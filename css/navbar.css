@@ -1,0 +1,35 @@
+.pointer {
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    background: #fff;
+}
+
+.form-control:focus{
+    box-shadow: none;
+}
+
+.smallNavbarBtn:focus {
+    background-color: rgba(221,18,60,0.1);
+    box-shadow: 1px 1px #dd123d;
+}
+
+.form-control::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.search {
+    color: #dd123d;
+    padding: 25px;
+    width: 80%;
+    border-width: 0;
+    border-radius: 25px;
+    background-color: rgba(221,18,60,0.1);
+}
+
+.search:focus {
+    color: #dd123d;
+    border: 1px solid #dd123d;
+}
