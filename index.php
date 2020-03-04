@@ -1,8 +1,10 @@
 <?php
 
-    //require_once('connection/connection.php');
+    require_once('connection/connection.php');
 
     session_start();
+
+    $alertStatus = 0;
 
     if(isset($_GET['currency'])){
         setcookie("currency_type", $_GET['currency'], time() + (86400 * 30), "/");
@@ -12,6 +14,10 @@
     if(isset($_GET['theme'])){
         setcookie("theme", $_GET['theme'], time() + (86400 * 30), "/");
         header('Location: '.$_SERVER['PHP_SELF']);
+    }
+
+    if(isset($_POST['btnAddCart'])){
+        $alertStatus = 1;
     }
 ?>
 
@@ -88,6 +94,14 @@
             height: 50px;
         }
         
+        #categoryList tr td {
+            background-color: rgba(221,18,60,0.1);            
+        }
+        
+        #categoryList tr td:hover {
+            background-color: rgba(221,18,60,0.1);            
+        }
+        
         .categoryTopic {
             font-family: 'ABeeZee';
         }
@@ -130,7 +144,7 @@
             content:"";
             height:81%;
             width:100%;
-            background:#fff;
+            background:none;
             border:1px solid rgba(221,18,61,.4);
             opacity:0;
             position:absolute;
@@ -187,7 +201,7 @@
         
         .product-grid .social li a {
             color:#dd123d;
-            background:#fff;
+            background:<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "#121633"; else echo "#fff"; ?>;
             font-size:18px;
             line-height:50px;
             width:50px;
@@ -201,7 +215,7 @@
         
         .product-grid .social li a:hover {
             background:#dd123d;
-            color:#fff;
+            color:<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "#121633"; else echo "#fff"; ?>;
         }
         
         .product-grid .product-new-label {
@@ -281,6 +295,25 @@
         .thin::-webkit-scrollbar {
             width: 6px;
         }
+        
+        @media only screen and (max-width: 600px) {
+            .sidebar-item {
+                width: 50%;
+                overflow-x:hidden;
+            }
+        }
+        
+        .toastNotify {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+            border: 1px solid #dd123d;
+            display: <?php if($alertStatus == 1) echo "block"; else echo "none"; ?>;
+            
+            -webkit-animation: cssAnimation 8s forwards; 
+            animation: cssAnimation 8s forwards;
+        }
     
     </style>
     
@@ -304,6 +337,18 @@
     
 <body>
     
+    <div class="toastNotify <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-white"; ?> col-7 col-sm-6 col-md-4 col-lg-3" data-autohide="false">
+        <div class="toast-header <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>">
+            <strong class="mr-auto text-danger">Thank you!</strong>
+            <small class="text-muted"></small>
+            <button type="button" class="ml-2 mb-1 close text-danger" data-dismiss="toast">&times;</button>
+        </div>
+
+        <div class="toast-body <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">
+            Your message has been sent.
+        </div>
+    </div>
+    
     <?php
         require_once('html/header_full.php');
     ?>
@@ -312,57 +357,29 @@
         <div class="row p-4">
             <div class="col-3">
                 <div class="sidebar-item scrollbar-deep-purple bordered-deep-purple thin">
-                    <div class="make-me-sticky p-3 shadow-sm">
-                        <h5 class="categoryTopic"><i class="fas fa-list"></i> Categories</h5>
+                    <div class="make-me-sticky p-3 shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>">
+                        <h5 class="categoryTopic <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-light"; ?>"><i class="fas fa-list"></i> Categories</h5>
                         <hr>
-                        <input class="form-control form-control-sm mb-3" id="categorySearch" type="text" placeholder="Search...">
+                        <input class="form-control form-control-sm mb-3 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>" id="categorySearch" type="text" placeholder="Search...">
                         <table class="w-100">
                             <tbody id="categoryList">
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/laptop.png" width="25px"> Laptops</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/desktop_workstation.png" width="25px"> Desktop workstations</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/gaming_desktop.png" width="25px"> Gaming Desktops</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/laptop.png" width="25px"> Laptops</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/desktop_workstation.png" width="25px"> Desktop workstations</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/gaming_desktop.png" width="25px"> Gaming Desktops</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/laptop.png" width="25px"> Laptops</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/desktop_workstation.png" width="25px"> Desktop workstations</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/gaming_desktop.png" width="25px"> Gaming Desktops</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/laptop.png" width="25px"> Laptops</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/desktop_workstation.png" width="25px"> Desktop workstations</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/gaming_desktop.png" width="25px"> Gaming Desktops</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/laptop.png" width="25px"> Laptops</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/desktop_workstation.png" width="25px"> Desktop workstations</a></td>
-                                </tr>
-                                <tr>
-                                    <td class= "item-type"><a href="#" class="text-secondary item-name"><img src="image/category/gaming_desktop.png" width="25px"> Gaming Desktops</a></td>
-                                </tr>
+                                <?php
+                                    $sql = "SELECT * FROM `category` WHERE `is_deleted` = 0";
+
+                                    $result = mysqli_query($conn, $sql);
+
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>
+                                                <td class= 'item-type'><a href='#' class='text-secondary item-name'><img src='image/category/". $row['icon']."' width='25px'> ". $row['type']."</a></td>
+                                            </tr>";
+                                        }
+                                    } else {
+                                        echo "<tr>
+                                                <td class= 'item-type'><a class='text-secondary item-name'> No Category</a></td>
+                                            </tr>";
+                                    }
+                                ?>
                             </tbody>
                         </table>
                     </div>
@@ -373,15 +390,15 @@
                 <div class="content-section">
                     
                     
-                    <h3 class="mb-3 text-center item-head">Laptops</h3>
+                    <h3 class="mb-3 text-center item-head <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Laptops</h3>
                     <hr>
                     
                     <div class="row">
                         
                         <div class="col-lg-4 col-md-6 col-sm-12">
-                            <div class="product-grid shadow-sm bg-white rounded">
+                            <div class="product-grid shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-light"; ?> rounded">
                                 <div class="product-image">
-                                    <a href="#">
+                                    <a href="html/product.php">
                                         <img class="" src="http://bestjquery.com/tutorial/product-grid/demo4/images/img-5.jpg">
                                     </a>
                                     <ul class="social">
@@ -409,7 +426,7 @@
                                 </div>
                                 <div class="product-content">
                                     <h3 class="title text-secondary">- Desktop Workstations -</h3>
-                                    <h4 class="text-dark">ASUS ROG STRIX SCAR III G531GW I9 WITH RTX 2070</h4>
+                                    <h4 class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">ASUS ROG STRIX SCAR III G531GW I9 WITH RTX 2070</h4>
                                     <div class="price text-danger">
                                         <h2><small>LKR </small>635000.00</h2>
                                     </div>

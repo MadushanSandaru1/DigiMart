@@ -32,4 +32,9 @@
 .search:focus {
     color: #dd123d;
     border: 1px solid #dd123d;
+    background-color: rgba(221,18,60,0.1);
+}
+
+img.bigNavIcon {
+    width: 40px;
 }
