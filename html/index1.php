@@ -1,6 +1,6 @@
 <?php
 
-    require_once('connection/connection.php');
+    require_once('../connection/connection.php');
 
     session_start();
 
@@ -28,14 +28,14 @@
 	<title>Home | DigiMart</title>
     
     <!-- title icon -->
-    <link rel="icon" type="image/ico" href="image/logo.png"/>
+    <link rel="icon" type="image/ico" href="../image/logo.png"/>
     
     <!-- Bootstrap CSS -->
-    <link type="text/css" href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- CSS -->
-    <link type="text/css" href="css/navbar.css" rel="stylesheet">
-    <link type="text/css" href="css/main.css" rel="stylesheet">
+    <link type="text/css" href="../css/navbar.css" rel="stylesheet">
+    <link type="text/css" href="../css/main.css" rel="stylesheet">
     
     <!-- google font -->
     <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
@@ -48,8 +48,8 @@
     <script src="https://kit.fontawesome.com/faf1c6588d.js" crossorigin="anonymous"></script>
 
     <!-- jQuery -->
-    <script src="vendor/jquery/jquery-3.4.1.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="../vendor/jquery/jquery-3.4.1.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.js"></script>
     
     <style>
         body {
@@ -352,7 +352,7 @@
     </div>
     
     <?php
-        require_once('html/header_full.php');
+        require_once('../html/header_half.php"');
     ?>
     
     <div class="container-fluid">
@@ -373,7 +373,7 @@
                                     if (mysqli_num_rows($result) > 0) {
                                         while($row = mysqli_fetch_assoc($result)) {
                                             echo "<tr>
-                                                <td class= 'item-type'><a href='#' class='text-secondary item-name'><img src='image/category/". $row['icon']."' width='25px'> ". $row['type']."</a></td>
+                                                <td class= 'item-type'><a href='#' class='text-secondary item-name'><img src='../image/category/". $row['icon']."' width='25px'> ". $row['type']."</a></td>
                                             </tr>";
                                         }
                                     } else {
@@ -391,6 +391,10 @@
             <div class="col-9">
                 <div class="content-section">
                     
+                    
+                    <h3 class="mb-3 text-center item-head <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Laptops</h3>
+                    <hr>
+                    
                     <div class="row">
                         
                         <?php
@@ -406,7 +410,7 @@
                             <div class="product-grid shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-light"; ?> rounded">
                                 <div class="product-image">
                                     <a href="html/product.php">
-                                        <img class="p-1" src="image/product/<?php echo $row['image']; ?>">
+                                        <img class="p-1" src="../image/product/<?php echo $row['image']; ?>">
                                     </a>
                                     <ul class="social">
                                         <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Add to Quot"><i class="fas fa-box"></i></a></li>
@@ -449,94 +453,14 @@
                         ?>
                         
                     </div>
-                    
-                    <hr>
-                    
-                    
-                    
-                    <hr>
-                    
-                    <div class="row">                        
-                        <div class="col-lg-4 col-md-6 col-sm-12 my-2">
-                            <div class="product-grid shadow-sm bg-danger rounded">
-                                <div class="pt-2 text-light">
-                                    <a>
-                                        <i class="fas fa-shield-alt fa-10x"></i>
-                                    </a>
-                                </div>
-                                <div class="text-center product-content">
-                                    <h3 class="text-white price">WARRANTY ASSURED</h3>
-                                    <h4 class="text-center">In case of faulty products, we have an upstanding warranty and claim procedures to make sure that your requirements are met in minimum time loss as possible.</h4>
-                                    <div class="price text-white">
-                                        <p><small>*Conditions Applied</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-lg-4 col-md-6 col-sm-12 my-2">
-                            <div class="product-grid shadow-sm bg-danger rounded">
-                                <div class="pt-2 text-light">
-                                    <a>
-                                        <i class="fas fa-cogs fa-10x"></i>
-                                    </a>
-                                </div>
-                                <div class="text-center product-content">
-                                    <h3 class="text-white price">CUSTOM ORDERS</h3>
-                                    <h4 class="text-center">In case your requirements supersedes what the local market has to offer, we will provide you with assistance to meet these requirements.</h4>
-                                    <div class="price text-white">
-                                        <p><small>*Conditions Applied</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-lg-4 col-md-6 col-sm-12 my-2">
-                            <div class="product-grid shadow-sm bg-danger rounded">
-                                <div class="pt-2 text-light">
-                                    <a>
-                                        <i class="fas fa-truck fa-10x"></i>
-                                    </a>
-                                </div>
-                                <div class="text-center product-content">
-                                    <h3 class="text-white price">HOME DELIVERY</h3>
-                                    <h4 class="text-center">To further facilitate your access to your needs, we offer to deliver to meet your requirements straight to where you live within Sri Lankan borders.</h4>
-                                    <div class="price text-white">
-                                        <p><small>*Conditions Applied</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    
+                
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="container">
-        <hr>
-        <div class="row d-flex justify-content-around">
-            <?php
-                $sql = "SELECT * FROM `brand` WHERE `is_deleted` = 0";
-
-                $result = mysqli_query($conn, $sql);
-
-                if (mysqli_num_rows($result) > 0) {
-                    while($row = mysqli_fetch_assoc($result)) {
-                        echo "<img class='m-4' src='image/brand/". $row['logo']."' height='50px'>";
-                    }
-                } else {
-                    echo "<h3 class='text-secondary item-name'> No Brands</h3>";
-                }
-            ?>
-        </div>
-    </div>
-    
     <?php
-        require_once('html/footer.php');
+        require_once('../html/footer.php');
     ?>
     
 </body>
