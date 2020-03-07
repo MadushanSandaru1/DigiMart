@@ -39,8 +39,8 @@
                     <p class="dropdown-item text-danger">Welcome to DigiMart!</p>
                     <div class="dropdown-divider text-danger"></div>
                     <p class="dropdown-item">
-                        <a class="btn btn-outline-danger" href="">Join</a>
-                        <a class="btn btn-outline-danger" href="">Sign in</a>
+                        <a class="btn btn-danger" href="html/join.php">Join</a>
+                        <a class="btn btn-outline-danger" href="html/sign_in.php">Sign in</a>
                     </p>
                 </div>
             </div>

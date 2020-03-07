@@ -119,7 +119,6 @@
             color: #dd123d;
             padding: 20px;
             background:none!important;
-            
         }
         
         .form-control:focus {

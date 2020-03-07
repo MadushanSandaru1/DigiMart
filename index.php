@@ -388,129 +388,195 @@
                 </div>
             </div>
             
-            <div class="col-9">
-                <div class="content-section">
-                    
-                    <div class="row">
-                        
-                        <?php
-                            $sql = "SELECT p.`id`, p.`name`, p.`image`,p.`price`, b.`name` AS 'brand', c.`type` FROM `product` p, `brand` b, `category` c WHERE p.`brand_id` = b.`id` AND p.`category_id` = c.`id` AND p.`is_deleted` = 0";
+            <div class="col-6">
+                <!--Carousel Wrapper-->
+                <div id="carousel-example-2" class="carousel slide carousel-fade z-depth-1-half" data-ride="carousel">
+                    <!--Slides-->
+                    <div class="carousel-inner" role="listbox">
+                        <div class="carousel-item active">
+                            <div class="view">
+                                <img class="d-block w-100" src="image/carousel/1.jpg" alt="First slide">
+                                <div class="mask rgba-black-light"></div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <!--Mask color-->
+                            <div class="view">
+                                <img class="d-block w-100" src="image/carousel/2.jpg" alt="Second slide">
+                                <div class="mask rgba-black-light"></div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <!--Mask color-->
+                            <div class="view">
+                                <img class="d-block w-100" src="image/carousel/3.jpg" alt="Third slide">
+                                <div class="mask rgba-black-light"></div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <!--Mask color-->
+                            <div class="view">
+                                <img class="d-block w-100" src="image/carousel/4.jpg" alt="Fourth slide">
+                                <div class="mask rgba-black-light"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/.Slides-->
+                    <!--Controls-->
+                    <a class="carousel-control-prev" href="#carousel-example-2" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel-example-2" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                    <!--/.Controls-->
+                </div>
+                <!--/.Carousel Wrapper-->
+            </div>
+            
+            <div class="col-3">
+                <div class="shadow-lg p-3 bg-white rounded">
+                    <div class="p-1 d-flex justify-content-around text-danger d-block mb-2">
+                        <i class="fas fa-user-circle fa-5x"></i>
+                    </div>
+                    <h5 class="text-center">Welcome to DigiMart</h5>
+                    <div class="p-1 d-flex justify-content-around mb-2">
+                        <a href="html/join.php" class="btn btn-danger">Join</a>
+                        <a href="html/sign_in.php" class="btn btn-outline-danger">Sign In</a>
+                    </div>
+                    <div class="p-1 d-flex justify-content-around mb-2">
+                        <a href="html/customer_account.php" class="text-dark"><i class="fas fa-user-cog fa-2x"></i></a>
+                        <a href="html/customer_order.php" class="text-dark"><i class="far fa-clipboard fa-2x"></i></a>
+                        <a href="html/customer_message.php" class="text-dark"><i class="far fa-comment-dots fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="content-section">
 
-                            $result = mysqli_query($conn, $sql);
+                <div class="row">
 
-                            if (mysqli_num_rows($result) > 0) {
-                                while($row = mysqli_fetch_assoc($result)) {
-                        ?>
-                        
-                        <div class="col-lg-4 col-md-6 col-sm-12 my-2">
-                            <div class="product-grid shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-light"; ?> rounded">
-                                <div class="product-image">
-                                    <a href="html/product.php">
-                                        <img class="p-1" src="image/product/<?php echo $row['image']; ?>">
-                                    </a>
-                                    <ul class="social">
-                                        <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Add to Quot"><i class="fas fa-box"></i></a></li>
-                                        <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Add to Cart"><i class="fas fa-cart-plus"></i></a></li>
-                                    </ul>
-                                    <!--span class="product-new-label">New</span-->
-                                    
-                                    <span class="product-rating-label p-1 text-danger">
-                                        <?php
-                                            $rate = 2.5;
-                                        
-                                            for($i=5;$i>0;$i--) {
-                                                if($rate>=$i) {
-                                                    echo "<i class='fas fa-star fa-sm'></i>";
-                                                }
-                                                else {
-                                                    echo "<i class='far fa-star fa-sm'></i>";
-                                                }
+                    <?php
+                        $sql = "SELECT p.`id`, p.`name`, p.`image`,p.`price`, b.`name` AS 'brand', c.`type` FROM `product` p, `brand` b, `category` c WHERE p.`brand_id` = b.`id` AND p.`category_id` = c.`id` AND p.`is_deleted` = 0";
+
+                        $result = mysqli_query($conn, $sql);
+
+                        if (mysqli_num_rows($result) > 0) {
+                            while($row = mysqli_fetch_assoc($result)) {
+                    ?>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 my-2">
+                        <div class="product-grid shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-light"; ?> rounded">
+                            <div class="product-image">
+                                <a href="html/product.php">
+                                    <img class="p-1" src="image/product/<?php echo $row['image']; ?>">
+                                </a>
+                                <ul class="social">
+                                    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Add to Quot"><i class="fas fa-box"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Add to Cart"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                                <!--span class="product-new-label">New</span-->
+
+                                <span class="product-rating-label p-1 text-danger">
+                                    <?php
+                                        $rate = 2.5;
+
+                                        for($i=5;$i>0;$i--) {
+                                            if($rate>=$i) {
+                                                echo "<i class='fas fa-star fa-sm'></i>";
                                             }
-                                        
-                                            echo $rate;
-                                        ?>
-                                    </span>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title text-secondary">- <?php echo strtoupper($row['type']); ?> -</h3>
-                                    <h4 class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>"><?php echo $row['name']; ?></h4>
-                                    <div class="price text-danger">
-                                        <h2><small>LKR </small><?php echo $row['price']; ?></h2>
-                                    </div>
+                                            else {
+                                                echo "<i class='far fa-star fa-sm'></i>";
+                                            }
+                                        }
+
+                                        echo $rate;
+                                    ?>
+                                </span>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="title text-secondary">- <?php echo strtoupper($row['type']); ?> -</h3>
+                                <h4 class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>"><?php echo $row['name']; ?></h4>
+                                <div class="price text-danger">
+                                    <h2><small>LKR </small><?php echo $row['price']; ?></h2>
                                 </div>
                             </div>
                         </div>
-                        
-                        <?php
-                                }
-                            } else {
-                                echo "<h4 class='text-danger'>No Items</h4>";
+                    </div>
+
+                    <?php
                             }
-                        ?>
-                        
+                        } else {
+                            echo "<h4 class='text-danger'>No Items</h4>";
+                        }
+                    ?>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="container-fluid">
+        <hr>
+                    
+        <div class="row d-flex justify-content-around">                        
+            <div class="col-lg-3 col-md-4 col-sm-6 my-2">
+                <div class="product-grid shadow-sm bg-secondary rounded">
+                    <div class="pt-2 text-light">
+                        <a>
+                            <i class="fas fa-shield-alt fa-5x"></i>
+                        </a>
                     </div>
-                    
-                    <hr>
-                    
-                    
-                    
-                    <hr>
-                    
-                    <div class="row">                        
-                        <div class="col-lg-4 col-md-6 col-sm-12 my-2">
-                            <div class="product-grid shadow-sm bg-danger rounded">
-                                <div class="pt-2 text-light">
-                                    <a>
-                                        <i class="fas fa-shield-alt fa-10x"></i>
-                                    </a>
-                                </div>
-                                <div class="text-center product-content">
-                                    <h3 class="text-white price">WARRANTY ASSURED</h3>
-                                    <h4 class="text-center">In case of faulty products, we have an upstanding warranty and claim procedures to make sure that your requirements are met in minimum time loss as possible.</h4>
-                                    <div class="price text-white">
-                                        <p><small>*Conditions Applied</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-lg-4 col-md-6 col-sm-12 my-2">
-                            <div class="product-grid shadow-sm bg-danger rounded">
-                                <div class="pt-2 text-light">
-                                    <a>
-                                        <i class="fas fa-cogs fa-10x"></i>
-                                    </a>
-                                </div>
-                                <div class="text-center product-content">
-                                    <h3 class="text-white price">CUSTOM ORDERS</h3>
-                                    <h4 class="text-center">In case your requirements supersedes what the local market has to offer, we will provide you with assistance to meet these requirements.</h4>
-                                    <div class="price text-white">
-                                        <p><small>*Conditions Applied</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-lg-4 col-md-6 col-sm-12 my-2">
-                            <div class="product-grid shadow-sm bg-danger rounded">
-                                <div class="pt-2 text-light">
-                                    <a>
-                                        <i class="fas fa-truck fa-10x"></i>
-                                    </a>
-                                </div>
-                                <div class="text-center product-content">
-                                    <h3 class="text-white price">HOME DELIVERY</h3>
-                                    <h4 class="text-center">To further facilitate your access to your needs, we offer to deliver to meet your requirements straight to where you live within Sri Lankan borders.</h4>
-                                    <div class="price text-white">
-                                        <p><small>*Conditions Applied</small></p>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="text-center product-content">
+                        <h4 class="text-white price">WARRANTY ASSURED</h4>
+                        <h6 class="text-center text-dark">In case of faulty products, we have an upstanding warranty and claim procedures to make sure that your requirements are met in minimum time loss as possible.</h6>
+                        <div class="price text-white">
+                            <p><small>*Conditions Applied</small></p>
                         </div>
                     </div>
-                    
-                    
-                    
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 my-2">
+                <div class="product-grid shadow-sm bg-secondary rounded">
+                    <div class="pt-2 text-light">
+                        <a>
+                            <i class="fas fa-cogs fa-5x"></i>
+                        </a>
+                    </div>
+                    <div class="text-center product-content">
+                        <h4 class="text-white price">CUSTOM ORDERS</h4>
+                        <h6 class="text-center text-dark">In case your requirements supersedes what the local market has to offer, we will provide you with assistance to meet these requirements.</h6>
+                        <div class="price text-white">
+                            <p><small>*Conditions Applied</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 my-2">
+                <div class="product-grid shadow-sm bg-secondary rounded">
+                    <div class="pt-2 text-light">
+                        <a>
+                            <i class="fas fa-truck fa-5x"></i>
+                        </a>
+                    </div>
+                    <div class="text-center product-content">
+                        <h4 class="text-white price">HOME DELIVERY</h4>
+                        <h6 class="text-center text-dark">To further facilitate your access to your needs, we offer to deliver to meet your requirements straight to where you live within Sri Lankan borders.</h6>
+                        <div class="price text-white">
+                            <p><small>*Conditions Applied</small></p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
