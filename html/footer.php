@@ -57,7 +57,7 @@
 
         <!-- Copyright -->
         <div class="footer-copyright text-center bg-danger py-3">© 2020 Copyright:
-            <a href="#" class="text-white"> Team DigiMart</a>
+            <a class="text-white"> Team DigiMart</a>
         </div>
         <!-- Copyright -->
 

@@ -120,6 +120,10 @@
             margin-bottom: 0px !important;
         }
         
+        #email-errmsg, #password-errmsg {
+            color: red;
+        }
+        
     </style>
     
     <script>
@@ -149,11 +153,13 @@
                     <form action="sign_in.php" method="post" name="sign-in">
                         <div class="form-group">
                             <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Email address</label>
-                            <input type="email" name="username"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email address" maxlength="100">
+                            <input type="email" name="username"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email address" maxlength="100" required>
+                            <small id="email-errmsg"></small>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Password</label>
-                            <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter password">
+                            <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter password" required>
+                            <small id="password-errmsg"></small>
                         </div>
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="rememberMe">
