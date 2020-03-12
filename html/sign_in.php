@@ -146,19 +146,20 @@
                             <h1>Sign In</h1>
                         </div>
                     </div>
-                    <form action="" method="post" name="login">
+                    <form action="sign_in.php" method="post" name="sign-in">
                         <div class="form-group">
-                            <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">User Name or Email address</label>
-                            <input type="text" name="username"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter user name or email" maxlength="100">
+                            <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Email address</label>
+                            <input type="email" name="username"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email address" maxlength="100">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Password</label>
                             <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter password">
                         </div>
-                        <div class="form-group">
-                            <p class="text-center <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">By signing up you accept our <a href="#" class="text-danger">Terms Of Use</a></p>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" for="rememberMe"><small class="form-text">Remember me</small></label>
                         </div>
-                        <div class="col-md-12 text-center ">
+                        <div class="col-md-12 text-center mt-3">
                             <button type="submit" class=" btn btn-block mybtn btn-outline-danger tx-tfm">SIGN IN</button>
                         </div>
                         <div class="col-md-12 ">
