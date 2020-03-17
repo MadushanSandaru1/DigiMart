@@ -506,7 +506,7 @@
                                 <h3 class="title text-secondary">- <?php echo strtoupper($row['type']); ?> -</h3>
                                 <h4 class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>"><?php echo $row['name']; ?></h4>
                                 <div class="price text-danger">
-                                    <h2><small>LKR </small><?php echo $row['price']; ?></h2>
+                                    <h2><small>LKR </small><?php echo number_format($row['price'],2); ?></h2>
                                 </div>
                             </div>
                         </div>
