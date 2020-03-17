@@ -19,7 +19,7 @@
 <html>
 <head>
     <!-- title -->
-	<title>Sign In | DigiMart</title>
+	<title>Join | DigiMart</title>
     
     <!-- title icon -->
     <link rel="icon" type="image/ico" href="../image/logo.png"/>
@@ -126,6 +126,30 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
+        
+        $(document).ready(function(){
+            $("#confirmPassword").keyup(function(){
+                if ($("#password").val() != $("#confirmPassword").val()) {
+                    $("#match-msg").html("Password do not match").css("color","red");
+                    $("#btn-submit").attr('disabled','disabled');
+                }else{
+                    $("#match-msg").html("Password matched").css("color","green");
+                    $("#btn-submit").removeAttr('disabled');
+                }
+            });
+        });
+        
+        function passwordVisible() {
+            var x = document.getElementById("password");
+            var y = document.getElementById("confirmPassword");
+            if (x.type === "password") {
+                x.type = "text";
+                y.type = "text";
+            } else {
+                x.type = "password";
+                y.type = "password";
+            }
+        }
     </script>
     
     
@@ -146,24 +170,38 @@
                             <h1>Join</h1>
                         </div>
                     </div>
-                    <form action="" method="post" name="login">
+                    <form action="join.php" method="post" name="join">
                         <div class="form-group">
-                            <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Email address</label>
-                            <input type="text" name="username"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email address" maxlength="100">
+                            <label for="firstName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">First Name</label>
+                            <input type="text" name="firstName"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter first name" maxlength="25" required>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Password</label>
-                            <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter password">
+                            <label for="lastName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Last Name</label>
+                            <input type="text" name="lastName"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter last name" maxlength="25" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Email address</label>
+                            <input type="email" name="email"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email address" maxlength="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Password</label>
+                            <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter password" required>
+                            <small><input type="checkbox" id="showPwd" onclick="passwordVisible()"><label class="form-check-label <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" for="showPwd"><small class="form-text">Show password</small></label></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Confirm password</label>
+                            <input type="password" name="confirmPassword" id="confirmPassword"  class="form-control" aria-describedby="emailHelp" placeholder="Enter confirm password" required>
+                            <small id="match-msg"></small>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="remember">
-                            <label class="form-check-label" for="remember">Remember me</label>
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" for="rememberMe"><small class="form-text">Remember me</small></label>
                         </div>
                         <div class="form-group">
-                            <p class="text-center <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">By signing up you accept our <a href="#" class="text-danger">Terms Of Use</a></p>
+                            <p class="text-center <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">By signing up you accept our <a href="join_terms.php" class="text-danger" target="_blank">Terms Of Use</a></p>
                         </div>
                         <div class="col-md-12 text-center ">
-                            <button type="submit" class=" btn btn-block mybtn btn-outline-danger tx-tfm">SIGN IN</button>
+                            <button type="submit" id="btn-submit" class="btn btn-block mybtn btn-outline-danger tx-tfm" disabled>JOIN</button>
                         </div>
                         <div class="col-md-12 ">
                             <div class="login-or text-secondary">
