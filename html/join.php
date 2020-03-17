@@ -148,12 +148,16 @@
                     </div>
                     <form action="" method="post" name="login">
                         <div class="form-group">
-                            <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Id</label>
-                            <input type="text" name="username"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter user name or email" maxlength="100">
+                            <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Email address</label>
+                            <input type="text" name="username"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email address" maxlength="100">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Password</label>
                             <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter password">
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="remember">
+                            <label class="form-check-label" for="remember">Remember me</label>
                         </div>
                         <div class="form-group">
                             <p class="text-center <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">By signing up you accept our <a href="#" class="text-danger">Terms Of Use</a></p>
