@@ -441,23 +441,38 @@
                     <div class="p-1 d-flex justify-content-around text-danger d-block mb-2">
                         <i class="fas fa-user-circle fa-5x"></i>
                     </div>
-                    <h5 class="text-center">Welcome to DigiMart</h5>
+                    <h5 class="text-center"><?php if(isset($_SESSION['digimart_current_user_email'])) echo "Hi, ".$_SESSION['digimart_current_user_first_name']; else echo "Welcome to DigiMart"; ?></h5>
+                    
+                    <?php
+                        if(!isset($_SESSION['digimart_current_user_email'])) {
+                    ?>
                     <div class="p-1 d-flex justify-content-around mb-2">
                         <a href="html/join.php" class="btn btn-danger">Join</a>
                         <a href="html/sign_in.php" class="btn btn-outline-danger">Sign In</a>
                     </div>
+                    <?php
+                        }
+                        else {
+                    ?>
                     <div class="p-1 d-flex justify-content-around mb-2">
-                        <a href="html/customer_account.php" class="text-dark"><i class="fas fa-user-cog fa-2x"></i></a>
-                        <a href="html/customer_order.php" class="text-dark"><i class="far fa-clipboard fa-2x"></i></a>
-                        <a href="html/customer_message.php" class="text-dark"><i class="far fa-comment-dots fa-2x"></i></a>
+                        <a href="html/logout.php" class="btn btn-outline-danger">Logout</a>
+                    </div>
+                    <?php
+                        }
+                    ?>
+                    
+                    <div class="p-1 d-flex justify-content-around mb-2">
+                        <a href="html/customer_account.php" class="text-dark" data-toggle="tooltip" data-placement="bottom" title="Account"><i class="fas fa-user-cog fa-2x"></i></a>
+                        <a href="html/customer_order.php" class="text-dark" data-toggle="tooltip" data-placement="bottom" title="Order List"><i class="far fa-clipboard fa-2x"></i></a>
+                        <a href="html/customer_message.php" class="text-dark" data-toggle="tooltip" data-placement="bottom" title="Message"><i class="far fa-comment-dots fa-2x"></i></a>
                     </div>
                 </div>
             </div>
             
             
         </div>
-    </div>
-    
+    </div>    
+        
     <div class="container">
         <div class="row">
             <div class="content-section">
@@ -465,7 +480,7 @@
                 <div class="row">
 
                     <?php
-                        $sql = "SELECT p.`id`, p.`name`, p.`image`,p.`price`, b.`name` AS 'brand', c.`type` FROM `product` p, `brand` b, `category` c WHERE p.`brand_id` = b.`id` AND p.`category_id` = c.`id` AND p.`is_deleted` = 0";
+                        $sql = "SELECT p.`id`, p.`name`, p.`image`,p.`price`, b.`name` AS 'brand', c.`type` FROM `product` p, `brand` b, `category` c WHERE p.`brand_id` = b.`id` AND p.`category_id` = c.`id` AND p.`is_deleted` = 0 ORDER BY `id` DESC LIMIT 12";
 
                         $result = mysqli_query($conn, $sql);
 
@@ -582,6 +597,7 @@
         </div>
     </div>
     
+    <!-- brand logo -->
     <div class="container">
         <hr>
         <div class="row d-flex justify-content-around">
@@ -600,6 +616,38 @@
             ?>
         </div>
     </div>
+    <!-- brand logo -->
+    
+    <!-- payment method logo -->
+    <div class="container">
+        <hr>
+        <div class="row d-flex justify-content-center">
+            
+            <?php
+                $dir = "image/payment_logo/";
+
+                // Open a directory, and read its contents
+                if (is_dir($dir)){
+                    if ($dh = opendir($dir)){
+                        while (($file = readdir($dh)) !== false){
+                            if(strlen($file) > 3) {
+            ?>
+
+            <!-- gallery item -->
+            <img class='m-4' src='image/payment_logo/<?php echo $file; ?>' height='50px'>
+            <!-- gallery item -->
+
+            <?php
+                                }
+                        }
+                        closedir($dh);
+                    }
+                }
+            ?>
+            
+        </div>
+    </div>
+    <!-- payment method logo -->
     
     <?php
         require_once('html/footer.php');

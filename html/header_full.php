@@ -36,12 +36,36 @@
                 <a class="btn btn-sm dropdown-toggle smallNavbarBtn text-danger" href="#" role="button" id="smallNavbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-user"></i> Account </a>
 
                 <div class="dropdown-menu <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-light"; ?>" aria-labelledby="smallNavbarDropdown">
-                    <p class="dropdown-item text-danger">Welcome to DigiMart!</p>
+                    <p class="dropdown-item text-danger"><?php if(isset($_SESSION['digimart_current_user_email'])) echo "Welcome back, ".$_SESSION['digimart_current_user_first_name']; else echo "Welcome to DigiMart"; ?></p>
                     <div class="dropdown-divider text-danger"></div>
                     <p class="dropdown-item">
+                        
+                        <?php
+                            if(!isset($_SESSION['digimart_current_user_email'])) {
+                        ?>
                         <a class="btn btn-danger" href="html/join.php">Join</a>
                         <a class="btn btn-outline-danger" href="html/sign_in.php">Sign in</a>
+                        <?php
+                            }
+                            else {
+                        ?>
+                        <a class="btn btn-outline-danger" href="html/logout.php">Logout</a>
+                        <?php
+                            }
+                        ?>
+                        
                     </p>
+                    
+                    <?php
+                        if(isset($_SESSION['digimart_current_user_email'])) {
+                    ?>
+                    <a class="dropdown-item text-danger" href="html/customer_account.php">My Account</a>
+                    <a class="dropdown-item text-danger" href="html/customer_order.php">My Order</a>
+                    <a class="dropdown-item text-danger" href="html/customer_message.php">Message Center</a>
+                    <?php
+                        }
+                    ?>
+                    
                 </div>
             </div>
             

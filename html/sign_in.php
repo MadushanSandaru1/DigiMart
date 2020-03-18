@@ -1,8 +1,11 @@
 <?php
 
-    //require_once('connection/connection.php');
+    require_once('../connection/connection.php');
 
     session_start();
+
+    $usernameErr = "";
+    $passwordErr = "";
 
     if(isset($_GET['currency'])){
         setcookie("currency_type", $_GET['currency'], time() + (86400 * 30), "/");
@@ -12,6 +15,65 @@
     if(isset($_GET['theme'])){
         setcookie("theme", $_GET['theme'], time() + (86400 * 30), "/");
         header('Location: '.$_SERVER['PHP_SELF']);
+    }
+
+    if(isset($_POST['btnSigninSubmit'])){
+        
+        if(!isset($_POST['rememberMe'])){
+            setcookie("digimart_email", "", time() - 3600, "/");
+        }
+        
+        /* data for login */
+		$username =  mysqli_real_escape_string($conn,trim($_POST['username']));
+		$pwd = mysqli_real_escape_string($conn,trim($_POST['password']));
+        
+        /* password encrypt */
+		$h_pwd = md5($pwd);
+        
+        /* login query */
+		$login_query = "SELECT * FROM `user` WHERE `username` = '{$username}' AND `password` = '{$h_pwd}' AND `is_deleted` = 0 LIMIT 1";
+        
+        /* query execute */
+		$result_set = mysqli_query($conn,$login_query);
+
+        /* query result */
+		if (mysqli_num_rows($result_set) == 1) {
+			$details = mysqli_fetch_assoc($result_set);
+            
+            /* if user available, user info load to session array */
+			$_SESSION = array();
+            $_SESSION['digimart_current_user_email'] = $details['username'];
+            $_SESSION['digimart_current_user_role'] = $details['role'];
+            
+            $query = "SELECT * FROM `{$_SESSION['digimart_current_user_role']}` WHERE `email` = '{$_SESSION['digimart_current_user_email']}' LIMIT 1";
+            
+            $result_set = mysqli_query($conn,$query);
+            $user_details = mysqli_fetch_assoc($result_set);
+            /* if user available, user info load to session array */
+			
+			$_SESSION['digimart_current_user_id'] = $user_details['id'];
+            $_SESSION['digimart_current_user_first_name'] = $user_details['first_name'];
+            $_SESSION['digimart_current_user_last_name'] = $user_details['last_name'];
+            
+            if(isset($_POST['rememberMe'])){
+                setcookie("digimart_email", $_SESSION['digimart_current_user_email'], time() + (86400 * 30), "/");
+            }
+            
+            /* redirect to dashboard page */
+            if($_SESSION['digimart_current_user_role'] == 'customer') {
+                header("location:../index.php");
+            }
+            else {
+                header("location:dashboard.php");
+            }
+            
+		}
+        /* if user not available, displayerror msg */
+		else{
+            $usernameErr = "Incorrect username.";
+            $passwordErr = "Incorrect password.";
+		}
+    
     }
 ?>
 
@@ -153,20 +215,20 @@
                     <form action="sign_in.php" method="post" name="sign-in">
                         <div class="form-group">
                             <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Email address</label>
-                            <input type="email" name="username"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email address" maxlength="100" required>
-                            <small id="email-errmsg"></small>
+                            <input type="email" name="username"  class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email address" maxlength="100" value="<?php if(isset($_COOKIE['digimart_email'])) echo $_COOKIE['digimart_email']; ?>" required>
+                            <small id="email-errmsg"><?php echo $usernameErr; ?></small>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; else echo "text-dark"; ?>">Password</label>
                             <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter password" required>
-                            <small id="password-errmsg"></small>
+                            <small id="password-errmsg"><?php echo $passwordErr; ?></small>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe" <?php if(isset($_COOKIE['digimart_email'])) echo 'checked'; ?> >
                             <label class="form-check-label <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" for="rememberMe"><small class="form-text">Remember me</small></label>
                         </div>
                         <div class="col-md-12 text-center mt-3">
-                            <button type="submit" class=" btn btn-block mybtn btn-outline-danger tx-tfm">SIGN IN</button>
+                            <button type="submit" name="btnSigninSubmit" class=" btn btn-block mybtn btn-outline-danger tx-tfm">SIGN IN</button>
                         </div>
                         <div class="col-md-12 ">
                             <div class="login-or text-secondary">

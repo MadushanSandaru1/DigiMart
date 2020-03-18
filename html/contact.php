@@ -1,6 +1,6 @@
 <?php
 
-    //require_once('connection/connection.php');
+    require_once('../connection/connection.php');
 
     session_start();
 
@@ -17,7 +17,23 @@
     }
 
     if(isset($_POST['btnMsgSubmit'])){
-        $alertStatus = 1;
+        
+        $name = $_POST['contactName'];
+        $email = $_POST['contactEmail'];
+        $phone = $_POST['contactPhone'];
+        $subject = $_POST['contactSubject'];
+        $msg = $_POST['contactMsg'];
+        
+        $qurey = "INSERT INTO `contact_message`(`name`, `email`, `mobile_no`, `subject`, `message`) VALUES ('{$name}','{$email}','{$phone}','{$subject}','{$msg}')";
+
+        $result = mysqli_query($conn,$qurey);
+
+        if ($result) {
+            $alertStatus = 1;
+        }
+        else{
+            $alertStatus = 2;
+        }
     }
 ?>
 
@@ -144,7 +160,7 @@
             right: 10px;
             z-index: 1;
             border: 1px solid #dd123d;
-            display: <?php if($alertStatus == 1) echo "block"; else echo "none"; ?>;
+            display: <?php if($alertStatus != 0) echo "block"; else echo "none"; ?>;
             
             -webkit-animation: cssAnimation 8s forwards; 
             animation: cssAnimation 8s forwards;
@@ -181,13 +197,13 @@
     
     <div class="toastNotify <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-white"; ?> col-7 col-sm-6 col-md-4 col-lg-3" data-autohide="false">
         <div class="toast-header <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>">
-            <strong class="mr-auto text-danger">Thank you!</strong>
+            <strong class="mr-auto text-danger"><?php if($alertStatus == 1) echo "Thank you!"; else echo "Error!"; ?></strong>
             <small class="text-muted"></small>
             <button type="button" class="ml-2 mb-1 close text-danger" data-dismiss="toast">&times;</button>
         </div>
 
         <div class="toast-body <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">
-            Your message has been sent.
+            <?php if($alertStatus == 1) echo "Your message has been sent."; else echo "Failed to send your message."; ?>
         </div>
     </div>
     
@@ -222,21 +238,21 @@
            <div class="row mb-3">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <input type="text" name="txtName" class="form-control" pattern="[A-Za-z ]{2,20}" maxlength="20" title="alphabets only" placeholder="Your Name *" value="" required>
+                        <input type="text" name="contactName" class="form-control" pattern="[A-Za-z ]{2,20}" maxlength="20" title="alphabets only" placeholder="Your Name *" value="<?php if(isset($_SESSION['digimart_current_user_email'])) echo $_SESSION['digimart_current_user_first_name']." ".$_SESSION['digimart_current_user_last_name']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" name="txtEmail" class="form-control" placeholder="Your Email *" maxlength="50" value="" required>
+                        <input type="email" name="contactEmail" class="form-control" placeholder="Your Email *" maxlength="50" value="<?php if(isset($_SESSION['digimart_current_user_email'])) echo $_SESSION['digimart_current_user_email']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" name="txtPhone" class="form-control" pattern="0[0-9]{9}" maxlength="10" title="0*********" placeholder="Your Phone Number *" value="" required>
+                        <input type="text" name="contactPhone" class="form-control" pattern="0[0-9]{9}" maxlength="10" title="0*********" placeholder="Your Phone Number *" value="" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" name="txtSubject" class="form-control" pattern="[A-Za-z ]{2,50}" maxlength="50" title="alphabets only" placeholder="Your Subject *" value="" required>
+                        <input type="text" name="contactSubject" class="form-control" pattern="[A-Za-z ]{2,50}" maxlength="50" title="alphabets only" placeholder="Your Subject *" value="" required>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <textarea name="txtMsg" class="form-control" placeholder="Your Message *" maxlength="255" style="width: 100%; height: 200px;" required></textarea>
+                        <textarea name="contactMsg" class="form-control" placeholder="Your Message *" maxlength="255" style="width: 100%; height: 200px;" required></textarea>
                     </div>
                 </div>
             </div>
