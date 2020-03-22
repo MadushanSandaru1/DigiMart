@@ -457,15 +457,17 @@
                     <div class="p-1 d-flex justify-content-around mb-2">
                         <a href="html/logout.php" class="btn btn-outline-danger">Logout</a>
                     </div>
-                    <?php
-                        }
-                    ?>
                     
                     <div class="p-1 d-flex justify-content-around mb-2">
                         <a href="html/customer_account.php" class="text-dark" data-toggle="tooltip" data-placement="bottom" title="Account"><i class="fas fa-user-cog fa-2x"></i></a>
                         <a href="html/customer_order.php" class="text-dark" data-toggle="tooltip" data-placement="bottom" title="Order List"><i class="far fa-clipboard fa-2x"></i></a>
                         <a href="html/customer_message.php" class="text-dark" data-toggle="tooltip" data-placement="bottom" title="Message"><i class="far fa-comment-dots fa-2x"></i></a>
                     </div>
+                    
+                    <?php
+                        }
+                    ?>
+                    
                 </div>
             </div>
             
@@ -502,7 +504,17 @@
 
                                 <span class="product-rating-label p-1 text-danger">
                                     <?php
-                                        $rate = 2.5;
+                                        $reviewSql = "SELECT AVG(`review_value`) AS 'review' FROM `product_review` WHERE `product_id` = '{$row['id']}' LIMIT 1";
+                                
+                                        $reviewResult = mysqli_query($conn, $reviewSql);
+
+                                        if (mysqli_num_rows($reviewResult) > 0) {
+                                            while($reviewRow = mysqli_fetch_assoc($reviewResult)) {
+                                                $rate = $reviewRow['review'];
+                                            }
+                                        } else {
+                                            $rate = 0;
+                                        }
 
                                         for($i=5;$i>0;$i--) {
                                             if($rate>=$i) {
@@ -513,7 +525,7 @@
                                             }
                                         }
 
-                                        echo $rate;
+                                        echo number_format($rate,1);
                                     ?>
                                 </span>
                             </div>
@@ -600,6 +612,7 @@
     <!-- brand logo -->
     <div class="container">
         <hr>
+        <h4 class="text-danger text-center">Powered By</h4>
         <div class="row d-flex justify-content-around">
             <?php
                 $sql = "SELECT * FROM `brand` WHERE `is_deleted` = 0";
@@ -620,7 +633,8 @@
     
     <!-- payment method logo -->
     <div class="container">
-        <hr>
+        <hr><hr>
+        <h4 class="text-danger text-center">Payment Methods</h4>
         <div class="row d-flex justify-content-center">
             
             <?php
