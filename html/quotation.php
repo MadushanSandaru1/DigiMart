@@ -38,16 +38,16 @@
 
 
     if(isset($_SESSION['digimart_current_user_id'])) {
-        $sql = "SELECT count(`customer_id`) AS 'cartCount' FROM `quotation` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}'";
+        $sql = "SELECT count(`customer_id`) AS 'quoteCount' FROM `quotation` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}'";
 
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-                $cartCount = $row['cartCount'];
+                $quoteCount = $row['quoteCount'];
             }
         } else {
-            $cartCount = 0;
+            $quoteCount = 0;
         }
     }
 
@@ -119,7 +119,7 @@
         
         <?php 
 
-            $query2 = "SELECT c.`id` AS 'cartId', p.* FROM `quotation` c, `product` p WHERE c.`product_id` = p.`id` AND c.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
+            $query2 = "SELECT q.`id` AS 'quoteId', p.* FROM `quotation` q, `product` p WHERE q.`product_id` = p.`id` AND q.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
 
             $result = $conn->query($query2);
 
@@ -127,19 +127,19 @@
 
         ?>
         
-        function qtyPrice<?php echo $row['cartId'] ?>() {
+        function qtyPrice<?php echo $row['quoteId'] ?>() {
             
-            if(document.getElementById("qty<?php echo $row['cartId'] ?>").value == "" || document.getElementById("qty<?php echo $row['cartId'] ?>").value == 0){
-                document.getElementById("qty<?php echo $row['cartId'] ?>").value = 1;
+            if(document.getElementById("qty<?php echo $row['quoteId'] ?>").value == "" || document.getElementById("qty<?php echo $row['quoteId'] ?>").value == 0){
+                document.getElementById("qty<?php echo $row['quoteId'] ?>").value = 1;
             }
             
-            var qty = document.getElementById("qty<?php echo $row['cartId'] ?>").value;
-            var price = parseFloat(document.getElementById("price<?php echo $row['cartId'] ?>").value);
+            var qty = document.getElementById("qty<?php echo $row['quoteId'] ?>").value;
+            var price = parseFloat(document.getElementById("price<?php echo $row['quoteId'] ?>").value);
             var qtyPrice = qty*price;
-            document.getElementById("qtyPrice<?php echo $row['cartId'] ?>").innerHTML = "LKR " + qtyPrice.toFixed(2);
-            document.getElementById("itemTotal<?php echo $row['cartId'] ?>").innerHTML = qtyPrice.toFixed(2);
-            document.getElementById("itemTotal1<?php echo $row['cartId'] ?>").value = qtyPrice.toFixed(2);
-            document.getElementById("itemQty<?php echo $row['cartId'] ?>").innerHTML = qty;
+            document.getElementById("qtyPrice<?php echo $row['quoteId'] ?>").innerHTML = "LKR " + qtyPrice.toFixed(2);
+            document.getElementById("itemTotal<?php echo $row['quoteId'] ?>").innerHTML = qtyPrice.toFixed(2);
+            document.getElementById("itemTotal1<?php echo $row['quoteId'] ?>").value = qtyPrice.toFixed(2);
+            document.getElementById("itemQty<?php echo $row['quoteId'] ?>").innerHTML = qty;
             
             calculateTotal();
         }
@@ -156,7 +156,7 @@
             
             <?php
             
-                $query2 = "SELECT c.`id` AS 'cartId', p.* FROM `quotation` c, `product` p WHERE c.`product_id` = p.`id` AND c.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
+                $query2 = "SELECT q.`id` AS 'quoteId', p.* FROM `quotation` q, `product` p WHERE q.`product_id` = p.`id` AND q.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
 
                 $result = $conn->query($query2);
 
@@ -164,15 +164,15 @@
 
             ?>
             
-            if(document.getElementById("check<?php echo $row['cartId'] ?>").checked == true){
-                total = total + parseFloat(document.getElementById("itemTotal1<?php echo $row['cartId'] ?>").value);
-                document.getElementById("itemId<?php echo $row['cartId'] ?>").style.display = "block";
-                document.getElementById("itemTotal<?php echo $row['cartId'] ?>").style.display = "block";
-                document.getElementById("card-footer<?php echo $row['cartId'] ?>").style.background = "rgba(221,18,60,0.1)";
-                document.getElementById("card-header<?php echo $row['cartId'] ?>").style.background = "rgba(221,18,60,0.1)";
+            if(document.getElementById("check<?php echo $row['quoteId'] ?>").checked == true){
+                total = total + parseFloat(document.getElementById("itemTotal1<?php echo $row['quoteId'] ?>").value);
+                document.getElementById("itemId<?php echo $row['quoteId'] ?>").style.display = "block";
+                document.getElementById("itemTotal<?php echo $row['quoteId'] ?>").style.display = "block";
+                document.getElementById("card-footer<?php echo $row['quoteId'] ?>").style.background = "rgba(221,18,60,0.1)";
+                document.getElementById("card-header<?php echo $row['quoteId'] ?>").style.background = "rgba(221,18,60,0.1)";
                 
-                var pQty = document.getElementById("qty<?php echo $row['cartId'] ?>").value;
-                var pPrice = document.getElementById("price<?php echo $row['cartId'] ?>").value;
+                var pQty = document.getElementById("qty<?php echo $row['quoteId'] ?>").value;
+                var pPrice = document.getElementById("price<?php echo $row['quoteId'] ?>").value;
                 
                 productId.push("<?php echo $row['id'] ?>");
                 productQty.push(pQty);
@@ -180,10 +180,10 @@
                 
                 
             } else {
-                document.getElementById("itemId<?php echo $row['cartId'] ?>").style.display = "none";
-                document.getElementById("itemTotal<?php echo $row['cartId'] ?>").style.display = "none";
-                document.getElementById("card-footer<?php echo $row['cartId'] ?>").style.background = "rgba(0,0,0,.03)";
-                document.getElementById("card-header<?php echo $row['cartId'] ?>").style.background = "rgba(0,0,0,.03)";
+                document.getElementById("itemId<?php echo $row['quoteId'] ?>").style.display = "none";
+                document.getElementById("itemTotal<?php echo $row['quoteId'] ?>").style.display = "none";
+                document.getElementById("card-footer<?php echo $row['quoteId'] ?>").style.background = "rgba(0,0,0,.03)";
+                document.getElementById("card-header<?php echo $row['quoteId'] ?>").style.background = "rgba(0,0,0,.03)";
                 
             }
             
@@ -236,7 +236,7 @@
         
             if(isset($_SESSION['digimart_current_user_email'])) {
                 
-                if($cartCount <= 0){
+                if($quoteCount <= 0){
         ?>
         
         <div class="justify-content-center mb-2 p-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" style="height: 300px;">
@@ -272,7 +272,7 @@
                     
                     <?php 
 
-                        $query2 = "SELECT c.`id` AS 'cartId', p.* FROM `quotation` c, `product` p WHERE c.`product_id` = p.`id` AND c.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
+                        $query2 = "SELECT q.`id` AS 'quoteId', p.* FROM `quotation` q, `product` p WHERE q.`product_id` = p.`id` AND q.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
 
                         $result = $conn->query($query2);
 
@@ -283,11 +283,11 @@
                     <div class="row mw-100" id="product-container">
                         <div class="mb-4 d-flex mx-2 shadow-sm">
                             <div class="card <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
-                                <div class="card-header d-flex justify-content-between" id="card-header<?php echo $row['cartId'] ?>">
+                                <div class="card-header d-flex justify-content-between" id="card-header<?php echo $row['quoteId'] ?>">
                                     <h6 class="lead">Product Id : <?php echo $row['id']; ?></h6>
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input checkItem" id="check<?php echo $row['cartId'] ?>" onclick="qtyPrice<?php echo $row['cartId'] ?>()" onchange="qtyPrice<?php echo $row['cartId'] ?>()">
-                                        <label class="custom-control-label" for="check<?php echo $row['cartId'] ?>"></label>
+                                        <input type="checkbox" class="custom-control-input checkItem" id="check<?php echo $row['quoteId'] ?>" onclick="qtyPrice<?php echo $row['quoteId'] ?>()" onchange="qtyPrice<?php echo $row['quoteId'] ?>()">
+                                        <label class="custom-control-label" for="check<?php echo $row['quoteId'] ?>"></label>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between p-1">
@@ -299,18 +299,18 @@
                                             <a href="#" class="text-danger"><?php echo $row['name']?></a>
                                         </h4>
                                         <h5>LKR <?php echo number_format($row['price'],2); ?></h5>
-                                        <input type="text" id="price<?php echo $row['cartId'] ?>" value="<?php echo $row['price']; ?>" hidden>
+                                        <input type="text" id="price<?php echo $row['quoteId'] ?>" value="<?php echo $row['price']; ?>" hidden>
                                         <div class="pl-3 form-group row d-flex justify-content-start">
                                             <label for="qty" class="col-form-label col-form-label-sm">Quentity </label>
-                                            <input type="number" class="form-control form-control-sm col-3 mx-2 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" id="qty<?php echo $row['cartId'] ?>" min="1" value="1" onchange="qtyPrice<?php echo $row['cartId'] ?>()" onkeydown="qtyPrice<?php echo $row['cartId'] ?>()" onkeyup="qtyPrice<?php echo $row['cartId'] ?>()" onselect="qtyPrice<?php echo $row['cartId'] ?>()">
-                                            <h5 id="qtyPrice<?php echo $row['cartId'] ?>" class="text-secondary">LKR <?php echo $row['price']; ?></h5>
+                                            <input type="number" class="form-control form-control-sm col-3 mx-2 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" id="qty<?php echo $row['quoteId'] ?>" min="1" value="1" onchange="qtyPrice<?php echo $row['quoteId'] ?>()" onkeydown="qtyPrice<?php echo $row['quoteId'] ?>()" onkeyup="qtyPrice<?php echo $row['quoteId'] ?>()" onselect="qtyPrice<?php echo $row['quoteId'] ?>()">
+                                            <h5 id="qtyPrice<?php echo $row['quoteId'] ?>" class="text-secondary">LKR <?php echo $row['price']; ?></h5>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <div class="card-footer text-right" id="card-footer<?php echo $row['cartId'] ?>">
+                                <div class="card-footer text-right" id="card-footer<?php echo $row['quoteId'] ?>">
                                     <?php
-                                        echo "<a href='quotation.php?remove={$row['cartId']}' onclick=\"return confirm('This action will remove this item from your quotation.');\" class='text-danger mx-5'><i class='far fa-trash-alt fa-lg'></i></a>";
+                                        echo "<a href='quotation.php?remove={$row['quoteId']}' onclick=\"return confirm('This action will remove this item from your quotation.');\" class='text-danger mx-5'><i class='far fa-trash-alt fa-lg'></i></a>";
                                         echo "<a href='quotation.php' class='btn btn-outline-danger px-5'>Buy</a>";
                                     ?>
                                 </div>
@@ -334,7 +334,7 @@
                     
                     <?php 
 
-                        $query2 = "SELECT c.`id` AS 'cartId', p.* FROM `quotation` c, `product` p WHERE c.`product_id` = p.`id` AND c.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
+                        $query2 = "SELECT q.`id` AS 'quoteId', p.* FROM `quotation` q, `product` p WHERE q.`product_id` = p.`id` AND q.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
 
                         $result = $conn->query($query2);
 
@@ -343,9 +343,9 @@
                     ?>
                     
                     <div class="d-flex justify-content-between">
-                        <div class="p-2" id="itemId<?php echo $row['cartId'] ?>"><?php echo $row['id'] ?> X <font id="itemQty<?php echo $row['cartId'] ?>">1</font></div>
-                        <div class="p-2" id="itemTotal<?php echo $row['cartId'] ?>"><?php echo $row['price']; ?></div>
-                        <input type="text" id="itemTotal1<?php echo $row['cartId'] ?>" value="<?php echo $row['price']; ?>" hidden>
+                        <div class="p-2" id="itemId<?php echo $row['quoteId'] ?>"><?php echo $row['id'] ?> X <font id="itemQty<?php echo $row['quoteId'] ?>">1</font></div>
+                        <div class="p-2" id="itemTotal<?php echo $row['quoteId'] ?>"><?php echo $row['price']; ?></div>
+                        <input type="text" id="itemTotal1<?php echo $row['quoteId'] ?>" value="<?php echo $row['price']; ?>" hidden>
                     </div>
                     
                     <?php } ?>
