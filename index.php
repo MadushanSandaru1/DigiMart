@@ -437,7 +437,7 @@
             </div>
             
             <div class="col-3">
-                <div class="shadow-lg p-3 bg-white rounded">
+                <div class="shadow-lg p-3 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark text-light"; else echo "bg-light text-dark"; ?> rounded">
                     <div class="p-1 d-flex justify-content-around text-danger d-block mb-2">
                         <i class="fas fa-user-circle fa-5x"></i>
                     </div>
@@ -455,13 +455,13 @@
                         else {
                     ?>
                     <div class="p-1 d-flex justify-content-around mb-2">
-                        <a href="html/logout.php" class="btn btn-outline-danger">Logout</a>
+                        <a href="html/logout.php" onclick="return confirm('Are you sure you want to logout?.');" class="btn btn-outline-danger">Logout</a>
                     </div>
                     
                     <div class="p-1 d-flex justify-content-around mb-2">
-                        <a href="html/customer_account.php" class="text-dark" data-toggle="tooltip" data-placement="bottom" title="Account"><i class="fas fa-user-cog fa-2x"></i></a>
-                        <a href="html/customer_order.php" class="text-dark" data-toggle="tooltip" data-placement="bottom" title="Order List"><i class="far fa-clipboard fa-2x"></i></a>
-                        <a href="html/customer_message.php" class="text-dark" data-toggle="tooltip" data-placement="bottom" title="Message"><i class="far fa-comment-dots fa-2x"></i></a>
+                        <a href="html/customer_account.php" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-light"; else echo "text-dark"; ?>" data-toggle="tooltip" data-placement="bottom" title="Account"><i class="fas fa-user-cog fa-2x"></i></a>
+                        <a href="html/customer_order.php" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-light"; else echo "text-dark"; ?>" data-toggle="tooltip" data-placement="bottom" title="Order List"><i class="far fa-clipboard fa-2x"></i></a>
+                        <a href="html/customer_message.php" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-light"; else echo "text-dark"; ?>" data-toggle="tooltip" data-placement="bottom" title="Message"><i class="far fa-comment-dots fa-2x"></i></a>
                     </div>
                     
                     <?php

@@ -58,7 +58,7 @@
 <html>
 <head>
     <!-- title -->
-	<title>Quotation | DigiMart</title>
+	<title>Mail and Payment | DigiMart</title>
     
     <!-- title icon -->
     <link rel="icon" type="image/ico" href="../image/logo.png"/>
@@ -94,7 +94,7 @@
             font-size: 20px;
         }
         
-        .display-4 {
+        .display-5 {
             font-family: 'Atomic Age';
         }
         
@@ -223,7 +223,7 @@
     <div class="container">
         
         <div class="mt-4">
-            <h1 class="display-4 text-danger"><img src="../image/quote.png" width="60px"> Quotation</h1>
+            <h1 class="display-5 text-danger"><img src="../image/mail.png" width="60px"> Mail Information</h1>
         </div>
         
         
@@ -232,41 +232,38 @@
     
     <div class="container-fluid mt-4">
         
-        <?php
-        
-            if(isset($_SESSION['digimart_current_user_email'])) {
-                
-                if($quoteCount <= 0){
-        ?>
-        
-        <div class="justify-content-center mb-2 p-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" style="height: 300px;">
-            <h2 class="text-center">You don't have any items in your quotation. Let's get shopping!</h2>
-            
-            <div class="justify-content-center p-1 d-flex mt-4">
-                <a href="../index.php" class="btn btn-outline-danger px-5">Start shopping</a>
-            </div>
-        </div>
-        
-        <?php
-                }
-                else {
-        ?>
-        
-        
-        
-        
-        
-        
-        
         <div class="container">
             
             <div class="row mt-3">
 
-                <div class="col-lg-8">
+                <div class="col-lg-8 shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
                     
-                    <div class="row justify-content-end mw-100" id="product-container">
-                        <div class="mb-4 d-flex mx-2">
-                            <a href='quotation.php?removeAll=1' onclick="return confirm('This action will remove all item from your quotation.');" class="btn btn-outline-danger w-100 px-5"><i class='far fa-trash-alt fa-lg'></i> Remove All</a>
+                    <div class="row mw-100 p-2" id="product-container">
+                        <div class="d-flex m-3">
+                            <a href='quotation.php?removeAll=1' onclick="return confirm('This action will remove all item from your quotation.');" class="btn btn-outline-danger w-100 px-5"><i class="fas fa-plus fa-lg"></i> Add a new address</a>
+                        </div>
+                    </div>
+                    
+                    <div class="row mw-100 p-2" id="product-container">
+                        
+                        <div class="col-6 d-flex">
+                            <div class="card border-danger <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
+                                <div class="card-header">Default Address</div>
+                                <div class="card-body text-danger">
+                                    <h5 class="card-title">Madushan Sandaruwan</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6 d-flex">
+                            <div class="card border-danger <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
+                                <div class="card-header">Header</div>
+                                <div class="card-body text-danger">
+                                    <h5 class="card-title">Danger card title</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -280,11 +277,12 @@
 
                     ?>
                     
-                    <div class="row mw-100" id="product-container">
-                        <div class="mb-4 d-flex mx-2 shadow-sm">
+                    <div class="row mw-100 shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>" id="product-container">
+                        <div class="m-3 d-flex">
+                            
                             <div class="card <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
                                 <div class="card-header d-flex justify-content-between" id="card-header<?php echo $row['quoteId'] ?>">
-                                    <h6 class="lead">Product Id : <?php echo $row['id']; ?></h6>
+                                    <h6 class="lead">Default Address</h6>
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input checkItem" id="check<?php echo $row['quoteId'] ?>" onclick="qtyPrice<?php echo $row['quoteId'] ?>()" onchange="qtyPrice<?php echo $row['quoteId'] ?>()">
                                         <label class="custom-control-label" for="check<?php echo $row['quoteId'] ?>"></label>
@@ -310,7 +308,8 @@
                                 
                                 <div class="card-footer text-right" id="card-footer<?php echo $row['quoteId'] ?>">
                                     <?php
-                                        echo "<a href='quotation.php?remove={$row['quoteId']}' onclick=\"return confirm('This action will remove this item from your quotation.');\" class='text-danger'><i class='far fa-trash-alt fa-lg'></i></a>";
+                                        echo "<a href='quotation.php?remove={$row['quoteId']}' onclick=\"return confirm('This action will remove this item from your quotation.');\" class='text-danger mx-5'><i class='far fa-trash-alt fa-lg'></i></a>";
+                                        echo "<a href='quotation.php' class='btn btn-outline-danger px-5'>Buy</a>";
                                     ?>
                                 </div>
                             </div>
@@ -321,76 +320,12 @@
                     
 
                 </div>
-                
-                <div class="shadow-lg p-4 mb-5 rounded-lg col-lg-4 h-100 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
-                    
-                    <h2>Quotation</h2>
-                    
-                    <div class="d-flex justify-content-between">
-                        <div class="p-2 font-weight-bold">PRODUCT ID X QTY</div>
-                        <div class="p-2 font-weight-bold">PRICE (LKR)</div>
-                    </div>
-                    
-                    <?php 
-
-                        $query2 = "SELECT q.`id` AS 'quoteId', p.* FROM `quotation` q, `product` p WHERE q.`product_id` = p.`id` AND q.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
-
-                        $result = $conn->query($query2);
-
-                        while ($row = $result->fetch_assoc()) { 
-
-                    ?>
-                    
-                    <div class="d-flex justify-content-between">
-                        <div class="p-2" id="itemId<?php echo $row['quoteId'] ?>"><?php echo $row['id'] ?> X <font id="itemQty<?php echo $row['quoteId'] ?>">1</font></div>
-                        <div class="p-2" id="itemTotal<?php echo $row['quoteId'] ?>"><?php echo $row['price']; ?></div>
-                        <input type="text" id="itemTotal1<?php echo $row['quoteId'] ?>" value="<?php echo $row['price']; ?>" hidden>
-                    </div>
-                    
-                    <?php } ?>
-                    
-                    <div class="d-flex border-top mt-4 border-danger">
-                        <div class="mr-auto p-2"><h5>Total</h5></div>
-                        <div class="p-2"><h5 id="totalPrice"></h5></div>
-                    </div>
-                    
-                    <button id="getQuoteDisabled" class="btn btn-outline-danger w-100 mt-3" data-toggle="tooltip" data-placement="bottom" title="Select item" disabled>Get Quotation as PDF</button>
-                    <a href='' id="getQuote" target="_blank" name="getQuote" class="btn btn-danger w-100 mt-3">Get Quotation as PDF</a>
-
-                </div>
-                <!-- /.col-lg-3 -->
 
             </div>
 
             <br>
 
         </div>
-        
-        
-        
-        
-        <?php
-                    
-                }                
-            }
-            else {
-                
-        ?>
-        
-        <div class="justify-content-center mb-2 p-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" style="height: 300px;">
-            <h2 class="text-center">You don't have any items in your quotation.</h2>
-            <h3 class="text-center lead mt-4">Have an account? Sign in to see your items.</h3>
-            
-            <div class="justify-content-center p-1 d-flex mt-4">
-                <a href="join.php" class="btn btn-danger px-5 mr-5">Join</a>
-                <a href="sign_in.php" class="btn btn-outline-danger px-5">Sign In</a>
-            </div>
-        </div>
-        
-        <?php
-            
-            }
-        ?>
         
     </div>
     

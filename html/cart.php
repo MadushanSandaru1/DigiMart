@@ -18,7 +18,17 @@
 
     if(isset($_GET['remove'])) {
 	    
-        $sql = "DELETE FROM `shopping_cart` WHERE `id` = {$_GET['remove']}";
+        $sql = "DELETE FROM `shopping_cart` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}' AND `id` = {$_GET['remove']}";
+        
+        mysqli_query($conn, $sql);
+        
+        header('Location: cart.php');
+    
+    }
+
+    if(isset($_GET['removeAll'])) {
+	    
+        $sql = "DELETE FROM `shopping_cart` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}'";
         
         mysqli_query($conn, $sql);
         
@@ -41,6 +51,30 @@
         }
     }
 
+    if(isset($_GET['itemCount'])) {
+        
+        $i=0;
+        $_SESSION['itemCount'] = $_GET['itemCount'];
+        $_SESSION['total'] = $_GET['total'];
+        $_SESSION['productId'] = array();
+        $_SESSION['productPrice'] = array();
+        $_SESSION['productQty'] = array();        
+        
+        $productId = explode(",",$_GET['productId']);
+        $productPrice = explode(",",$_GET['productPrice']);
+        $productQty = explode(",",$_GET['productQty']);
+        
+        while ($i < $_SESSION['itemCount']){
+            $_SESSION['productId'][$i] = $productId[$i];
+            $_SESSION['productPrice'][$i] = $productPrice[$i];
+            $_SESSION['productQty'][$i] = $productQty[$i];
+            
+            $i++;
+        }
+        //var_dump($_SESSION['productQty']);
+        header('Location: mail_and_payment.php');
+        
+    }
 
 ?>
 
@@ -48,7 +82,7 @@
 <html>
 <head>
     <!-- title -->
-	<title>Cart | DigiMart</title>
+	<title>Shopping Cart | DigiMart</title>
     
     <!-- title icon -->
     <link rel="icon" type="image/ico" href="../image/logo.png"/>
@@ -92,6 +126,14 @@
             background-color: transparent;
         }
         
+        #getCartDisabled {
+            display: block;
+        }
+        
+        #getCart {
+            display: none;
+        }
+        
     </style>
     
     <script>
@@ -121,6 +163,7 @@
             document.getElementById("qtyPrice<?php echo $row['cartId'] ?>").innerHTML = "LKR " + qtyPrice.toFixed(2);
             document.getElementById("itemTotal<?php echo $row['cartId'] ?>").innerHTML = qtyPrice.toFixed(2);
             document.getElementById("itemTotal1<?php echo $row['cartId'] ?>").value = qtyPrice.toFixed(2);
+            document.getElementById("itemQty<?php echo $row['cartId'] ?>").innerHTML = qty;
             
             calculateTotal();
         }
@@ -131,8 +174,12 @@
             
             var total = 0.0;
             
-            <?php 
-
+            var productId = [];
+            var productQty = [];
+            var productPrice = [];
+            
+            <?php
+            
                 $query2 = "SELECT c.`id` AS 'cartId', p.* FROM `shopping_cart` c, `product` p WHERE c.`product_id` = p.`id` AND c.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
 
                 $result = $conn->query($query2);
@@ -143,51 +190,55 @@
             
             if(document.getElementById("check<?php echo $row['cartId'] ?>").checked == true){
                 total = total + parseFloat(document.getElementById("itemTotal1<?php echo $row['cartId'] ?>").value);
-                document.getElementById("itemTotalLabel<?php echo $row['cartId'] ?>").style.display = "block";
+                document.getElementById("itemId<?php echo $row['cartId'] ?>").style.display = "block";
                 document.getElementById("itemTotal<?php echo $row['cartId'] ?>").style.display = "block";
                 document.getElementById("card-footer<?php echo $row['cartId'] ?>").style.background = "rgba(221,18,60,0.1)";
                 document.getElementById("card-header<?php echo $row['cartId'] ?>").style.background = "rgba(221,18,60,0.1)";
+                
+                var pQty = document.getElementById("qty<?php echo $row['cartId'] ?>").value;
+                var pPrice = document.getElementById("price<?php echo $row['cartId'] ?>").value;
+                
+                productId.push("<?php echo $row['id'] ?>");
+                productQty.push(pQty);
+                productPrice.push(pPrice);
+                
+                
             } else {
-                document.getElementById("itemTotalLabel<?php echo $row['cartId'] ?>").style.display = "none";
+                document.getElementById("itemId<?php echo $row['cartId'] ?>").style.display = "none";
                 document.getElementById("itemTotal<?php echo $row['cartId'] ?>").style.display = "none";
                 document.getElementById("card-footer<?php echo $row['cartId'] ?>").style.background = "rgba(0,0,0,.03)";
                 document.getElementById("card-header<?php echo $row['cartId'] ?>").style.background = "rgba(0,0,0,.03)";
+                
             }
             
             <?php } ?>
             
             document.getElementById("totalPrice").innerHTML = "LKR " + total.toFixed(2);
+            
+            var strLink = "cart.php?itemCount=" + productId.length + "&productId=" + productId + "&productPrice=" + productPrice + "&productQty=" + productQty + "&total=" + total;
+            document.getElementById("getCart").setAttribute("href",strLink);
+            
+            if(total != 0.0) {
+                document.getElementById("getCart").style.display = "block";
+                document.getElementById("getCartDisabled").style.display = "none";
+            } else {
+                document.getElementById("getCart").style.display = "none";
+                document.getElementById("getCartDisabled").style.display = "block";
+            }
+        
         }
         
-        
+        /*function checkAll() {
+            $("#checkAll").change(function () {
+                $("input:checkbox").prop('checked', $(this).prop("checked"));
+            });
+        }*/
     </script>
+    
     
 </head>
     
 <body onload="calculateTotal()">
-    
-    <!-- Modal -->
-    <div class="modal fade" id="itemRemoveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="far fa-question-circle"></i> Are you sure about this?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    This action will remove this item from your shopping cart.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="btnSave" class="btn btn-danger" onclick="ConfirmDelete()">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal -->
-    
     
     <?php
         require_once('header_half.php');
@@ -232,9 +283,16 @@
         
         
         <div class="container">
+            
             <div class="row mt-3">
 
                 <div class="col-lg-8">
+                    
+                    <div class="row justify-content-end mw-100" id="product-container">
+                        <div class="mb-4 d-flex mx-2">
+                            <a href='cart.php?removeAll=1' onclick="return confirm('This action will remove all item from your shopping cart.');" class="btn btn-outline-danger w-100 px-5"><i class='far fa-trash-alt fa-lg'></i> Remove All</a>
+                        </div>
+                    </div>
                     
                     <?php 
 
@@ -252,7 +310,7 @@
                                 <div class="card-header d-flex justify-content-between" id="card-header<?php echo $row['cartId'] ?>">
                                     <h6 class="lead">Product Id : <?php echo $row['id']; ?></h6>
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="check<?php echo $row['cartId'] ?>" onclick="qtyPrice<?php echo $row['cartId'] ?>()">
+                                        <input type="checkbox" class="custom-control-input checkItem" id="check<?php echo $row['cartId'] ?>" onclick="qtyPrice<?php echo $row['cartId'] ?>()" onchange="qtyPrice<?php echo $row['cartId'] ?>()">
                                         <label class="custom-control-label" for="check<?php echo $row['cartId'] ?>"></label>
                                     </div>
                                 </div>
@@ -268,7 +326,7 @@
                                         <input type="text" id="price<?php echo $row['cartId'] ?>" value="<?php echo $row['price']; ?>" hidden>
                                         <div class="pl-3 form-group row d-flex justify-content-start">
                                             <label for="qty" class="col-form-label col-form-label-sm">Quentity </label>
-                                            <input type="number" class="form-control form-control-sm col-3 mx-2 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" id="qty<?php echo $row['cartId'] ?>" min="1" value="1" onchange="qtyPrice<?php echo $row['cartId'] ?>()" onkeydown="qtyPrice<?php echo $row['cartId'] ?>()" onkeyup="qtyPrice<?php echo $row['cartId'] ?>()">
+                                            <input type="number" class="form-control form-control-sm col-3 mx-2 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" id="qty<?php echo $row['cartId'] ?>" min="1" value="1" onchange="qtyPrice<?php echo $row['cartId'] ?>()" onkeydown="qtyPrice<?php echo $row['cartId'] ?>()" onkeyup="qtyPrice<?php echo $row['cartId'] ?>()" onselect="qtyPrice<?php echo $row['cartId'] ?>()">
                                             <h5 id="qtyPrice<?php echo $row['cartId'] ?>" class="text-secondary">LKR <?php echo $row['price']; ?></h5>
                                         </div>
                                     </div>
@@ -276,8 +334,7 @@
                                 
                                 <div class="card-footer text-right" id="card-footer<?php echo $row['cartId'] ?>">
                                     <?php
-                                        echo "<a href='cart.php?remove={$row['cartId']}' class='text-danger mx-5' data-toggle='modal' data-target='#itemRemoveModal'><i class='far fa-trash-alt fa-lg'></i></a>";
-                                        echo "<a href='cart.php' class='btn btn-outline-danger px-5'>Buy</a>";
+                                        echo "<a href='cart.php?remove={$row['cartId']}' onclick=\"return confirm('This action will remove this item from your shopping cart.');\" class='text-danger'><i class='far fa-trash-alt fa-lg'></i></a>";
                                     ?>
                                 </div>
                             </div>
@@ -291,10 +348,10 @@
                 
                 <div class="shadow-lg p-4 mb-5 rounded-lg col-lg-4 h-100 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
                     
-                    <h2>Order Summary</h2>
+                    <h2>Order</h2>
                     
-                    <div class="d-flex">
-                        <div class="mr-auto p-2 font-weight-bold">PRODUCT ID</div>
+                    <div class="d-flex justify-content-between">
+                        <div class="p-2 font-weight-bold">PRODUCT ID X QTY</div>
                         <div class="p-2 font-weight-bold">PRICE (LKR)</div>
                     </div>
                     
@@ -308,8 +365,8 @@
 
                     ?>
                     
-                    <div class="d-flex">
-                        <div class="mr-auto p-2" id="itemTotalLabel<?php echo $row['cartId'] ?>"><?php echo $row['cartId'] ?></div>
+                    <div class="d-flex justify-content-between">
+                        <div class="p-2" id="itemId<?php echo $row['cartId'] ?>"><?php echo $row['id'] ?> X <font id="itemQty<?php echo $row['cartId'] ?>">1</font></div>
                         <div class="p-2" id="itemTotal<?php echo $row['cartId'] ?>"><?php echo $row['price']; ?></div>
                         <input type="text" id="itemTotal1<?php echo $row['cartId'] ?>" value="<?php echo $row['price']; ?>" hidden>
                     </div>
@@ -321,7 +378,8 @@
                         <div class="p-2"><h5 id="totalPrice"></h5></div>
                     </div>
                     
-                    <button type="submit" name="msgSend" class="btn btn-danger w-100 mt-3">Buy</button>
+                    <button id="getCartDisabled" class="btn btn-outline-danger w-100 mt-3" data-toggle="tooltip" data-placement="bottom" title="Select item" disabled>Buy</button>
+                    <a href='' id="getCart" name="getCart" class="btn btn-danger w-100 mt-3">Buy</a>
 
                 </div>
                 <!-- /.col-lg-3 -->
