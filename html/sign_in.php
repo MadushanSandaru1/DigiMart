@@ -64,7 +64,7 @@
                 header("location:../index.php");
             }
             else {
-                header("location:dashboard.php");
+                header("location:digimart_account.php");
             }
             
 		}

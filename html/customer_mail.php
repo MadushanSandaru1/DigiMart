@@ -5,8 +5,6 @@
     session_start();
 
     date_default_timezone_set("Asia/Colombo");
-    $alert = "";
-    $alertStatus = "none";
 
     if(isset($_GET['currency'])){
         setcookie("currency_type", $_GET['currency'], time() + (86400 * 30), "/");
@@ -33,28 +31,40 @@
         }
     }
 
+    if(isset($_GET['setDefault'])){
+        $id = $_GET['setDefault'];
+        
+        $sql = "UPDATE `customer_mail_info` SET `is_default`= 0 WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}'";
+        mysqli_query($conn, $sql);
+        
+        $sql = "UPDATE `customer_mail_info` SET `is_default`= 1 WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}' AND `id` = $id";
+        mysqli_query($conn, $sql);
+        
+        header('Location: customer_mail.php');
+    }
+
     if(isset($_POST['btnSubmit'])){
+        $name = $_POST['mailName'];
+        $street1 = $_POST['mailStreet1'];
+        $street2 = $_POST['mailStreet2'];
+        $city = $_POST['mailCity'];
+        $zip = $_POST['mailZip'];
+        $mobile = $_POST['mailMobile'];
         
-        $firstName = $_POST['firstName'];
-        $lastName = $_POST['lastName'];
-        
-        $sql = "UPDATE `customer` SET `first_name`= '{$firstName}', `last_name`= '{$lastName}' WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+        $sql = "INSERT INTO `customer_mail_info`(`customer_id`, `name`, `street_1`, `street_2`, `city`, `zip_code`, `mobile_no`) VALUES ('{$_SESSION['digimart_current_user_id']}', '{$name}', '{$street1}', '{$street2}', '{$city}', $zip, '{$mobile}')";
         
         mysqli_query($conn, $sql);
         
-        $sql = "SELECT * FROM `customer` WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
-        
-        $result = mysqli_query($conn, $sql);
+        header('Location: customer_mail.php');
+    }
 
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-                $_SESSION['digimart_current_user_first_name'] = $row['first_name'];
-                $_SESSION['digimart_current_user_last_name'] = $row['last_name'];
-            }
-        }
+    if(isset($_GET['remove'])){
+        $id = $_GET['remove'];
+        $sql = "UPDATE `customer_mail_info` SET `is_deleted`= 1 WHERE `id` = '{$id}'";
         
-        $alert = "Changed";
-        $alertStatus = "block";
+        mysqli_query($conn, $sql);
+        
+        header('Location: customer_mail.php');
     }
 
 ?>
@@ -63,7 +73,7 @@
 <html>
 <head>
     <!-- title -->
-	<title>My Account | DigiMart</title>
+	<title>My Mail Address | DigiMart</title>
     
     <!-- title icon -->
     <link rel="icon" type="image/ico" href="../image/logo.png"/>
@@ -205,48 +215,81 @@
         </div>
         
         <div class="content p-1 mb-5 rounded-lg shadow-lg <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
-            <h4 class="text-danger mb-3"><i class="fas fa-user-cog"></i> My Account Setting</h4>
+            <h4 class="text-danger mb-3"><i class="far fa-address-card"></i> My Mail Address</h4>
             <div class="row mw-100 p-2" id="product-container">
                 
                 <div class="col-12">
                     <div class="col-md-6 col-sm-12">
                         <div class="custom-control custom-checkbox">
-                            <form action="customer_account.php" method="post">
+                            <form action="customer_mail.php" method="post">
                                 <div class="">
                                     <div class="form-group">
-                                        <label for="userId" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">User Id</label>
-                                        <input type="text" class="form-control"  name="userId" id="userId" value="<?php echo $_SESSION['digimart_current_user_id']; ?>" readonly>
+                                        <input type="text" class="form-control mailInput" maxlength="100" name="mailName" id="mailName" placeholder="NAME *" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="email" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email" value="<?php echo $_SESSION['digimart_current_user_email']; ?>" readonly>
+                                        <input type="text" class="form-control mailInput" maxlength="100" name="mailStreet1" id="mailStreet1" placeholder="STREET 1">
                                     </div>
                                     <div class="form-group">
-                                        <label for="firstName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">First Name</label>
-                                        <input type="text" class="form-control" name="firstName" id="firstName" value="<?php echo $_SESSION['digimart_current_user_first_name']; ?>" required>
+                                        <input type="text" class="form-control mailInput" maxlength="100" name="mailStreet2" id="mailStreet2" placeholder="STREET 2">
                                     </div>
                                     <div class="form-group">
-                                        <label for="lastName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Last Name</label>
-                                        <input type="text" class="form-control" name="lastName" id="lastName" value="<?php echo $_SESSION['digimart_current_user_last_name']; ?>" required>
+                                        <input type="text" class="form-control mailInput" maxlength="100" name="mailCity" id="mailCity" placeholder="CITY *" required>
                                     </div>
                                     <div class="form-group">
-                                        <input type="submit" value="Change Name" class="btn btn-outline-danger paymentInput px-5" id="btnSubmit" name="btnSubmit">
+                                        <input type="number" class="form-control mailInput" maxlength="11" name="mailZip" id="mailZip" placeholder="ZIP CODE *" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control mailInput" maxlength="10" name="mailMobile" id="mailMobile" placeholder="MOBILE NO *" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" value="Add Address" class="btn btn-outline-danger paymentInput px-5" id="btnSubmit" name="btnSubmit">
                                     </div>
                                 </div>
                             </form>
-                            
-                            <div class="alert alert-danger" role="alert" style="display:<?php echo $alertStatus; ?>;">
-                                <?php echo $alert; ?>
-                            </div>
-                            
                         </div>
-                    
                     </div>
-                    
                 </div>
-            
+
+                <?php
+
+                    $flag = 0;
+
+                    $query2 = "SELECT * FROM `customer_mail_info` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0 ORDER BY `is_default` DESC";
+
+                    $result = $conn->query($query2);
+
+                    while ($row = $result->fetch_assoc()) {
+                        $flag = 1;
+
+                ?>
+
+                <div class="">
+                    <div class="col-12 d-flex pl-5" id="mailCard">
+                        <div class="card border-danger m-2 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
+                            <div class="card-header d-flex justify-content-between" id="card-header<?php echo $row['id']; ?>">
+                                <label><?php if($row['is_default']==1) echo "<i class='far fa-bookmark'></i> Default Address"; else echo "<a class='text-danger' href='customer_mail.php?setDefault=".$row['id']."'>Set as default</a>"; ?></label>
+                            </div>
+                            <div class="card-body text-danger">
+                                <h5 class="card-title"><?php echo $row['name']; ?></h5>
+                                <address>
+                                    <?php echo $row['street_1'].','; ?><br> 
+                                    <?php echo $row['street_2'].','; ?><br>
+                                    <?php echo $row['city'].'.'; ?><br>
+                                    <?php echo $row['zip_code']; ?><br>
+                                    <?php echo '<b>'.$row['mobile_no'].'</b>'; ?>
+                                </address>
+                                <div class="d-flex justify-content-end">
+                                    <a href="customer_mail.php?remove=<?php echo $row['id']; ?>" class=" text-danger" data-toggle="tooltip" data-placement="bottom" title="Remove"><i class="far fa-trash-alt fa-lg"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <?php } ?>
+
+
             </div>
-            
         </div>
 
         

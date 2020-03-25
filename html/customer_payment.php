@@ -5,8 +5,6 @@
     session_start();
 
     date_default_timezone_set("Asia/Colombo");
-    $alert = "";
-    $alertStatus = "none";
 
     if(isset($_GET['currency'])){
         setcookie("currency_type", $_GET['currency'], time() + (86400 * 30), "/");
@@ -33,28 +31,22 @@
         }
     }
 
-    if(isset($_POST['btnSubmit'])){
-        
-        $firstName = $_POST['firstName'];
-        $lastName = $_POST['lastName'];
-        
-        $sql = "UPDATE `customer` SET `first_name`= '{$firstName}', `last_name`= '{$lastName}' WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+    if(isset($_GET['remove'])){        
+        $sql = "UPDATE `customer_payment_info` SET `is_deleted`= 1 WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}'";
         
         mysqli_query($conn, $sql);
         
-        $sql = "SELECT * FROM `customer` WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
-        
-        $result = mysqli_query($conn, $sql);
+        header('Location: customer_payment.php');
+    }
 
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-                $_SESSION['digimart_current_user_first_name'] = $row['first_name'];
-                $_SESSION['digimart_current_user_last_name'] = $row['last_name'];
-            }
-        }
+    if(isset($_POST['btnSubmit'])){
+        $cardNo = $_POST['cardNo'];
         
-        $alert = "Changed";
-        $alertStatus = "block";
+        $sql = "UPDATE `customer_payment_info` SET `card_no`= '{$cardNo}' WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}'";
+        
+        mysqli_query($conn, $sql);
+        
+        header('Location: customer_payment.php');
     }
 
 ?>
@@ -63,7 +55,7 @@
 <html>
 <head>
     <!-- title -->
-	<title>My Account | DigiMart</title>
+	<title>My Payment Card | DigiMart</title>
     
     <!-- title icon -->
     <link rel="icon" type="image/ico" href="../image/logo.png"/>
@@ -205,48 +197,62 @@
         </div>
         
         <div class="content p-1 mb-5 rounded-lg shadow-lg <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
-            <h4 class="text-danger mb-3"><i class="fas fa-user-cog"></i> My Account Setting</h4>
+            <h4 class="text-danger mb-3"><i class="far fa-credit-card"></i> My Payment Card</h4>
             <div class="row mw-100 p-2" id="product-container">
-                
-                <div class="col-12">
-                    <div class="col-md-6 col-sm-12">
-                        <div class="custom-control custom-checkbox">
-                            <form action="customer_account.php" method="post">
-                                <div class="">
-                                    <div class="form-group">
-                                        <label for="userId" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">User Id</label>
-                                        <input type="text" class="form-control"  name="userId" id="userId" value="<?php echo $_SESSION['digimart_current_user_id']; ?>" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email" value="<?php echo $_SESSION['digimart_current_user_email']; ?>" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="firstName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">First Name</label>
-                                        <input type="text" class="form-control" name="firstName" id="firstName" value="<?php echo $_SESSION['digimart_current_user_first_name']; ?>" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lastName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Last Name</label>
-                                        <input type="text" class="form-control" name="lastName" id="lastName" value="<?php echo $_SESSION['digimart_current_user_last_name']; ?>" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="submit" value="Change Name" class="btn btn-outline-danger paymentInput px-5" id="btnSubmit" name="btnSubmit">
-                                    </div>
+
+                <?php
+
+                    $flag = 0;
+
+                    $query2 = "SELECT * FROM `customer_payment_info` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+
+                    $result = $conn->query($query2);
+
+                    while ($row = $result->fetch_assoc()) {
+                        $flag = 1;
+
+                ?>
+
+                <div class="col-md-6 col-sm-12 mb-4">
+                    <div class="card border-danger <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
+                        <div class="card-body text-danger">
+                            <h5 class="card-title" id="bankCardNo"><?php echo $row['card_no']; ?></h5>
+                            <img src="../image/paymentMethod.png" width="100px">
+                        </div>
+                        <div class="card-body d-flex justify-content-end">
+                            <a href="customer_payment.php?remove=1" class=" text-danger" data-toggle="tooltip" data-placement="bottom" title="Remove"><i class="far fa-trash-alt fa-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <?php } ?>
+
+                <div class="col-md-6 col-sm-12">
+                    <div class="custom-control custom-checkbox">
+                        <div id="paymentAnotherDiv">
+                            <form action="customer_payment.php" method="post">
+                                <div class="form-group">
+                                    <input type="text" class="form-control paymentInput" maxlength="25" name ="cardName" id="cardName" placeholder="CARD HOLDER NAME *" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control paymentInput" maxlength="20" name ="cardNo" id="cardNo" placeholder="CARD NUMBER *" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control paymentInput" maxlength="5" name ="cardExp" id="cardExp" placeholder="EXPIRES *" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" class="form-control paymentInput" name ="cardCvv" id="cardCvv" placeholder="CVV *" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="<?php if($flag==1) echo "Change Card"; else echo "Add Card"; ?>" class="btn btn-outline-danger paymentInput px-5" id="btnSubmit" name="btnSubmit">
                                 </div>
                             </form>
-                            
-                            <div class="alert alert-danger" role="alert" style="display:<?php echo $alertStatus; ?>;">
-                                <?php echo $alert; ?>
-                            </div>
-                            
                         </div>
-                    
                     </div>
-                    
                 </div>
-            
+
+
             </div>
-            
         </div>
 
         

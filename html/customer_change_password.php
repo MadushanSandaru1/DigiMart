@@ -35,26 +35,27 @@
 
     if(isset($_POST['btnSubmit'])){
         
-        $firstName = $_POST['firstName'];
-        $lastName = $_POST['lastName'];
+        $currentPwd = $_POST['currentPassword'];
+        $newPwd = $_POST['newPassword'];
         
-        $sql = "UPDATE `customer` SET `first_name`= '{$firstName}', `last_name`= '{$lastName}' WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+        $h_currentPwd = md5($currentPwd);
+        $h_newPwd = md5($newPwd);
         
-        mysqli_query($conn, $sql);
-        
-        $sql = "SELECT * FROM `customer` WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+        $sql = "SELECT * FROM `user` WHERE `username` = '{$_SESSION['digimart_current_user_email']}' AND `password` = '{$h_currentPwd}' AND `is_deleted` = 0";
         
         $result = mysqli_query($conn, $sql);
 
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-                $_SESSION['digimart_current_user_first_name'] = $row['first_name'];
-                $_SESSION['digimart_current_user_last_name'] = $row['last_name'];
-            }
+        if (mysqli_num_rows($result) != 1) {
+            $alert = "Current password is incorrect. Try agin.";
+            $alertStatus = "block";
+        } else {
+            $sql = "UPDATE `user` SET`password`= '{$h_newPwd}' WHERE `username` = '{$_SESSION['digimart_current_user_email']}' AND `is_deleted` = 0";
+            
+            mysqli_query($conn, $sql);
+            
+            $alert = "Password changed.";
+            $alertStatus = "block";
         }
-        
-        $alert = "Changed";
-        $alertStatus = "block";
     }
 
 ?>
@@ -63,7 +64,7 @@
 <html>
 <head>
     <!-- title -->
-	<title>My Account | DigiMart</title>
+	<title>Change Password | DigiMart</title>
     
     <!-- title icon -->
     <link rel="icon" type="image/ico" href="../image/logo.png"/>
@@ -161,6 +162,34 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
+        
+        function passwordVisible() {
+            var x = document.getElementById("currentPassword");
+            var y = document.getElementById("newPassword");
+            var z = document.getElementById("confirmPassword");
+            
+            if (x.type === "password") {
+                x.type = "text";
+                y.type = "text";
+                z.type = "text";
+            } else {
+                x.type = "password";
+                y.type = "password";
+                z.type = "password";
+            }
+        }
+        
+        $(document).ready(function(){
+            $("#confirmPassword").keyup(function(){
+                if ($("#newPassword").val() != $("#confirmPassword").val()) {
+                    $("#match-msg").html("Password do not match").css("color","red");
+                    $("#btnSubmit").attr('disabled','disabled');
+                }else{
+                    $("#match-msg").html("Password matched").css("color","green");
+                    $("#btnSubmit").removeAttr('disabled');
+                }
+            });
+        });
     </script>
     
     
@@ -205,32 +234,30 @@
         </div>
         
         <div class="content p-1 mb-5 rounded-lg shadow-lg <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
-            <h4 class="text-danger mb-3"><i class="fas fa-user-cog"></i> My Account Setting</h4>
+            <h4 class="text-danger mb-3"><i class="fas fa-key"></i> Change Password</h4>
             <div class="row mw-100 p-2" id="product-container">
                 
                 <div class="col-12">
                     <div class="col-md-6 col-sm-12">
                         <div class="custom-control custom-checkbox">
-                            <form action="customer_account.php" method="post">
+                            <form action="customer_change_password.php" method="post">
                                 <div class="">
-                                    <div class="form-group">
-                                        <label for="userId" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">User Id</label>
-                                        <input type="text" class="form-control"  name="userId" id="userId" value="<?php echo $_SESSION['digimart_current_user_id']; ?>" readonly>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" onclick="passwordVisible()" name="mailRadio" id="showPwd">
+                                        <label class="custom-control-label <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" for="showPwd">Show Password</label>
                                     </div>
                                     <div class="form-group">
-                                        <label for="email" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email" value="<?php echo $_SESSION['digimart_current_user_email']; ?>" readonly>
+                                        <input type="password" class="form-control"  name="currentPassword" id="currentPassword" placeholder="CURRENT PASSWORD *" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="firstName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">First Name</label>
-                                        <input type="text" class="form-control" name="firstName" id="firstName" value="<?php echo $_SESSION['digimart_current_user_first_name']; ?>" required>
+                                        <input type="password" class="form-control" name="newPassword" id="newPassword" placeholder="NEW  PASSWORD *" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="lastName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Last Name</label>
-                                        <input type="text" class="form-control" name="lastName" id="lastName" value="<?php echo $_SESSION['digimart_current_user_last_name']; ?>" required>
+                                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="CONFIRM NEW  PASSWORD *" required>
+                                        <small id="match-msg"></small>
                                     </div>
                                     <div class="form-group">
-                                        <input type="submit" value="Change Name" class="btn btn-outline-danger paymentInput px-5" id="btnSubmit" name="btnSubmit">
+                                        <input type="submit" value="Change Password" class="btn btn-outline-danger paymentInput px-5" id="btnSubmit" name="btnSubmit" disabled>
                                     </div>
                                 </div>
                             </form>

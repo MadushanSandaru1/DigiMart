@@ -8,11 +8,6 @@
     $alert = "";
     $alertStatus = "none";
 
-    if(isset($_GET['currency'])){
-        setcookie("currency_type", $_GET['currency'], time() + (86400 * 30), "/");
-        header('Location: '.$_SERVER['PHP_SELF']);
-    }
-
     if(isset($_GET['theme'])){
         setcookie("theme", $_GET['theme'], time() + (86400 * 30), "/");
         header('Location: '.$_SERVER['PHP_SELF']);
@@ -169,7 +164,7 @@
 <body>
     
     <?php
-        require_once('header_half.php');
+        require_once('digimart_header_half.php');
     ?>
     
     
@@ -179,13 +174,13 @@
             <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item active mx-5">
-                        <a class="nav-link" href="customer_account.php">My Account</a>
+                        <a class="nav-link" href="digimart_account.php">My Account</a>
                     </li>
                     <li class="nav-item mx-5">
                         <a class="nav-link" href="customer_order.php">My Order</a>
                     </li>
                     <li class="nav-item mx-5">
-                        <a class="nav-link" href="customer_message_center.php">Message Center <span class="badge badge-pill badge-danger"><?php if($unreadMsgCount!=0) echo $unreadMsgCount; ?></span></a>
+                        <a class="nav-link" href="digimart_message_center.php">Message Center <span class="badge badge-pill badge-danger"><?php if($unreadMsgCount!=0) echo $unreadMsgCount; ?></span></a>
                     </li>
                 </ul>
             </div>
@@ -197,7 +192,7 @@
         <h3 class="text-danger mb-3"><i class="far fa-user-circle"></i> My Account</h3>
         
         <div class="sidebar shadow-lg d-flex flex-column rounded-lg <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
-            <a class="p-3" href="customer_account.php">My Account Setting</a>
+            <a class="p-3" href="digimart_account.php">My Account Setting</a>
             <a class="p-3" href="customer_review.php">My Review</a>
             <a class="p-3" href="customer_mail.php">My Mail Address</a>
             <a class="p-3" href="customer_payment.php">My Payment Card</a>

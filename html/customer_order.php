@@ -16,6 +16,21 @@
         header('Location: '.$_SERVER['PHP_SELF']);
     }
 
+    $unreadMsgCount = 0;
+
+    if(isset($_SESSION['digimart_current_user_id'])){
+        
+        $sql = "SELECT COUNT(*) AS 'unreadMsg' FROM `customer_message` WHERE `to` = '{$_SESSION['digimart_current_user_id']}' AND `is_unread` = 1 AND `is_deleted` = 0";
+        
+        $result = mysqli_query($conn, $sql);
+
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_assoc($result)) {
+                $unreadMsgCount = $row['unreadMsg'];
+            }
+        }
+    }
+
     if(isset($_GET['cancelOrder'])){
         $itemId = $_GET['cancelOrder'];
         
@@ -121,7 +136,7 @@
                         <a class="nav-link" href="customer_order.php">My Order</a>
                     </li>
                     <li class="nav-item mx-5">
-                        <a class="nav-link" href="customer_message.php">Message Center</a>
+                        <a class="nav-link" href="customer_message_center.php">Message Center <span class="badge badge-pill badge-danger"><?php if($unreadMsgCount!=0) echo $unreadMsgCount; ?></span></a>
                     </li>
                 </ul>
             </div>
@@ -175,7 +190,7 @@
                     <td class="d-flex justify-content-start">
                         <img src="../image/product/<?php echo $row['image']; ?>" width="100px;">
                         <div class="ml-3 d-flex flex-column">
-                            <h6><?php echo $row['name']; ?></h6>
+                            <h6 class="<?php if($row['is_canceled']!=0) echo "text-secondary"; ?>"><?php echo $row['name']; ?></h6>
                             <a class="text-secondary">Quentity: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>"><?php echo $row['quantity']; ?></b></a>
                             <a class="text-secondary">Unit price: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>">LKR <?php echo $row['unit_price']; ?></b></a>
                         </div>

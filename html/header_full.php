@@ -49,7 +49,7 @@
                             }
                             else {
                         ?>
-                        <a class="btn btn-outline-danger" href="html/logout.php">Logout</a>
+                        <a class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to logout?.');"  href="html/logout.php">Logout</a>
                         <?php
                             }
                         ?>
@@ -61,7 +61,7 @@
                     ?>
                     <a class="dropdown-item text-danger" href="html/customer_account.php">My Account</a>
                     <a class="dropdown-item text-danger" href="html/customer_order.php">My Order</a>
-                    <a class="dropdown-item text-danger" href="html/customer_message.php">Message Center</a>
+                    <a class="dropdown-item text-danger" href="html/customer_message_center.php">Message Center</a>
                     <?php
                         }
                     ?>

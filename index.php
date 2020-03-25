@@ -461,7 +461,7 @@
                     <div class="p-1 d-flex justify-content-around mb-2">
                         <a href="html/customer_account.php" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-light"; else echo "text-dark"; ?>" data-toggle="tooltip" data-placement="bottom" title="Account"><i class="fas fa-user-cog fa-2x"></i></a>
                         <a href="html/customer_order.php" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-light"; else echo "text-dark"; ?>" data-toggle="tooltip" data-placement="bottom" title="Order List"><i class="far fa-clipboard fa-2x"></i></a>
-                        <a href="html/customer_message.php" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-light"; else echo "text-dark"; ?>" data-toggle="tooltip" data-placement="bottom" title="Message"><i class="far fa-comment-dots fa-2x"></i></a>
+                        <a href="html/customer_message_center.php" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-light"; else echo "text-dark"; ?>" data-toggle="tooltip" data-placement="bottom" title="Message"><i class="far fa-comment-dots fa-2x"></i></a>
                     </div>
                     
                     <?php

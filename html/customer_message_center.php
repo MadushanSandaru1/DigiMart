@@ -16,11 +16,14 @@
         header('Location: '.$_SERVER['PHP_SELF']);
     }
 
-    //is_unread update
-    $sql = "UPDATE `customer_message` SET `is_unread` = 0 WHERE `to` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` =0";
+    if(isset($_SESSION['digimart_current_user_id'])){
         
-    mysqli_query($conn, $sql);
-    //is_unread update
+        //is_unread update
+        $sql = "UPDATE `customer_message` SET `is_unread` = 0 WHERE `to` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` =0";
+        
+        mysqli_query($conn, $sql);
+        //is_unread update
+    }
 
 
 
@@ -31,7 +34,7 @@
         
         mysqli_query($conn, $sql);
         
-        header('Location: customer_message.php');
+        header('Location: customer_message_center.php');
     }
 
 ?>
@@ -173,7 +176,7 @@
                         <a class="nav-link" href="customer_order.php">My Order</a>
                     </li>
                     <li class="nav-item active mx-5">
-                        <a class="nav-link" href="customer_message.php">Message Center</a>
+                        <a class="nav-link" href="customer_message_center.php">Message Center</a>
                     </li>
                 </ul>
             </div>
@@ -340,7 +343,7 @@
                         
                     </div>
                 </div>
-                <form method="post" action="customer_message.php">
+                <form method="post" action="customer_message_center.php">
                     <div class="row m-0 p-2">
                         <div class="d-flex flex-row w-100">
                             <textarea class="form-control msgTypeArea px-4" name="msg" id="msg" rows="3" required></textarea>

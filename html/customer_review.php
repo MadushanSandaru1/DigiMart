@@ -5,8 +5,6 @@
     session_start();
 
     date_default_timezone_set("Asia/Colombo");
-    $alert = "";
-    $alertStatus = "none";
 
     if(isset($_GET['currency'])){
         setcookie("currency_type", $_GET['currency'], time() + (86400 * 30), "/");
@@ -33,37 +31,13 @@
         }
     }
 
-    if(isset($_POST['btnSubmit'])){
-        
-        $firstName = $_POST['firstName'];
-        $lastName = $_POST['lastName'];
-        
-        $sql = "UPDATE `customer` SET `first_name`= '{$firstName}', `last_name`= '{$lastName}' WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
-        
-        mysqli_query($conn, $sql);
-        
-        $sql = "SELECT * FROM `customer` WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
-        
-        $result = mysqli_query($conn, $sql);
-
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-                $_SESSION['digimart_current_user_first_name'] = $row['first_name'];
-                $_SESSION['digimart_current_user_last_name'] = $row['last_name'];
-            }
-        }
-        
-        $alert = "Changed";
-        $alertStatus = "block";
-    }
-
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <!-- title -->
-	<title>My Account | DigiMart</title>
+	<title>My Review | DigiMart</title>
     
     <!-- title icon -->
     <link rel="icon" type="image/ico" href="../image/logo.png"/>
@@ -144,17 +118,6 @@
             }
         }
         
-        .form-control {
-            border-color: #dd123d;
-            color: #dd123d;
-            background:none!important;
-        }
-        
-        .form-control:focus {
-            border-color: #dd123d;
-            color: #dd123d;
-        }
-        
     </style>
     
     <script>
@@ -205,48 +168,83 @@
         </div>
         
         <div class="content p-1 mb-5 rounded-lg shadow-lg <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
-            <h4 class="text-danger mb-3"><i class="fas fa-user-cog"></i> My Account Setting</h4>
-            <div class="row mw-100 p-2" id="product-container">
-                
-                <div class="col-12">
-                    <div class="col-md-6 col-sm-12">
-                        <div class="custom-control custom-checkbox">
-                            <form action="customer_account.php" method="post">
-                                <div class="">
-                                    <div class="form-group">
-                                        <label for="userId" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">User Id</label>
-                                        <input type="text" class="form-control"  name="userId" id="userId" value="<?php echo $_SESSION['digimart_current_user_id']; ?>" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email" value="<?php echo $_SESSION['digimart_current_user_email']; ?>" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="firstName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">First Name</label>
-                                        <input type="text" class="form-control" name="firstName" id="firstName" value="<?php echo $_SESSION['digimart_current_user_first_name']; ?>" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lastName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Last Name</label>
-                                        <input type="text" class="form-control" name="lastName" id="lastName" value="<?php echo $_SESSION['digimart_current_user_last_name']; ?>" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="submit" value="Change Name" class="btn btn-outline-danger paymentInput px-5" id="btnSubmit" name="btnSubmit">
-                                    </div>
-                                </div>
-                            </form>
-                            
-                            <div class="alert alert-danger" role="alert" style="display:<?php echo $alertStatus; ?>;">
-                                <?php echo $alert; ?>
+            <h4 class="text-danger mb-3"><i class="far fa-star"></i> My Review</h4>
+            <table class="table table-striped <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "text-white table-dark"; ?>">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Order Details</th>
+                        <th scope="col">Feedback</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <?php
+
+                        $i=1;
+
+                        $query2 = "SELECT o.*, r.*, p.`name`, p.`image`  FROM `order_product` o, `product` p, `product_review` r WHERE o.`product_id` = p.`id` AND o.`customer_id` = '{$_SESSION['digimart_current_user_id']}' AND r.`product_id` = o.`product_id` AND r.`customer_id` = o.`customer_id` AND o.`is_received` = 1 AND o.`is_canceled` = 0 AND o.`is_deleted` = 0 ORDER BY o.`date_time` DESC";
+
+                        $result = $conn->query($query2);
+
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                    ?>
+
+
+                    <tr>
+                        <th scope="row"><?php echo $i; ?></th>
+                        <td>
+                            <address>
+                                <a class="text-secondary">Order ID: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>"><?php echo $row['id']; ?></b></a><br>
+                                <a class="text-secondary">Order time: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>"><?php echo $row['date_time']; ?></b></a>
+                            </address>
+                        </td>
+                        <td>
+                            <a class="text-secondary">Order amount: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>">LKR <?php echo number_format($row['quantity']*$row['unit_price'],2); ?></b></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td class="d-flex justify-content-start">
+                            <img src="../image/product/<?php echo $row['image']; ?>" width="100px;">
+                            <div class="ml-3 d-flex flex-column">
+                                <h6 class="<?php if($row['is_canceled']!=0) echo "text-secondary"; ?>"><?php echo $row['name']; ?></h6>
+                                <a class="text-secondary">Quentity: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>"><?php echo $row['quantity']; ?></b></a>
+                                <a class="text-secondary">Unit price: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>">LKR <?php echo $row['unit_price']; ?></b></a>
                             </div>
-                            
-                        </div>
-                    
-                    </div>
-                    
-                </div>
-            
-            </div>
-            
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column text-danger">
+                                <h6 class=''>
+                                    <?php
+                                        $rate = $row['review_value'];
+                                        
+                                        for($i=1;$i<6;$i++) {
+                                            if($rate>=$i) {
+                                                echo "<i class='fas fa-star fa-sm'></i>";
+                                            }
+                                            else {
+                                                echo "<i class='far fa-star fa-sm'></i>";
+                                            }
+                                        }
+                                    ?>
+                                </h6>
+                                <h6 class=''><?php echo $row['review_text']; ?></h6>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <?php
+                                $i++;
+                            }
+                        }
+
+                    ?>
+
+                </tbody>
+            </table>
         </div>
 
         
