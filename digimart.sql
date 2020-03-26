@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 06, 2020 at 09:31 PM
+-- Generation Time: Mar 26, 2020 at 08:11 AM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
 --
 
 INSERT INTO `admin` (`id`, `first_name`, `last_name`, `email`, `is_deleted`) VALUES
-('ADM001', 'DigiMart', 'Admin', 'admin.digimart@gmail.com', 0);
+('ADM001', 'DigiMart', 'Admin', 'admin@digimart', 0);
 
 -- --------------------------------------------------------
 
@@ -134,14 +134,15 @@ CREATE TABLE IF NOT EXISTS `contact_message` (
   `is_unread` tinyint(1) NOT NULL DEFAULT 1,
   `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `contact_message`
 --
 
 INSERT INTO `contact_message` (`id`, `name`, `email`, `mobile_no`, `subject`, `message`, `date_time`, `is_unread`, `is_deleted`) VALUES
-(1, 'mashan', 'tg2017233@gmai.com', '0771637551', 'Damage item', 'damage keyboard', '2020-03-07 02:11:46', 1, 0);
+(1, 'mashan', 'tg2017233@gmai.com', '0771637551', 'Damage item', 'damage keyboard', '2020-03-07 02:11:46', 1, 0),
+(2, 'mashan sandaru', 'madushansandaru1@gmail.com', '0771637551', 'jjjddvdfv dvs', 'dsaxdwdcw vdvf\r\nfedfc dds', '2020-03-18 19:14:37', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -164,7 +165,76 @@ CREATE TABLE IF NOT EXISTS `customer` (
 --
 
 INSERT INTO `customer` (`id`, `first_name`, `last_name`, `email`, `is_deleted`) VALUES
-('C00001', 'Madushan', 'Sandaruwan', 'madushansandaru1@gmail.com', 0);
+('C00001', 'madushan', 'Sandaruwan', 'madushansandaru1@gmail.com', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer_mail_info`
+--
+
+DROP TABLE IF EXISTS `customer_mail_info`;
+CREATE TABLE IF NOT EXISTS `customer_mail_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` varchar(6) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `street_1` varchar(100) NOT NULL,
+  `street_2` varchar(100) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `zip_code` int(11) NOT NULL,
+  `mobile_no` varchar(10) NOT NULL,
+  `is_default` tinyint(1) NOT NULL DEFAULT 0,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customer_mail_info`
+--
+
+INSERT INTO `customer_mail_info` (`id`, `customer_id`, `name`, `street_1`, `street_2`, `city`, `zip_code`, `mobile_no`, `is_default`, `is_deleted`) VALUES
+(1, 'C00001', 'Madushan Sandaruwan', 'Bambaragala', 'Koththallena', 'Hatton', 22040, '0771637551', 1, 0),
+(2, 'C00001', 'Sandaru Karunasena', '11 mile post', 'Wanathawilluwa', 'Puttalam', 52364, '0778321006', 0, 0),
+(3, 'C00001', 'dszjnk', 'jikj', 'jkij', 'ol', 45, 'klj', 0, 0),
+(4, 'C00001', 'dv nj', 'jbhnj', 'njlhn', 'njklh', 5, 'mkjj', 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer_message`
+--
+
+DROP TABLE IF EXISTS `customer_message`;
+CREATE TABLE IF NOT EXISTS `customer_message` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from` varchar(8) NOT NULL DEFAULT 'digimart',
+  `to` varchar(8) NOT NULL DEFAULT 'digimart',
+  `message` varchar(500) NOT NULL,
+  `date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `is_unread` tinyint(1) NOT NULL DEFAULT 1,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customer_message`
+--
+
+INSERT INTO `customer_message` (`id`, `from`, `to`, `message`, `date_time`, `is_unread`, `is_deleted`) VALUES
+(1, 'C00001', 'digimart', 'damage keyboard', '2020-03-07 02:11:46', 0, 0),
+(2, 'C00001', 'digimart', 'dsaxdwdcw vdvf\r\nfedfc dds', '2020-03-18 19:14:37', 1, 0),
+(3, 'digimart', 'C00001', 'Payment for invoice 2028, dated 3/3/19 has not been received. Please submit payment by 3/12/19 to avoid any late fees. – Your Citizens Bank Team\r\n\r\nProfessional Interview Text\r\nAndrew. Your interview at Citizens Bank is at 11am tomorrow on 101 Poe Street. Please bring a copy of your i.d for security. -Citizens HR Team', '2020-03-25 10:55:43', 0, 0),
+(4, 'C00001', 'digimart', 'damage keyboard', '2020-03-07 02:11:46', 0, 0),
+(5, 'digimart', 'C00001', 'dsaxdwdcw vdvf\r\nfedfc dds', '2020-03-18 19:14:37', 0, 0),
+(6, 'C00001', 'digimart', 'Payment for invoice 2028, dated 3/3/19 has not been received. Please submit payment by 3/12/19 to avoid any late fees. – Your Citizens Bank Team\r\n\r\nProfessional Interview Text\r\nAndrew. Your interview at Citizens Bank is at 11am tomorrow on 101 Poe Street. Please bring a copy of your i.d for security. -Citizens HR Team', '2020-03-25 10:55:43', 1, 0),
+(7, 'C00001', 'digimart', 'damage keyboard', '1998-01-17 02:11:46', 0, 0),
+(8, 'C00001', 'digimart', 'madushan sandaruwan', '2020-03-25 12:48:27', 1, 0),
+(9, 'C00001', 'digimart', 'hiiiiii', '2020-03-25 12:48:56', 1, 0),
+(10, 'C00001', 'digimart', 'how are you', '2020-03-25 12:49:17', 1, 0),
+(11, 'C00001', 'digimart', 'hellow', '2020-03-25 13:15:25', 1, 0),
+(12, 'C00001', 'digimart', 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhh', '2020-03-25 13:21:29', 1, 0),
+(13, 'C00001', 'digimart', '', '2020-03-25 22:24:10', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -185,36 +255,7 @@ CREATE TABLE IF NOT EXISTS `customer_payment_info` (
 --
 
 INSERT INTO `customer_payment_info` (`customer_id`, `card_no`, `is_deleted`) VALUES
-('C00001', '2587-6358-9574-2514', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `customer_shipping_address`
---
-
-DROP TABLE IF EXISTS `customer_shipping_address`;
-CREATE TABLE IF NOT EXISTS `customer_shipping_address` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `customer_id` varchar(6) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `street_1` varchar(100) NOT NULL,
-  `street_2` varchar(100) NOT NULL,
-  `city` varchar(100) NOT NULL,
-  `zip_code` int(11) NOT NULL,
-  `mobile_no` varchar(10) NOT NULL,
-  `is_default` tinyint(1) NOT NULL DEFAULT 0,
-  `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `customer_id` (`customer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `customer_shipping_address`
---
-
-INSERT INTO `customer_shipping_address` (`id`, `customer_id`, `name`, `street_1`, `street_2`, `city`, `zip_code`, `mobile_no`, `is_default`, `is_deleted`) VALUES
-(1, 'C00001', 'Madushan Sandaruwan', 'Bambaragala', 'Koththallena', 'Hatton', 22040, '0771637551', 1, 0);
+('C00001', '4512-6985-3256-7458', 0);
 
 -- --------------------------------------------------------
 
@@ -237,7 +278,7 @@ CREATE TABLE IF NOT EXISTS `inventory_officer` (
 --
 
 INSERT INTO `inventory_officer` (`id`, `first_name`, `last_name`, `email`, `is_deleted`) VALUES
-('IO0001', 'Sandun', 'Bandara', 'sandaru1wgm@gmail.com', 0);
+('IO0001', 'Sandun', 'Bandara', 'io@digimart', 0);
 
 -- --------------------------------------------------------
 
@@ -247,16 +288,58 @@ INSERT INTO `inventory_officer` (`id`, `first_name`, `last_name`, `email`, `is_d
 
 DROP TABLE IF EXISTS `order_details`;
 CREATE TABLE IF NOT EXISTS `order_details` (
+  `invoice_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` varchar(6) NOT NULL,
+  `date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `total_price` decimal(10,2) NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`invoice_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`invoice_id`, `customer_id`, `date_time`, `total_price`, `is_deleted`) VALUES
+(2, 'C00001', '2020-03-24 19:35:55', '905000.00', 0),
+(3, 'C00001', '2020-03-24 21:07:46', '57500.00', 0),
+(4, 'C00001', '2020-03-25 01:55:56', '1907000.00', 0),
+(5, 'C00001', '2020-03-25 01:57:43', '1094500.00', 0),
+(6, 'C00001', '2020-03-25 02:03:43', '972200.00', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_product`
+--
+
+DROP TABLE IF EXISTS `order_product`;
+CREATE TABLE IF NOT EXISTS `order_product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` varchar(6) NOT NULL,
   `product_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `total_amount` decimal(10,2) NOT NULL,
-  `is_not_received` tinyint(1) NOT NULL DEFAULT 1,
-  `is_deleted` tinyint(4) NOT NULL DEFAULT 0,
+  `unit_price` decimal(10,2) NOT NULL,
   `date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `is_posted` tinyint(1) NOT NULL DEFAULT 0,
+  `is_received` tinyint(1) NOT NULL DEFAULT 0,
+  `is_canceled` tinyint(1) NOT NULL DEFAULT 0,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_product`
+--
+
+INSERT INTO `order_product` (`id`, `customer_id`, `product_id`, `quantity`, `unit_price`, `date_time`, `is_posted`, `is_received`, `is_canceled`, `is_deleted`) VALUES
+(10, 'C00001', 2, 6, '169000.00', '2020-03-25 01:57:43', 0, 0, 0, 0),
+(9, 'C00001', 5, 11, '158000.00', '2020-03-25 01:55:56', 0, 0, 0, 0),
+(8, 'C00001', 1, 5, '11500.00', '2020-03-24 21:07:46', 0, 0, 0, 0),
+(7, 'C00001', 1, 10, '11500.00', '2020-03-24 19:35:55', 1, 1, 0, 0),
+(6, 'C00001', 5, 5, '158000.00', '2020-03-24 19:35:55', 1, 1, 0, 0),
+(11, 'C00001', 6, 7, '135600.00', '2020-03-25 02:03:43', 0, 0, 0, 0),
+(12, 'C00001', 1, 2, '11500.00', '2020-03-25 02:03:43', 0, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -311,7 +394,13 @@ CREATE TABLE IF NOT EXISTS `product_review` (
 --
 
 INSERT INTO `product_review` (`product_id`, `customer_id`, `review_value`, `review_text`) VALUES
-(1, 'C00001', 4, 'Good product');
+(1, 'C00100', 2, 'u can leave feedback for sellers within 30 days in \"Orders Awaiting My Feedbac'),
+(1, 'C00002', 5, ''),
+(1, 'C00003', 2, ''),
+(1, 'C00004', 2, ''),
+(1, 'C00005', 3, ''),
+(1, 'C00006', 5, ''),
+(1, 'C00007', 5, '');
 
 -- --------------------------------------------------------
 
@@ -321,19 +410,19 @@ INSERT INTO `product_review` (`product_id`, `customer_id`, `review_value`, `revi
 
 DROP TABLE IF EXISTS `quotation`;
 CREATE TABLE IF NOT EXISTS `quotation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` varchar(6) NOT NULL,
   `product_id` int(11) NOT NULL,
   `date_time` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`customer_id`,`product_id`),
-  KEY `product_id` (`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `quotation`
 --
 
-INSERT INTO `quotation` (`customer_id`, `product_id`, `date_time`) VALUES
-('C00001', 3, '2020-03-07 02:30:17');
+INSERT INTO `quotation` (`id`, `customer_id`, `product_id`, `date_time`) VALUES
+(1, 'C00001', 1, '2020-03-24 16:03:20');
 
 -- --------------------------------------------------------
 
@@ -343,19 +432,20 @@ INSERT INTO `quotation` (`customer_id`, `product_id`, `date_time`) VALUES
 
 DROP TABLE IF EXISTS `shopping_cart`;
 CREATE TABLE IF NOT EXISTS `shopping_cart` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` varchar(6) NOT NULL,
   `product_id` int(11) NOT NULL,
   `date_time` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`customer_id`,`product_id`),
-  KEY `product_id` (`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `shopping_cart`
 --
 
-INSERT INTO `shopping_cart` (`customer_id`, `product_id`, `date_time`) VALUES
-('C00001', 1, '2020-03-07 02:28:07');
+INSERT INTO `shopping_cart` (`id`, `customer_id`, `product_id`, `date_time`) VALUES
+(10, 'C00001', 3, '2020-03-25 02:07:04'),
+(9, 'C00001', 5, '2020-03-25 02:07:04');
 
 -- --------------------------------------------------------
 
@@ -365,21 +455,21 @@ INSERT INTO `shopping_cart` (`customer_id`, `product_id`, `date_time`) VALUES
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` varchar(6) NOT NULL,
+  `username` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` varchar(20) NOT NULL,
   `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `password`, `role`, `is_deleted`) VALUES
-('ADM001', '123', 'admin', 0),
-('C00001', '123', 'customer', 0),
-('IO0001', '123', 'inventory_officer', 0);
+INSERT INTO `user` (`username`, `password`, `role`, `is_deleted`) VALUES
+('admin@digimart', '202cb962ac59075b964b07152d234b70', 'admin', 0),
+('madushansandaru1@gmail.com', '202cb962ac59075b964b07152d234b70', 'customer', 0),
+('io@digimart', '202cb962ac59075b964b07152d234b70', 'inventory_officer', 0);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
