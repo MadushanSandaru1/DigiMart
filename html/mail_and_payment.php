@@ -54,10 +54,6 @@
     if(isset($_GET['buy'])) {
 
         $i = 0;
-        
-        $inserQuery = "INSERT INTO `order_details`(`customer_id`, `total_price`) VALUES ('{$_SESSION['digimart_current_user_id']}',{$_SESSION['total']})";
-            
-        $result = mysqli_query($conn, $inserQuery);
 
         while ($i < $_SESSION['itemCount']) {
             

@@ -65,6 +65,7 @@
                 $_SESSION['digimart_current_user_email'] = $email;
                 $_SESSION['digimart_current_user_first_name'] = $firstName;
                 $_SESSION['digimart_current_user_last_name'] = $lastName;
+                $_SESSION['digimart_current_user_role'] = "customer";
 
                 if(isset($_POST['rememberMe'])){
                     setcookie("digimart_email", $_SESSION['digimart_current_user_email'], time() + (86400 * 30), "/");

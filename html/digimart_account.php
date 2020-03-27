@@ -6,7 +6,8 @@
 
     date_default_timezone_set("Asia/Colombo");
     $alert = "";
-    $alertStatus = "none";
+    $alertStatusUn = "none";
+    $alertStatusPwd = "none";
 
     if(isset($_GET['theme'])){
         setcookie("theme", $_GET['theme'], time() + (86400 * 30), "/");
@@ -17,7 +18,7 @@
 
     if(isset($_SESSION['digimart_current_user_id'])){
         
-        $sql = "SELECT COUNT(*) AS 'unreadMsg' FROM `customer_message` WHERE `to` = '{$_SESSION['digimart_current_user_id']}' AND `is_unread` = 1 AND `is_deleted` = 0";
+        $sql = "SELECT COUNT(*) AS 'unreadMsg' FROM `customer_message` WHERE `to` = 'digimart' AND `is_unread` = 1 AND `is_deleted` = 0";
         
         $result = mysqli_query($conn, $sql);
 
@@ -33,11 +34,20 @@
         $firstName = $_POST['firstName'];
         $lastName = $_POST['lastName'];
         
-        $sql = "UPDATE `customer` SET `first_name`= '{$firstName}', `last_name`= '{$lastName}' WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+        if($_SESSION['digimart_current_user_role'] == 'admin') {
+            $sql = "UPDATE `admin` SET `first_name`= '{$firstName}', `last_name`= '{$lastName}' WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+        } else {
+            $sql = "UPDATE `inventory_officer` SET `first_name`= '{$firstName}', `last_name`= '{$lastName}' WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+        }
         
         mysqli_query($conn, $sql);
         
-        $sql = "SELECT * FROM `customer` WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+        if($_SESSION['digimart_current_user_role'] == 'admin') {
+            $sql = "SELECT * FROM `admin` WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+        } else {
+            $sql = "SELECT * FROM `inventory_officer` WHERE `id` = '{$_SESSION['digimart_current_user_id']}' AND `is_deleted` = 0";
+        }
+        
         
         $result = mysqli_query($conn, $sql);
 
@@ -49,7 +59,32 @@
         }
         
         $alert = "Changed";
-        $alertStatus = "block";
+        $alertStatusUn = "block";
+    }
+
+    if(isset($_POST['btnSubmitPassword'])){
+        
+        $currentPwd = $_POST['currentPassword'];
+        $newPwd = $_POST['newPassword'];
+        
+        $h_currentPwd = md5($currentPwd);
+        $h_newPwd = md5($newPwd);
+        
+        $sql = "SELECT * FROM `user` WHERE `username` = '{$_SESSION['digimart_current_user_email']}' AND `password` = '{$h_currentPwd}' AND `is_deleted` = 0";
+        
+        $result = mysqli_query($conn, $sql);
+
+        if (mysqli_num_rows($result) != 1) {
+            $alert = "Current password is incorrect. Try agin.";
+            $alertStatus = "block";
+        } else {
+            $sql = "UPDATE `user` SET`password`= '{$h_newPwd}' WHERE `username` = '{$_SESSION['digimart_current_user_email']}' AND `is_deleted` = 0";
+            
+            mysqli_query($conn, $sql);
+            
+            $alert = "Password changed.";
+            $alertStatusPwd = "block";
+        }
     }
 
 ?>
@@ -156,6 +191,34 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
+        
+        function passwordVisible() {
+            var x = document.getElementById("currentPassword");
+            var y = document.getElementById("newPassword");
+            var z = document.getElementById("confirmPassword");
+            
+            if (x.type === "password") {
+                x.type = "text";
+                y.type = "text";
+                z.type = "text";
+            } else {
+                x.type = "password";
+                y.type = "password";
+                z.type = "password";
+            }
+        }
+        
+        $(document).ready(function(){
+            $("#confirmPassword").keyup(function(){
+                if ($("#newPassword").val() != $("#confirmPassword").val()) {
+                    $("#match-msg").html("Password do not match").css("color","red");
+                    $("#btnSubmitPassword").attr('disabled','disabled');
+                }else{
+                    $("#match-msg").html("Password matched").css("color","green");
+                    $("#btnSubmitPassword").removeAttr('disabled');
+                }
+            });
+        });
     </script>
     
     
@@ -177,7 +240,7 @@
                         <a class="nav-link" href="digimart_account.php">My Account</a>
                     </li>
                     <li class="nav-item mx-5">
-                        <a class="nav-link" href="customer_order.php">My Order</a>
+                        <a class="nav-link" href="digimart_manage_digimart.php">Manage DigiMart</a>
                     </li>
                     <li class="nav-item mx-5">
                         <a class="nav-link" href="digimart_message_center.php">Message Center <span class="badge badge-pill badge-danger"><?php if($unreadMsgCount!=0) echo $unreadMsgCount; ?></span></a>
@@ -193,20 +256,16 @@
         
         <div class="sidebar shadow-lg d-flex flex-column rounded-lg <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
             <a class="p-3" href="digimart_account.php">My Account Setting</a>
-            <a class="p-3" href="customer_review.php">My Review</a>
-            <a class="p-3" href="customer_mail.php">My Mail Address</a>
-            <a class="p-3" href="customer_payment.php">My Payment Card</a>
-            <a class="p-3" href="customer_change_password.php">Change Password</a>
+            <a class="p-3" href="digimart_contact_message.php">Contact Message</a>
         </div>
         
         <div class="content p-1 mb-5 rounded-lg shadow-lg <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
             <h4 class="text-danger mb-3"><i class="fas fa-user-cog"></i> My Account Setting</h4>
             <div class="row mw-100 p-2" id="product-container">
                 
-                <div class="col-12">
-                    <div class="col-md-6 col-sm-12">
+                <div class="col-md-6 col-sm-12">
                         <div class="custom-control custom-checkbox">
-                            <form action="customer_account.php" method="post">
+                            <form action="digimart_account.php" method="post">
                                 <div class="">
                                     <div class="form-group">
                                         <label for="userId" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">User Id</label>
@@ -214,7 +273,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="email" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email" value="<?php echo $_SESSION['digimart_current_user_email']; ?>" readonly>
+                                        <input type="email" class="form-control" name="email" id="email" value="<?php echo $_SESSION['digimart_current_user_email']; ?>" readonly>
                                     </div>
                                     <div class="form-group">
                                         <label for="firstName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">First Name</label>
@@ -230,7 +289,7 @@
                                 </div>
                             </form>
                             
-                            <div class="alert alert-danger" role="alert" style="display:<?php echo $alertStatus; ?>;">
+                            <div class="alert alert-danger" role="alert" style="display:<?php echo $alertStatusUn; ?>;">
                                 <?php echo $alert; ?>
                             </div>
                             
@@ -238,7 +297,37 @@
                     
                     </div>
                     
-                </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="custom-control custom-checkbox">
+                            <form action="digimart_account.php" method="post">
+                                <div class="">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" onclick="passwordVisible()" name="mailRadio" id="showPwd">
+                                        <label class="custom-control-label <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" for="showPwd">Show Password</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control"  name="currentPassword" id="currentPassword" placeholder="CURRENT PASSWORD *" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" name="newPassword" id="newPassword" placeholder="NEW  PASSWORD *" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="CONFIRM NEW  PASSWORD *" required>
+                                        <small id="match-msg"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" value="Change Password" class="btn btn-outline-danger paymentInput px-5" id="btnSubmitPassword" name="btnSubmitPassword" disabled>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <div class="alert alert-danger" role="alert" style="display:<?php echo $alertStatusPwd; ?>;">
+                                <?php echo $alert; ?>
+                            </div>
+                            
+                        </div>
+                    
+                    </div>
             
             </div>
             
