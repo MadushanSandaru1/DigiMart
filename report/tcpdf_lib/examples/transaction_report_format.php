@@ -183,7 +183,7 @@ $pdf->Cell(40, 7, 'Date', 0, 0, 'C', 1);
 $pdf->Cell(45, 7, 'Amount [LKR]', 0, 0, 'C', 1);
 $pdf->Cell(40, 7, 'Status', 0, 1, 'C', 1);
 
-$query2 = "SELECT *, (`unit_price`*`quantity`) AS 'total_price' FROM `order_product` WHERE `is_deleted` = 0 ORDER BY `date_time` ASC";
+$query2 = "SELECT *, (`unit_price`*`quantity`) AS 'total_price' FROM `order_product` WHERE  (`is_deleted` = 0 OR `is_deleted` = 1) ORDER BY `date_time` ASC";
 
 $result = $conn->query($query2);
 

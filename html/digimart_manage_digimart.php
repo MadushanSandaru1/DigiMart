@@ -232,9 +232,9 @@
                             $countResult = 0;
                         
                             if($_SESSION['digimart_current_user_role'] == "admin"){
-                                $countResultSql = "SELECT SUM(`unit_price`*`quantity`) AS 'countResult' FROM `order_product` WHERE `is_received` = 1 AND `is_canceled` = 0 AND `is_deleted` = 0 AND `date_time` LIKE '".date("Y-m")."%'";
+                                $countResultSql = "SELECT SUM(`unit_price`*`quantity`) AS 'countResult' FROM `order_product` WHERE `is_received` = 1 AND `is_canceled` = 0 AND (`is_deleted` = 0 OR `is_deleted` = 1) AND `date_time` LIKE '".date("Y-m")."%'";
                             } elseif ($_SESSION['digimart_current_user_role'] == "inventory_officer") {
-                                $countResultSql = "SELECT COUNT(`id`) AS 'countResult' FROM `order_product` WHERE `date_time` LIKE '".date("Y-m-d")."%' AND `is_canceled` = 0 AND `is_deleted` = 0";
+                                $countResultSql = "SELECT COUNT(`id`) AS 'countResult' FROM `order_product` WHERE `date_time` LIKE '".date("Y-m-d")."%' AND `is_canceled` = 0 AND (`is_deleted` = 0 OR `is_deleted` = 1)";
                             }
                             
                             

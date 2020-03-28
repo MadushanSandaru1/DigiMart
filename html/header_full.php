@@ -28,7 +28,7 @@
                 <div class="dropdown-menu <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-light"; ?>" aria-labelledby="currencyDropdown">
                     <h6 class="pl-4"><b>Currency</b></h6>
                     <a class="dropdown-item text-danger" href="index.php?currency=lkr"><img src="image/sl_flag.png" width="25px" alt="SL Flag"> LKR (Sri Lanka Rupee)</a>
-                    <a class="dropdown-item text-danger" href="index.php?currency=usd"><img src="image/us_flag.png" width="25px" alt="US Flag"> USD (US Dollar)</a>
+                    <!--a class="dropdown-item text-danger" href="index.php?currency=usd"><img src="image/us_flag.png" width="25px" alt="US Flag"> USD (US Dollar)</a-->
                 </div>
             </div>
 

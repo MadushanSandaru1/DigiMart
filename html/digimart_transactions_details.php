@@ -313,7 +313,7 @@
 
                             <?php
 
-                                $query2 = "SELECT *, (`unit_price`*`quantity`) AS 'total_price' FROM `order_product` WHERE `is_deleted` = 0 ORDER BY `date_time` DESC";
+                                $query2 = "SELECT *, (`unit_price`*`quantity`) AS 'total_price' FROM `order_product` WHERE  (`is_deleted` = 0 OR `is_deleted` = 1) ORDER BY `date_time` DESC";
 
                                 $result = $conn->query($query2);
 

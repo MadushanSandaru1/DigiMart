@@ -42,7 +42,7 @@
         
         $itemId = $_GET['deleteOrder'];
         
-        $sql = "UPDATE `order_product` SET `is_deleted`= 1 WHERE `id` = {$itemId}";
+        $sql = "UPDATE `order_product` SET `is_deleted`= 2 WHERE `id` = {$itemId}";
         
         mysqli_query($conn, $sql);
         
@@ -267,7 +267,7 @@
 
                         $i=1;
 
-                        $query2 = "SELECT o.*, p.`name`, p.`image`  FROM `order_product` o, `product` p WHERE o.`product_id` = p.`id` AND o.`is_deleted` = 0 ORDER BY o.`date_time` DESC";
+                        $query2 = "SELECT o.*, p.`name`, p.`image`  FROM `order_product` o, `product` p WHERE o.`product_id` = p.`id` AND (o.`is_deleted` = 0 OR o.`is_deleted` = 1) ORDER BY o.`date_time` DESC";
 
                         $result = $conn->query($query2);
 

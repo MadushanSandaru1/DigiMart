@@ -34,21 +34,22 @@
     if(isset($_GET['cancelOrder'])){
         $itemId = $_GET['cancelOrder'];
         
-        $sql = "UPDATE `order_product` SET `is_canceled`= 1 WHERE `id` = {$itemId}";
+        $sql = "UPDATE `order_product` SET `is_canceled`= 1, `is_deleted`= 2 WHERE `id` = {$itemId}";
         
         mysqli_query($conn, $sql);
         
         header('Location: customer_order.php');
     }
         
-    if(isset($_GET['receivedItem'])){
+    if(isset($_GET['receivedOrderId'])){
+        $orderId = $_GET['receivedOrderId'];
         $itemId = $_GET['receivedItem'];
         
-        $sql = "UPDATE `order_product` SET `is_received`= 1 WHERE `id` = {$itemId}";
-        
+        $sql = "UPDATE `order_product` SET `is_received`= 1 WHERE `id` = {$orderId}";
+        echo $sql;
         mysqli_query($conn, $sql);
         
-        header('Location: customer_order.php');
+        header("Location: customer_order_review.php?itemId={$itemId}");
     }
 
     if(isset($_GET['removeItem'])){
@@ -217,7 +218,7 @@
 
                                             if($row['is_received']==0){
                                                 echo "<a class='text-secondary'>Not yet received</a>";
-                                                echo "<a href='customer_order.php?receivedItem={$row['id']}' onclick=\"return confirm('Do you received this item?.');\" class='btn btn-outline-danger btn-sm'>Received</a>";
+                                                echo "<a href='customer_order.php?receivedItem={$row['product_id']}&receivedOrderId={$row['id']}' onclick=\"return confirm('Do you received this item?.');\" class='btn btn-outline-danger btn-sm'>Received</a>";
                                             } else {
                                                 echo "<h6 class=''>Received <i class='far fa-handshake'></i></h6>";
                                             }

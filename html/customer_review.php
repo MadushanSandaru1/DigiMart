@@ -173,7 +173,7 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Order Details</th>
+                        <th scope="col">Product Details</th>
                         <th scope="col">Feedback</th>
                     </tr>
                 </thead>
@@ -183,35 +183,20 @@
 
                         $i=1;
 
-                        $query2 = "SELECT o.*, r.*, p.`name`, p.`image`  FROM `order_product` o, `product` p, `product_review` r WHERE o.`product_id` = p.`id` AND o.`customer_id` = '{$_SESSION['digimart_current_user_id']}' AND r.`product_id` = o.`product_id` AND r.`customer_id` = o.`customer_id` AND o.`is_received` = 1 AND o.`is_canceled` = 0 AND o.`is_deleted` = 0 ORDER BY o.`date_time` DESC";
+                        $query2 = "SELECT * FROM `product_review`, `product` WHERE  `product_id` = `id` AND `customer_id` = '{$_SESSION['digimart_current_user_id']}'";
 
                         $result = $conn->query($query2);
 
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = $result->fetch_assoc()) {
                     ?>
-
-
-                    <tr>
-                        <th scope="row"><?php echo $i; ?></th>
-                        <td>
-                            <address>
-                                <a class="text-secondary">Order ID: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>"><?php echo $row['id']; ?></b></a><br>
-                                <a class="text-secondary">Order time: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>"><?php echo $row['date_time']; ?></b></a>
-                            </address>
-                        </td>
-                        <td>
-                            <a class="text-secondary">Order amount: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>">LKR <?php echo number_format($row['quantity']*$row['unit_price'],2); ?></b></a>
-                        </td>
-                    </tr>
                     <tr>
                         <th scope="row"></th>
                         <td class="d-flex justify-content-start">
                             <img src="../image/product/<?php echo $row['image']; ?>" width="100px;">
                             <div class="ml-3 d-flex flex-column">
-                                <h6 class="<?php if($row['is_canceled']!=0) echo "text-secondary"; ?>"><?php echo $row['name']; ?></h6>
-                                <a class="text-secondary">Quentity: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>"><?php echo $row['quantity']; ?></b></a>
-                                <a class="text-secondary">Unit price: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>">LKR <?php echo $row['unit_price']; ?></b></a>
+                                <h6 class=""><?php echo $row['name']; ?></h6>
+                                <a class="text-secondary">Product ID: <b class=""><?php echo $row['product_id']; ?></b></a>
                             </div>
                         </td>
                         <td>
