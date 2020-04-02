@@ -86,7 +86,6 @@
         }
         
         #categoryList tr:hover {
-            background-color: rgba(221,18,60,0.1);
             border-right: 5px solid #dd123d;
         }
         
@@ -95,11 +94,7 @@
         }
         
         #categoryList tr td {
-            background-color: rgba(221,18,60,0.1);            
-        }
-        
-        #categoryList tr td:hover {
-            background-color: rgba(221,18,60,0.1);            
+            background-color: transparent;            
         }
         
         .categoryTopic {
@@ -107,7 +102,7 @@
         }
         
         .item-type {
-            background: linear-gradient(to left, rgba(221,18,61,0.1) 50%, white 50%);
+            background: linear-gradient(to left, rgba(221,18,61,0.4) 50%, transparent 50%);
             background-size: 200% 100%;
             background-position: left bottom;
             transition: all .5s ease-out;
@@ -264,13 +259,13 @@
         
         .scrollbar-deep-purple::-webkit-scrollbar-track {
             -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
+            background-color: transparent;
             border-radius: 10px;
         }
         
         .scrollbar-deep-purple::-webkit-scrollbar {
             width: 12px;
-            background-color: #fff;
+            background-color: transparent;
         }
         
         .scrollbar-deep-purple::-webkit-scrollbar-thumb {
