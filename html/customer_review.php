@@ -191,7 +191,7 @@
                             while ($row = $result->fetch_assoc()) {
                     ?>
                     <tr>
-                        <th scope="row"></th>
+                        <th scope="row"><?php echo $i; ?></th>
                         <td class="d-flex justify-content-start">
                             <img src="../image/product/<?php echo $row['image']; ?>" width="100px;">
                             <div class="ml-3 d-flex flex-column">
@@ -205,8 +205,8 @@
                                     <?php
                                         $rate = $row['review_value'];
                                         
-                                        for($i=1;$i<6;$i++) {
-                                            if($rate>=$i) {
+                                        for($count=1;$count<6;$count++) {
+                                            if($rate>=$count) {
                                                 echo "<i class='fas fa-star fa-sm'></i>";
                                             }
                                             else {

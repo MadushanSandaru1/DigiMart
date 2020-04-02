@@ -134,6 +134,7 @@
             border-radius: 50px;
             background-color: rgba(221,18,60,0.1);
             font-size: 18px;
+            overflow: hidden;
         }
 
         .msgTypeArea:focus {

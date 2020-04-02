@@ -182,6 +182,15 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
         
+        $(document).ready(function(){
+            $("#tableContentSearch").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#transactionList tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+        
         function passwordVisible() {
             var x = document.getElementById("currentPassword");
             var y = document.getElementById("newPassword");
@@ -295,75 +304,72 @@
             
             </div>
             
-            
-            <div class="row mw-100 p-2" id="product-container">
-                
-                <div class="col-md-12 col-sm-12">
-                    <table class="table table-striped <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "text-white table-dark"; ?>">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Customer ID</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Amount [LKR]</th>
-                                <th scope="col">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+            <table class="table table-striped <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "text-white table-dark"; ?>">
+                <thead>
+                    <tr>
+                        <th scope="col" colspan="5" class="text-right">
+                            <input class="form-control form-control-sm w-25 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>" id="tableContentSearch" type="text" placeholder="Search...">
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Customer ID</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Amount [LKR]</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionList">
 
+                    <?php
+
+                        $query2 = "SELECT *, (`unit_price`*`quantity`) AS 'total_price' FROM `order_product` WHERE  (`is_deleted` = 0 OR `is_deleted` = 1) ORDER BY `date_time` DESC";
+
+                        $result = $conn->query($query2);
+
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                    ?>
+
+
+                    <tr>
+                        <th scope="row" class="text-danger"><?php echo $row['id']; ?></th>
+                        <td><?php echo $row['customer_id']; ?></td>
+                        <td><?php echo $row['date_time']; ?></td>
+                        <td class="text-right"><?php echo number_format($row['total_price'],2); ?></td>
+                        <td>
                             <?php
+                                $date = date_create($row['date_time']);
+                                $date = date_format($date,"Y-m-d");
 
-                                $query2 = "SELECT *, (`unit_price`*`quantity`) AS 'total_price' FROM `order_product` WHERE  (`is_deleted` = 0 OR `is_deleted` = 1) ORDER BY `date_time` DESC";
-
-                                $result = $conn->query($query2);
-
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                            ?>
-
-
-                            <tr>
-                                <th scope="row" class="text-danger"><?php echo $row['id']; ?></th>
-                                <td><?php echo $row['customer_id']; ?></td>
-                                <td><?php echo $row['date_time']; ?></td>
-                                <td class="text-right"><?php echo number_format($row['total_price'],2); ?></td>
-                                <td>
-                                    <?php
-                                        $date = date_create($row['date_time']);
-                                        $date = date_format($date,"Y-m-d");
-                                        
-                                        if($row['is_received']==1) {
-                                            echo "<h6 class=''>Received <i class='far fa-handshake'></i></h6>";
-                                        } else if($row['is_posted']==1) {
-                                            echo "<h6 class=''>Posted <i class='fas fa-truck'></i></h6>";
-                                        } else if($row['is_canceled']==1) {
-                                            echo "<a class='text-secondary'>Canceled <i class='far fa-times-circle'></i></a>";
-                                        } else if (date("Y-m-d")!=$date) {
-                                            echo "<h6 class=''>Confirmed <i class='far fa-check-circle'></i></h6>";
-                                        } else {
-                                            echo "<a class='text-secondary'>Not yet confirmed</a>";
-                                        }
-
-                                    ?>
-                                </td>
-                            </tr>
-                            
-
-
-                            <?php
-                                    }
+                                if($row['is_received']==1) {
+                                    echo "<h6 class=''>Received <i class='far fa-handshake'></i></h6>";
+                                } else if($row['is_posted']==1) {
+                                    echo "<h6 class=''>Posted <i class='fas fa-truck'></i></h6>";
+                                } else if($row['is_canceled']==1) {
+                                    echo "<a class='text-secondary'>Canceled <i class='far fa-times-circle'></i></a>";
+                                } else if (date("Y-m-d")!=$date) {
+                                    echo "<h6 class=''>Confirmed <i class='far fa-check-circle'></i></h6>";
+                                } else {
+                                    echo "<a class='text-secondary'>Not yet confirmed</a>";
                                 }
 
                             ?>
+                        </td>
+                    </tr>
 
-                        </tbody>
-                    </table>
-                </div>
-            
-            </div>
-            
-            
-            
+
+
+                    <?php
+                            }
+                        }
+
+                    ?>
+
+                </tbody>
+            </table>
+        
+        
         </div>
 
         

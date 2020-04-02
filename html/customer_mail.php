@@ -164,6 +164,18 @@
             border-color: #dd123d;
             color: #dd123d;
         }
+
+        .dropDownLink a {
+            text-decoration: none;
+            color: #dd123d;
+            border: 1px solid #dd123d;
+            border-radius: 10px;
+        }
+        
+        .dropDownLink a:hover:not(.active) {
+            background-color: #dd123d;
+            color: white;
+        }
         
     </style>
     
@@ -216,40 +228,53 @@
         
         <div class="content p-1 mb-5 rounded-lg shadow-lg <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
             <h4 class="text-danger mb-3"><i class="far fa-address-card"></i> My Mail Address</h4>
-            <div class="row mw-100 p-2" id="product-container">
-                
-                <div class="col-12">
-                    <div class="col-md-6 col-sm-12">
-                        <div class="custom-control custom-checkbox">
-                            <form action="customer_mail.php" method="post">
-                                <div class="">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control mailInput" maxlength="100" name="mailName" id="mailName" placeholder="NAME *" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control mailInput" maxlength="100" name="mailStreet1" id="mailStreet1" placeholder="STREET 1">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control mailInput" maxlength="100" name="mailStreet2" id="mailStreet2" placeholder="STREET 2">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control mailInput" maxlength="100" name="mailCity" id="mailCity" placeholder="CITY *" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="number" class="form-control mailInput" maxlength="11" name="mailZip" id="mailZip" placeholder="ZIP CODE *" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control mailInput" maxlength="10" name="mailMobile" id="mailMobile" placeholder="MOBILE NO *" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="submit" value="Add Address" class="btn btn-outline-danger paymentInput px-5" id="btnSubmit" name="btnSubmit">
-                                    </div>
+            
+            <div id="accordion" class="mt-4">
+                <div class="m-3 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
+                    <div class="dropDownLink ml-4 mb-2">
+                        <a class="py-2 px-5" data-toggle="collapse" href="#collapseOne">
+                            Add Address
+                        </a>
+                    </div>
+                    <div id="collapseOne" class="collapse" data-parent="#accordion">
+                        <div class="row mw-100 p-2" id="product-container">
+
+                            <div class="col-md-6 col-sm-12">
+                                <div class="custom-control custom-checkbox">
+                                    <form action="customer_mail.php" method="post">
+                                        <div class="">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control mailInput" maxlength="100" name="mailName" id="mailName" placeholder="NAME *" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control mailInput" maxlength="100" name="mailStreet1" id="mailStreet1" placeholder="STREET 1">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control mailInput" maxlength="100" name="mailStreet2" id="mailStreet2" placeholder="STREET 2">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control mailInput" maxlength="100" name="mailCity" id="mailCity" placeholder="CITY *" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="number" class="form-control mailInput" maxlength="11" name="mailZip" id="mailZip" placeholder="ZIP CODE *" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control mailInput" maxlength="10" name="mailMobile" id="mailMobile" placeholder="MOBILE NO *" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Add Address" class="btn btn-outline-danger paymentInput px-5" id="btnSubmit" name="btnSubmit">
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-
+            </div>
+            
+            <div class="row mw-100 p-2" id="product-container">
                 <?php
 
                     $flag = 0;

@@ -197,6 +197,15 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
+        
+        $(document).ready(function(){
+            $("#tableContentSearch").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#brandList tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
     </script>
     
     
@@ -348,13 +357,18 @@
             <table class="table table-striped <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "text-white table-dark"; ?>">
                 <thead>
                     <tr>
+                        <th scope="col" colspan="4" class="text-right">
+                            <input class="form-control form-control-sm w-25 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>" id="tableContentSearch" type="text" placeholder="Search...">
+                        </th>
+                    </tr>
+                    <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Logo</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="brandList">
 
                     <?php
 

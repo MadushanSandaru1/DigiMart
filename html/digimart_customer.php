@@ -193,6 +193,15 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
+        
+        $(document).ready(function(){
+            $("#tableContentSearch").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#customerList tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
     </script>
     
     
@@ -336,56 +345,52 @@
                 </div>
             </div>
             
-            
-            <div class="row mw-100 p-2" id="product-container">
-                
-                <div class="col-md-12 col-sm-12">
-                    <table class="table table-striped <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "text-white table-dark"; ?>">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">First Name</th>
-                                <th scope="col">Last Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
+            <table class="table table-striped <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "text-white table-dark"; ?>">
+                <thead>
+                    <tr>
+                        <th scope="col" colspan="5" class="text-right">
+                            <input class="form-control form-control-sm w-25 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>" id="tableContentSearch" type="text" placeholder="Search...">
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="customerList">
 
-                            <?php
+                    <?php
 
-                                $query2 = "SELECT * FROM `customer` WHERE `is_deleted` = 0";
+                        $query2 = "SELECT * FROM `customer` WHERE `is_deleted` = 0";
 
-                                $result = $conn->query($query2);
+                        $result = $conn->query($query2);
 
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                            ?>
-
-
-                            <tr>
-                                <th scope="row" class="text-danger"><?php echo $row['id']; ?></th>
-                                <td><?php echo $row['first_name']; ?></td>
-                                <td><?php echo $row['last_name']; ?></td>
-                                <td><?php echo $row['email']; ?></td>
-                                <td><a href="digimart_inventory_officer.php?delete=<?php echo $row['email']; ?>" class="text-danger" onclick="return confirm('This action will remove this cutomer account from the system..');" ><i class="far fa-trash-alt"></i></a></td>
-                            </tr>
-                            
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                    ?>
 
 
-                            <?php
-                                    }
-                                }
+                    <tr>
+                        <th scope="row" class="text-danger"><?php echo $row['id']; ?></th>
+                        <td><?php echo $row['first_name']; ?></td>
+                        <td><?php echo $row['last_name']; ?></td>
+                        <td><?php echo $row['email']; ?></td>
+                        <td><a href="digimart_inventory_officer.php?delete=<?php echo $row['email']; ?>" class="text-danger" onclick="return confirm('This action will remove this cutomer account from the system..');" ><i class="far fa-trash-alt"></i></a></td>
+                    </tr>
 
-                            ?>
 
-                        </tbody>
-                    </table>
-                </div>
-            
-            </div>
-            
-            
+
+                    <?php
+                            }
+                        }
+
+                    ?>
+
+                </tbody>
+            </table>
             
         </div>
 
