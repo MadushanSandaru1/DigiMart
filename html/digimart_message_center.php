@@ -254,12 +254,14 @@
                             while ($row1 = $result1->fetch_assoc()) {
                                 $dt = $row1['date_time'];
                                 $em = $row1['email'];
+                                $to = $row1['to'];
+                                $unread = $row1['is_unread'];
                             }
                     ?>
                     
                     <a href="digimart_message_center.php?msgId=<?php echo $row['from']; ?>">
                         <div class="p-1 border-bottom border-danger">
-                            <b class="d-flex justify-content-between"><?php echo $em; ?></b><br>
+                            <b class="d-flex justify-content-between"><?php echo $em; ?><small class=""><?php if(($to == 'digimart') and ($unread == 1)) echo "<i class='fas fa-flag'></i>"; ?></small></b><br>
                             <small class="d-flex justify-content-between text-secondary"><lable><?php echo $row['from']; ?></lable><?php echo $dt; ?></small>
                         </div>
                     </a>

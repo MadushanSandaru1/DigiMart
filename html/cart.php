@@ -1,21 +1,24 @@
 <?php
 
+    //connection start
     require_once('../connection/connection.php');
 
+    //session variable start
     session_start();
 
+    //set currency type as cookie in local machine
     if(isset($_GET['currency'])){
         setcookie("currency_type", $_GET['currency'], time() + (86400 * 30), "/");
         header('Location: '.$_SERVER['PHP_SELF']);
     }
 
+    //set theme as cookie in local machine
     if(isset($_GET['theme'])){
         setcookie("theme", $_GET['theme'], time() + (86400 * 30), "/");
         header('Location: '.$_SERVER['PHP_SELF']);
     }
 
-
-
+    //Remove button submit
     if(isset($_GET['remove'])) {
 	    
         $sql = "DELETE FROM `shopping_cart` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}' AND `id` = {$_GET['remove']}";
@@ -26,6 +29,7 @@
     
     }
 
+    //Remove All button submit
     if(isset($_GET['removeAll'])) {
 	    
         $sql = "DELETE FROM `shopping_cart` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}'";
@@ -36,7 +40,7 @@
     
     }
 
-
+    //count catr items
     if(isset($_SESSION['digimart_current_user_id'])) {
         $sql = "SELECT count(`customer_id`) AS 'cartCount' FROM `shopping_cart` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}'";
 
@@ -51,6 +55,7 @@
         }
     }
 
+    //Buy button submit
     if(isset($_GET['itemCount'])) {
         
         $i=0;
@@ -71,7 +76,7 @@
             
             $i++;
         }
-        //var_dump($_SESSION['productQty']);
+        
         header('Location: mail_and_payment.php');
         
     }
@@ -105,17 +110,12 @@
     <script src="../vendor/jquery/jquery-3.4.1.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.js"></script>
     
+    <!-- Internal CSS -->
     <style>
         body {
             /*background-image: url('../image/back.gif');
             background-image: url('../image/back.png');*/
             <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "background-color: #404550"; ?>
-        }
-        
-        .aboutDescription {
-            background-color: rgba(221,18,60,0.1);
-            font-family: 'Abel';
-            font-size: 20px;
         }
         
         .display-4 {
@@ -136,11 +136,14 @@
         
     </style>
     
+    <!-- Script -->
     <script>
+        //for tooltips
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
         
+        //for calculate price of quantity
         <?php 
 
             $query2 = "SELECT c.`id` AS 'cartId', p.* FROM `shopping_cart` c, `product` p WHERE c.`product_id` = p.`id` AND c.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
@@ -170,6 +173,7 @@
         
         <?php } ?>
         
+        //for calculate total price of selected item
         function calculateTotal() {
             
             var total = 0.0;
@@ -227,200 +231,189 @@
             }
         
         }
-        
-        /*function checkAll() {
-            $("#checkAll").change(function () {
-                $("input:checkbox").prop('checked', $(this).prop("checked"));
-            });
-        }*/
     </script>
     
+    </head>
     
-</head>
-    
-<body onload="calculateTotal()">
-    
-    <?php
-        require_once('header_half.php');
-    ?>
-    
-    <div class="container">
-        
-        <div class="mt-4">
-            <h1 class="display-4 text-danger"><img src="../image/cart.png" width="60px"> Shopping Cart</h1>
-        </div>
-        
-        
-        
-    </div>
-    
-    <div class="container-fluid mt-4">
-        
+    <body onload="calculateTotal()">
+
+        <!-- import navbar -->
         <?php
-        
-            if(isset($_SESSION['digimart_current_user_email'])) {
-                
-                if($cartCount <= 0){
+            require_once('header_half.php');
         ?>
-        
-        <div class="justify-content-center mb-2 p-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" style="height: 300px;">
-            <h2 class="text-center">You don't have any items in your shopping cart. Let's get shopping!</h2>
-            
-            <div class="justify-content-center p-1 d-flex mt-4">
-                <a href="../index.php" class="btn btn-outline-danger px-5">Start shopping</a>
-            </div>
-        </div>
-        
-        <?php
-                }
-                else {
-        ?>
-        
-        
-        
-        
-        
-        
-        
+
+        <!-- page content row 1 | topic -->
         <div class="container">
+
+            <div class="mt-4">
+                <h1 class="display-4 text-danger"><img src="../image/cart.png" width="60px"> Shopping Cart</h1>
+            </div>
+        
+        </div>
+
+        <!-- page content row 2 -->
+        <div class="container-fluid mt-4">
+
+            <?php
+
+                if(isset($_SESSION['digimart_current_user_email'])) {
+
+                    if($cartCount <= 0){
+            ?>
+
+            <div class="justify-content-center mb-2 p-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" style="height: 300px;">
+                <h2 class="text-center">You don't have any items in your shopping cart. Let's get shopping!</h2>
+
+                <div class="justify-content-center p-1 d-flex mt-4">
+                    <a href="../index.php" class="btn btn-outline-danger px-5">Start shopping</a>
+                </div>
+            </div>
+
+            <?php
+                    }
+                    else {
+            ?>
             
-            <div class="row mt-3">
+            <!-- quotation not empty -->
+            <div class="container">
 
-                <div class="col-lg-8">
-                    
-                    <div class="row justify-content-end mw-100" id="product-container">
-                        <div class="mb-4 d-flex mx-2">
-                            <a href='cart.php?removeAll=1' onclick="return confirm('This action will remove all item from your shopping cart.');" class="btn btn-outline-danger w-100 px-5"><i class='far fa-trash-alt fa-lg'></i> Remove All</a>
+                <div class="row mt-3">
+
+                    <div class="col-lg-8">
+
+                        <!-- Remove All button -->
+                        <div class="row justify-content-end mw-100" id="product-container">
+                            <div class="mb-4 d-flex mx-2">
+                                <a href='cart.php?removeAll=1' onclick="return confirm('This action will remove all item from your shopping cart.');" class="btn btn-outline-danger w-100 px-5"><i class='far fa-trash-alt fa-lg'></i> Remove All</a>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <?php 
 
-                        $query2 = "SELECT c.`id` AS 'cartId', p.* FROM `shopping_cart` c, `product` p WHERE c.`product_id` = p.`id` AND c.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
+                        <?php 
 
-                        $result = $conn->query($query2);
+                            $query2 = "SELECT c.`id` AS 'cartId', p.* FROM `shopping_cart` c, `product` p WHERE c.`product_id` = p.`id` AND c.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
 
-                        while ($row = $result->fetch_assoc()) { 
+                            $result = $conn->query($query2);
 
-                    ?>
-                    
-                    <div class="row mw-100" id="product-container">
-                        <div class="mb-4 d-flex mx-2 shadow-sm">
-                            <div class="card <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
-                                <div class="card-header d-flex justify-content-between" id="card-header<?php echo $row['cartId'] ?>">
-                                    <h6 class="lead">Product Id : <?php echo $row['id']; ?></h6>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input checkItem" id="check<?php echo $row['cartId'] ?>" onclick="qtyPrice<?php echo $row['cartId'] ?>()" onchange="qtyPrice<?php echo $row['cartId'] ?>()">
-                                        <label class="custom-control-label" for="check<?php echo $row['cartId'] ?>"></label>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between p-1">
-                                    <div class="col-4 card-img">
-                                        <a href="#"><img class="card-img-top" src="../image/product/<?php echo $row['image'] ?>" alt=""></a>
-                                    </div>
-                                    <div class="py-2">
-                                        <h4 class="card-title text-danger">
-                                            <a href="#" class="text-danger"><?php echo $row['name']?></a>
-                                        </h4>
-                                        <h5>LKR <?php echo number_format($row['price'],2); ?></h5>
-                                        <input type="text" id="price<?php echo $row['cartId'] ?>" value="<?php echo $row['price']; ?>" hidden>
-                                        <div class="pl-3 form-group row d-flex justify-content-start">
-                                            <label for="qty" class="col-form-label col-form-label-sm">Quentity </label>
-                                            <input type="number" class="form-control form-control-sm col-3 mx-2 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" id="qty<?php echo $row['cartId'] ?>" min="1" value="1" onchange="qtyPrice<?php echo $row['cartId'] ?>()" onkeydown="qtyPrice<?php echo $row['cartId'] ?>()" onkeyup="qtyPrice<?php echo $row['cartId'] ?>()" onselect="qtyPrice<?php echo $row['cartId'] ?>()">
-                                            <h5 id="qtyPrice<?php echo $row['cartId'] ?>" class="text-secondary">LKR <?php echo $row['price']; ?></h5>
+                            while ($row = $result->fetch_assoc()) { 
+
+                        ?>
+
+                        <!-- items -->
+                        <div class="row mw-100" id="product-container">
+                            <div class="mb-4 d-flex mx-2 shadow-sm">
+                                <div class="card <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
+                                    <div class="card-header d-flex justify-content-between" id="card-header<?php echo $row['cartId'] ?>">
+                                        <h6 class="lead">Product Id : <?php echo $row['id']; ?></h6>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input checkItem" id="check<?php echo $row['cartId'] ?>" onclick="qtyPrice<?php echo $row['cartId'] ?>()" onchange="qtyPrice<?php echo $row['cartId'] ?>()">
+                                            <label class="custom-control-label" for="check<?php echo $row['cartId'] ?>"></label>
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <div class="card-footer text-right" id="card-footer<?php echo $row['cartId'] ?>">
-                                    <?php
-                                        echo "<a href='cart.php?remove={$row['cartId']}' onclick=\"return confirm('This action will remove this item from your shopping cart.');\" class='text-danger'><i class='far fa-trash-alt fa-lg'></i></a>";
-                                    ?>
+                                    <div class="d-flex justify-content-between p-1">
+                                        <div class="col-4 card-img">
+                                            <a href="#"><img class="card-img-top" src="../image/product/<?php echo $row['image'] ?>" alt=""></a>
+                                        </div>
+                                        <div class="py-2">
+                                            <h4 class="card-title text-danger">
+                                                <a href="#" class="text-danger"><?php echo $row['name']?></a>
+                                            </h4>
+                                            <h5>LKR <?php echo number_format($row['price'],2); ?></h5>
+                                            <input type="text" id="price<?php echo $row['cartId'] ?>" value="<?php echo $row['price']; ?>" hidden>
+                                            <div class="pl-3 form-group row d-flex justify-content-start">
+                                                <label for="qty" class="col-form-label col-form-label-sm">Quentity </label>
+                                                <input type="number" class="form-control form-control-sm col-3 mx-2 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" id="qty<?php echo $row['cartId'] ?>" min="1" value="1" onchange="qtyPrice<?php echo $row['cartId'] ?>()" onkeydown="qtyPrice<?php echo $row['cartId'] ?>()" onkeyup="qtyPrice<?php echo $row['cartId'] ?>()" onselect="qtyPrice<?php echo $row['cartId'] ?>()">
+                                                <h5 id="qtyPrice<?php echo $row['cartId'] ?>" class="text-secondary">LKR <?php echo $row['price']; ?></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-footer text-right" id="card-footer<?php echo $row['cartId'] ?>">
+                                        <?php
+                                            echo "<a href='cart.php?remove={$row['cartId']}' onclick=\"return confirm('This action will remove this item from your shopping cart.');\" class='text-danger'><i class='far fa-trash-alt fa-lg'></i></a>";
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <?php } ?>
+                    
                     </div>
 
-                    <?php } ?>
-                    
+                    <!-- card order summery div -->
+                    <div class="shadow-lg p-4 mb-5 rounded-lg col-lg-4 h-100 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
+
+                        <h2>Order</h2>
+
+                        <div class="d-flex justify-content-between">
+                            <div class="p-2 font-weight-bold">PRODUCT ID X QTY</div>
+                            <div class="p-2 font-weight-bold">PRICE (LKR)</div>
+                        </div>
+
+                        <?php 
+
+                            $query2 = "SELECT c.`id` AS 'cartId', p.* FROM `shopping_cart` c, `product` p WHERE c.`product_id` = p.`id` AND c.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
+
+                            $result = $conn->query($query2);
+
+                            while ($row = $result->fetch_assoc()) { 
+
+                        ?>
+
+                        <div class="d-flex justify-content-between">
+                            <div class="p-2" id="itemId<?php echo $row['cartId'] ?>"><?php echo $row['id'] ?> X <font id="itemQty<?php echo $row['cartId'] ?>">1</font></div>
+                            <div class="p-2" id="itemTotal<?php echo $row['cartId'] ?>"><?php echo $row['price']; ?></div>
+                            <input type="text" id="itemTotal1<?php echo $row['cartId'] ?>" value="<?php echo $row['price']; ?>" hidden>
+                        </div>
+
+                        <?php } ?>
+
+                        <div class="d-flex border-top mt-4 border-danger">
+                            <div class="mr-auto p-2"><h5>Total</h5></div>
+                            <div class="p-2"><h5 id="totalPrice"></h5></div>
+                        </div>
+
+                        <button id="getCartDisabled" class="btn btn-outline-danger w-100 mt-3" data-toggle="tooltip" data-placement="bottom" title="Select item" disabled>Buy</button>
+                        <a href='' id="getCart" name="getCart" class="btn btn-danger w-100 mt-3">Buy</a>
+
+                    </div>
 
                 </div>
-                
-                <div class="shadow-lg p-4 mb-5 rounded-lg col-lg-4 h-100 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white bg-dark"; ?>">
-                    
-                    <h2>Order</h2>
-                    
-                    <div class="d-flex justify-content-between">
-                        <div class="p-2 font-weight-bold">PRODUCT ID X QTY</div>
-                        <div class="p-2 font-weight-bold">PRICE (LKR)</div>
-                    </div>
-                    
-                    <?php 
 
-                        $query2 = "SELECT c.`id` AS 'cartId', p.* FROM `shopping_cart` c, `product` p WHERE c.`product_id` = p.`id` AND c.`customer_id` = '{$_SESSION['digimart_current_user_id']}' ORDER BY `date_time` DESC";
+                <br>
 
-                        $result = $conn->query($query2);
+            </div>
+            
+            <?php
 
-                        while ($row = $result->fetch_assoc()) { 
+                    }                
+                }
+                else {
 
-                    ?>
-                    
-                    <div class="d-flex justify-content-between">
-                        <div class="p-2" id="itemId<?php echo $row['cartId'] ?>"><?php echo $row['id'] ?> X <font id="itemQty<?php echo $row['cartId'] ?>">1</font></div>
-                        <div class="p-2" id="itemTotal<?php echo $row['cartId'] ?>"><?php echo $row['price']; ?></div>
-                        <input type="text" id="itemTotal1<?php echo $row['cartId'] ?>" value="<?php echo $row['price']; ?>" hidden>
-                    </div>
-                    
-                    <?php } ?>
-                    
-                    <div class="d-flex border-top mt-4 border-danger">
-                        <div class="mr-auto p-2"><h5>Total</h5></div>
-                        <div class="p-2"><h5 id="totalPrice"></h5></div>
-                    </div>
-                    
-                    <button id="getCartDisabled" class="btn btn-outline-danger w-100 mt-3" data-toggle="tooltip" data-placement="bottom" title="Select item" disabled>Buy</button>
-                    <a href='' id="getCart" name="getCart" class="btn btn-danger w-100 mt-3">Buy</a>
+            ?>
 
+            <!-- quest user cannot use quotation -->
+            <div class="justify-content-center mb-2 p-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" style="height: 300px;">
+                <h2 class="text-center">You don't have any items in your shopping cart.</h2>
+                <h3 class="text-center lead mt-4">Have an account? Sign in to see your items.</h3>
+
+                <div class="justify-content-center p-1 d-flex mt-4">
+                    <a href="join.php" class="btn btn-danger px-5 mr-5">Join</a>
+                    <a href="sign_in.php" class="btn btn-outline-danger px-5">Sign In</a>
                 </div>
-                <!-- /.col-lg-3 -->
-
             </div>
 
-            <br>
+            <?php
+
+                }
+            ?>
 
         </div>
-        
-        
-        
-        
+
+        <!-- footer -->
         <?php
-                    
-                }                
-            }
-            else {
-                
+            require_once('footer.php');
         ?>
-        
-        <div class="justify-content-center mb-2 p-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" style="height: 300px;">
-            <h2 class="text-center">You don't have any items in your shopping cart.</h2>
-            <h3 class="text-center lead mt-4">Have an account? Sign in to see your items.</h3>
-            
-            <div class="justify-content-center p-1 d-flex mt-4">
-                <a href="join.php" class="btn btn-danger px-5 mr-5">Join</a>
-                <a href="sign_in.php" class="btn btn-outline-danger px-5">Sign In</a>
-            </div>
-        </div>
-        
-        <?php
-            
-            }
-        ?>
-        
-    </div>
-    
-    <?php
-        require_once('footer.php');
-    ?>
-    
-</body>
+
+    </body>
 </html>

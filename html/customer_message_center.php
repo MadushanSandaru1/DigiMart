@@ -33,8 +33,6 @@
         $sql = "INSERT INTO `customer_message`(`from`, `to`, `message`) VALUES ('{$_SESSION['digimart_current_user_id']}', 'digimart', '{$msg}')";
         
         mysqli_query($conn, $sql);
-        
-        header('Location: customer_message_center.php');
     }
 
 ?>

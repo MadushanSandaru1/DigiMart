@@ -1,16 +1,16 @@
 <html>
+    
     <!-- Footer -->
     <footer class="page-footer <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-light"; ?> navbar-fixed-bottom">
 
-        <!-- Footer Links -->
+        <!-- Footer Social Media Links -->
         <div class="container">
 
-            <!-- Grid row-->
             <div class="row pt-5">
 
-                <!-- Grid column -->
                 <div class="col-3">
                 </div>
+                
                 <div class="col-6 mb-5">
                     <div class="d-flex flex-row justify-content-between">
 
@@ -24,7 +24,7 @@
                             <i class="fab fa-twitter fa-lg"> </i>
                         </a>
 
-                        <!-- Google +-->
+                        <!-- Google + -->
                         <a class="gplus-ic text-danger" href="#">
                         <i class="fab fa-google-plus-g fa-lg"> </i>
                         </a>
@@ -34,33 +34,28 @@
                             <i class="fab fa-linkedin-in fa-lg"> </i>
                         </a>
                         
-                        <!--Instagram-->
+                        <!-- Instagram -->
                         <a class="ins-ic text-danger" href="#">
                             <i class="fab fa-instagram fa-lg"> </i>
                         </a>
                         
-                        <!--Pinterest-->
+                        <!-- Pinterest -->
                         <a class="pin-ic text-danger" href="#">
                             <i class="fab fa-pinterest fa-lg"> </i>
                         </a>
 
                     </div>
-
                 </div>
-                <!-- Grid column -->
 
             </div>
-            <!-- Grid row-->
 
         </div>
-        <!-- Footer Links -->
 
         <!-- Copyright -->
         <div class="footer-copyright text-center bg-danger py-3">© 2020 Copyright:
             <a class="text-white"> Team DigiMart</a>
         </div>
-        <!-- Copyright -->
 
     </footer>
-    <!-- Footer -->
+    
 </html>

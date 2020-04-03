@@ -44,6 +44,7 @@
             $sql = "INSERT INTO `user`(`username`, `password`, `role`) VALUES ('{$email}','".md5("123")."','admin')";
             mysqli_query($conn, $sql);
             
+            $alert = "Administration details inserted.";
             $alertStatus = 1;
         }
     }
@@ -169,10 +170,22 @@
             right: 10px;
             z-index: 1;
             border: 1px solid #dd123d;
-            display: <?php if($alertStatus == 1) echo "block"; else echo "none"; ?>;
+            display: <?php if($alertStatus != 0) echo "block"; else echo "none"; ?>;
             
             -webkit-animation: cssAnimation 8s forwards; 
             animation: cssAnimation 8s forwards;
+        }
+        
+        @keyframes cssAnimation {
+            0%   {opacity: 1;}
+            50%  {opacity: 0.7;}
+            100% {opacity: 0;}
+        }
+        
+        @-webkit-keyframes cssAnimation {
+            0%   {opacity: 1;}
+            50%  {opacity: 0.7;}
+            100% {opacity: 0;}
         }
 
         .dropDownLink a {
@@ -202,6 +215,11 @@
                 });
             });
         });
+        
+        $(document).ready(function(){
+            $("#myToast").toast({ autohide: false });
+            $("#myToast").toast('show');
+        });
     </script>
     
     
@@ -211,13 +229,13 @@
     
     <div class="toastNotify <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-white"; ?> col-7 col-sm-6 col-md-4 col-lg-3" data-autohide="false">
         <div class="toast-header <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>">
-            <strong class="mr-auto text-danger">Successful!</strong>
+            <strong class="mr-auto text-danger"><?php if($alertStatus == 1) echo "Successful !"; else echo "Unsuccessful !"; ?></strong>
             <small class="text-muted"></small>
             <button type="button" class="ml-2 mb-1 close text-danger" data-dismiss="toast">&times;</button>
         </div>
 
         <div class="toast-body <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">
-            Account has been created.
+            <?php echo $alert; ?>
         </div>
     </div>
     
@@ -364,7 +382,7 @@
 
                     <?php
 
-                        $query2 = "SELECT * FROM `admin` WHERE `is_deleted` = 0";
+                        $query2 = "SELECT * FROM `admin` WHERE `is_deleted` = 0 ORDER BY `id` ASC";
 
                         $result = $conn->query($query2);
 

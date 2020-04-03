@@ -1,7 +1,10 @@
 <html>
+    
+    <!-- row 1 | small top bar -->
     <div class="navbar <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-light"; ?> p-0 border-bottom">
         
         <div class="container d-flex flex-row justify-content-start">
+            
             <div class="d-inline">
                 <a class="btn btn-sm smallNavbarBtn text-danger" href="index.php"><i class="fas fa-home"></i> Home </a>
             </div>
@@ -14,6 +17,7 @@
                 <a class="btn btn-sm smallNavbarBtn text-danger" href="html/contact.php"><i class="fas fa-phone"></i> Contact </a>
             </div>
             
+            <!-- currency type -->
             <div class="d-inline dropdown show">
                 <a class="btn btn-sm dropdown-toggle smallNavbarBtn text-danger" href="#" role="button" id="currencyDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <?php 
@@ -32,6 +36,7 @@
                 </div>
             </div>
 
+            <!-- Account drop down -->
             <div class="d-inline dropdown show">
                 <a class="btn btn-sm dropdown-toggle smallNavbarBtn text-danger" href="#" role="button" id="smallNavbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-user"></i> Account </a>
 
@@ -69,6 +74,7 @@
                 </div>
             </div>
             
+            <!-- Theme -->
             <div class="d-inline dropdown show">
                 <a class="btn btn-sm dropdown-toggle smallNavbarBtn text-danger" href="#" role="button" id="themeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-palette"></i> </a>
 
@@ -77,9 +83,12 @@
                     <a class="dropdown-item text-danger" href="index.php?theme=dark">Dark</a>
                 </div>
             </div>
+            
         </div>
+        
     </div>
     
+    <!-- row 2 | big bar -->
     <div class="shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?> p-3 mb-5 rounded p-0">
         <nav class="navbar p-0">
             <div class="col-md-3 col-sm-6 col-6 d-flex justify-content-center">

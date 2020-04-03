@@ -1,8 +1,12 @@
 <?php
 
+    //connection start
     $conn = mysqli_connect('localhost', 'root', '', 'digimart');
 
+    //check connection status
     if ($conn) {
+        
+        //if connection success, redirect to index page
         header('location:../index.php');
     }
 
@@ -26,8 +30,14 @@
         <!-- Bootstrap core CSS -->
         <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         
+        <!-- Fontawesome icons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
+        <!-- jQuery -->
+        <script src="../vendor/jquery/jquery-3.4.1.min.js"></script>
+        <script src="../vendor/bootstrap/js/bootstrap.js"></script>
+        
+        <!-- Internal CSS -->
         <style>
             body {
                 /*background-image: url('../image/back.gif');
@@ -44,24 +54,17 @@
 
     </head>
 
-<body>
-    
-    <!-- Page Content -->
-    
-    <div class="container">
-		<div class="d-flex justify-content-center">
-            <div class="col-8 d-flex justify-content-center mt-4">
-                <img src="../image/disconnected.gif">
-                <input type="button" value="Refresh" onclick="window.location.reload();" class="btn btn-lg btn-danger">
+    <body>
+
+        <!-- Page Content -->
+        <div class="container">
+            <div class="d-flex justify-content-center">
+                <div class="col-8 d-flex justify-content-center mt-4">
+                    <img src="../image/disconnected.gif">
+                    <input type="button" value="Refresh" onclick="window.location.reload();" class="btn btn-lg btn-danger">
+                </div>
             </div>
-		</div>
-    </div>
-  <!-- /.container -->
-
-  <!-- Bootstrap core JavaScript -->
-  <script src="../vendor/jquery/jquery.min.js"></script>
-  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-</body>
+        </div>
+    </body>
 
 </html>

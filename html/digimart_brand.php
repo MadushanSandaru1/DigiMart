@@ -173,10 +173,22 @@
             right: 10px;
             z-index: 1;
             border: 1px solid #dd123d;
-            display: <?php if($alertStatus == 1) echo "block"; else echo "none"; ?>;
+            display: <?php if($alertStatus != 0) echo "block"; else echo "none"; ?>;
             
             -webkit-animation: cssAnimation 8s forwards; 
             animation: cssAnimation 8s forwards;
+        }
+        
+        @keyframes cssAnimation {
+            0%   {opacity: 1;}
+            50%  {opacity: 0.7;}
+            100% {opacity: 0;}
+        }
+        
+        @-webkit-keyframes cssAnimation {
+            0%   {opacity: 1;}
+            50%  {opacity: 0.7;}
+            100% {opacity: 0;}
         }
 
         .dropDownLink a {
@@ -372,7 +384,7 @@
 
                     <?php
 
-                        $query2 = "SELECT * FROM `brand` WHERE `is_deleted` = 0";
+                        $query2 = "SELECT * FROM `brand` WHERE `is_deleted` = 0 ORDER BY `id` ASC";
 
                         $result = $conn->query($query2);
 
