@@ -126,11 +126,11 @@
             background-color: transparent;
         }
         
-        #getCartDisabled {
+        #getBuyDisabled {
             display: block;
         }
         
-        #getCart {
+        #getBuy {
             display: none;
         }
         
@@ -220,14 +220,14 @@
             document.getElementById("totalPrice").innerHTML = "LKR " + total.toFixed(2);
             
             var strLink = "cart.php?itemCount=" + productId.length + "&productId=" + productId + "&productPrice=" + productPrice + "&productQty=" + productQty + "&total=" + total;
-            document.getElementById("getCart").setAttribute("href",strLink);
+            document.getElementById("getBuy").setAttribute("href",strLink);
             
             if(total != 0.0) {
-                document.getElementById("getCart").style.display = "block";
-                document.getElementById("getCartDisabled").style.display = "none";
+                document.getElementById("getBuy").style.display = "block";
+                document.getElementById("getBuyDisabled").style.display = "none";
             } else {
-                document.getElementById("getCart").style.display = "none";
-                document.getElementById("getCartDisabled").style.display = "block";
+                document.getElementById("getBuy").style.display = "none";
+                document.getElementById("getBuyDisabled").style.display = "block";
             }
         
         }
@@ -373,8 +373,8 @@
                             <div class="p-2"><h5 id="totalPrice"></h5></div>
                         </div>
 
-                        <button id="getCartDisabled" class="btn btn-outline-danger w-100 mt-3" data-toggle="tooltip" data-placement="bottom" title="Select item" disabled>Buy</button>
-                        <a href='' id="getCart" name="getCart" class="btn btn-danger w-100 mt-3">Buy</a>
+                        <button id="getBuyDisabled" class="btn btn-outline-danger w-100 mt-3" data-toggle="tooltip" data-placement="bottom" title="Select item" disabled>Buy</button>
+                        <a href='' id="getBuy" name="getBuy" class="btn btn-danger w-100 mt-3">Buy</a>
 
                     </div>
 

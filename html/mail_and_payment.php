@@ -54,23 +54,29 @@
     if(isset($_GET['buy'])) {
 
         $i = 0;
+        
+        if(is_array($_SESSION['productId'])) {
+            while ($i < $_SESSION['itemCount']) {
 
-        while ($i < $_SESSION['itemCount']) {
-            
-            $inserQuery = "INSERT INTO `order_product`(`customer_id`, `product_id`, `quantity`, `unit_price`) VALUES ('{$_SESSION['digimart_current_user_id']}',{$_SESSION['productId'][$i]},{$_SESSION['productQty'][$i]},{$_SESSION['productPrice'][$i]})";
-            
-            $resultInsert = mysqli_query($conn, $inserQuery);
-            
-            if ($resultInsert) {
-                $deleteQuery = "DELETE FROM `shopping_cart` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}' AND `product_id` = {$_SESSION['productId'][$i]}";
-                
-                $result = mysqli_query($conn, $deleteQuery);
-                
-            } else {
-                //echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                $inserQuery = "INSERT INTO `order_product`(`customer_id`, `product_id`, `quantity`, `unit_price`) VALUES ('{$_SESSION['digimart_current_user_id']}',{$_SESSION['productId'][$i]},{$_SESSION['productQty'][$i]},{$_SESSION['productPrice'][$i]})";
+
+                $resultInsert = mysqli_query($conn, $inserQuery);
+
+                if ($resultInsert) {
+                    $deleteQuery = "DELETE FROM `shopping_cart` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}' AND `product_id` = {$_SESSION['productId'][$i]}";
+
+                    $result = mysqli_query($conn, $deleteQuery);
+
+                } else {
+                    //echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                }
+
+                $i++;
             }
-            
-            $i++;
+        } else {
+            $inserQuery = "INSERT INTO `order_product`(`customer_id`, `product_id`, `quantity`, `unit_price`) VALUES ('{$_SESSION['digimart_current_user_id']}',{$_SESSION['productId']},{$_SESSION['productQty']},{$_SESSION['productPrice']})";
+
+            $resultInsert = mysqli_query($conn, $inserQuery);
         }
         
         $_SESSION['itemCount'] = null;
@@ -401,12 +407,12 @@
                     </div>
                     
                     <?php
-                    
-                    if(isset($_SESSION['itemCount'])) {
+                    if(is_array($_SESSION['productId'])) {
+                        if(isset($_SESSION['itemCount'])) {
 
-                        $i = 0;
+                            $i = 0;
 
-                        while ($i < $_SESSION['itemCount']) {
+                            while ($i < $_SESSION['itemCount']) {
                     
                     ?>
                     
@@ -415,9 +421,23 @@
                         <div class="p-2"><?php echo number_format($_SESSION['productPrice'][$i]*$_SESSION['productQty'][$i], 2); ?></div>
                     </div>
                     
-                    <?php $i++;
+                    <?php
+                                $i++;
+                            }
                         }
+                    } else {
+                    
+                    ?>
+                    
+                    <div class="d-flex justify-content-between">
+                        <div class="p-2"><?php echo $_SESSION['productId']; ?> X <?php echo $_SESSION['productQty']; ?></div>
+                        <div class="p-2"><?php echo number_format($_SESSION['productPrice']*$_SESSION['productQty'], 2); ?></div>
+                    </div>
+                    
+                    <?php
+                        
                     }
+                    
                     ?>
                     
                     <div class="d-flex border-top mt-4 border-danger">

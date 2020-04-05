@@ -488,7 +488,7 @@
                     <div class="col-lg-3 col-md-4 col-sm-6 my-2">
                         <div class="product-grid shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-light"; ?> rounded">
                             <div class="product-image">
-                                <a href="html/product.php">
+                                <a href="html/product.php?productId=<?php echo $row['id']; ?>" target="_blank">
                                     <img class="p-1" src="image/product/<?php echo $row['image']; ?>">
                                 </a>
                                 <ul class="social">

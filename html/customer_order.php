@@ -34,7 +34,7 @@
     if(isset($_GET['cancelOrder'])){
         $itemId = $_GET['cancelOrder'];
         
-        $sql = "UPDATE `order_product` SET `is_canceled`= 1, `is_deleted`= 2 WHERE `id` = {$itemId}";
+        $sql = "UPDATE `order_product` SET `is_canceled`= 1, `is_deleted`= 1 WHERE `id` = {$itemId}";
         
         mysqli_query($conn, $sql);
         
