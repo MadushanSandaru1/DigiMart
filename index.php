@@ -65,7 +65,7 @@
             width: 100%;
             height: 100%;
             overflow-y: scroll;
-            max-height: 650px;
+            max-height: 600px;
             
             /* Position the items */
             // &:nth-child(2) { top: 25%; }
@@ -73,11 +73,14 @@
             // &:nth-child(4) { top: 75%; }
         }
         
+        .login-pane {
+            height: 600px;
+        }
+        
         .make-me-sticky {
             position: -webkit-sticky;
             position: sticky;
             top: 0;
-            border-radius: 10px;
         }
         
         #categoryList a {
@@ -304,10 +307,26 @@
             right: 10px;
             z-index: 1;
             border: 1px solid #dd123d;
-            display: <?php if($alertStatus == 1) echo "block"; else echo "none"; ?>;
+            display: <?php if($alertStatus != 0) echo "block"; else echo "none"; ?>;
             
             -webkit-animation: cssAnimation 8s forwards; 
             animation: cssAnimation 8s forwards;
+        }
+        
+        @keyframes cssAnimation {
+            0%   {opacity: 1;}
+            50%  {opacity: 0.7;}
+            100% {opacity: 0;}
+        }
+        
+        @-webkit-keyframes cssAnimation {
+            0%   {opacity: 1;}
+            50%  {opacity: 0.7;}
+            100% {opacity: 0;}
+        }
+        
+        .hr1 {
+            border-top: 1px solid #dd123d;
         }
     
     </style>
@@ -325,6 +344,64 @@
                 });
             });
         });
+        
+        //type writter
+        var TxtType = function(el, toRotate, period) {
+            this.toRotate = toRotate;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 10) || 2000;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
+        };
+
+        TxtType.prototype.tick = function() {
+            var i = this.loopNum % this.toRotate.length;
+            var fullTxt = this.toRotate[i];
+
+            if (this.isDeleting) {
+                this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+                this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+
+            this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+
+            var that = this;
+            var delta = 200 - Math.random() * 100;
+
+            if (this.isDeleting) { delta /= 2; }
+
+            if (!this.isDeleting && this.txt === fullTxt) {
+                delta = this.period;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
+                this.isDeleting = false;
+                this.loopNum++;
+                delta = 500;
+            }
+
+            setTimeout(function() {
+                that.tick();
+            }, delta);
+        };
+
+        window.onload = function() {
+            var elements = document.getElementsByClassName('typewrite');
+            for (var i=0; i<elements.length; i++) {
+                var toRotate = elements[i].getAttribute('data-type');
+                var period = elements[i].getAttribute('data-period');
+                if (toRotate) {
+                    new TxtType(elements[i], JSON.parse(toRotate), period);
+                }
+            }
+            // INJECT CSS
+            var css = document.createElement("style");
+            css.type = "text/css";
+            css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #dd123d}";
+            document.body.appendChild(css);
+        };
         
         
     </script>
@@ -353,8 +430,8 @@
     <div class="container-fluid">
         <div class="row p-4">
             <div class="col-3">
-                <div class="sidebar-item scrollbar-deep-purple bordered-deep-purple thin">
-                    <div class="make-me-sticky p-3 shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>">
+                <div class="rounded sidebar-item scrollbar-deep-purple bordered-deep-purple thin shadow-sm <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>">
+                    <div class="make-me-sticky p-3">
                         <h5 class="categoryTopic <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-light"; ?>"><i class="fas fa-list"></i> Categories</h5>
                         <hr>
                         <input class="form-control form-control-sm mb-3 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>" id="categorySearch" type="text" placeholder="Search...">
@@ -429,10 +506,14 @@
                     <!--/.Controls-->
                 </div>
                 <!--/.Carousel Wrapper-->
+                
+                <div class="z-depth-1-half mt-3">
+                    <a href="html/customize.php" target="_blank"><img class="d-block w-100" src="image/carousel/customize.png" alt="Customize"></a>
+                </div>
             </div>
             
             <div class="col-3">
-                <div class="shadow-lg p-3 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark text-light"; else echo "bg-light text-dark"; ?> rounded">
+                <div class="pt-5 login-pane shadow-lg p-3 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark text-light"; else echo "bg-light text-dark"; ?> rounded">
                     <div class="p-1 d-flex justify-content-around text-danger d-block mb-2">
                         <i class="fas fa-user-circle fa-5x"></i>
                     </div>
@@ -462,6 +543,14 @@
                     <?php
                         }
                     ?>
+                    
+                    <hr class="hr1">
+                    
+                    <h2 class="text-center mt-5">
+                        <a class="typewrite" data-period="2000" data-type='[ "Hi, Welcome to DigiMart.", "Become a our registered customer.", "Have a great experience." ]'>
+                            <span class="wrap"></span>
+                        </a>
+                    </h2>
                     
                 </div>
             </div>

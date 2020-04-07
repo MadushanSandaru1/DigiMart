@@ -96,6 +96,8 @@
             </div>
             
             <div class="navbar col-sm-6 col-6 d-flex justify-content-center d-none d-sm-block d-md-none">
+                <a class="mr-3 bigNavbarBtn" href="html/customize.php" target="_blank"><img src="image/customize.png" width="40px" data-toggle="tooltip" data-placement="bottom" title="Customize PC"></a>
+                
                 <a class="mr-3 bigNavbarBtn" href="html/cart.php"><img src="image/cart.png" width="40px" data-toggle="tooltip" data-placement="bottom" title="Shopping Cart"></a>
 
                 <a class="mr-3 bigNavbarBtn" href="html/quote.php"><img src="image/quote.png" width="40px" data-toggle="tooltip" data-placement="bottom" title="Quotation"></a>
@@ -107,6 +109,8 @@
 
             <div class="navbar col-md-3 d-none d-sm-none d-md-block d-lg-block">
                 <div class=" d-flex justify-content-center">
+                    <a class="mr-3 bigNavbarBtn" href="html/customize.php" target="_blank"><img src="image/customize.png" width="40px" data-toggle="tooltip" data-placement="bottom" title="Customize PC"></a>
+                    
                     <a class="mr-3" href="html/cart.php"><img src="image/cart.png" class="bigNavIcon" width="40px" data-toggle="tooltip" data-placement="bottom" title="Shopping Cart"></a>
 
                     <a href="html/quotation.php"><img src="image/quote.png" class="bigNavIcon" width="40px" data-toggle="tooltip" data-placement="bottom" title="Quotation"></a>

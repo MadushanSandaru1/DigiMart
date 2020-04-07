@@ -93,6 +93,10 @@
             <div>
                 
                 <div class="d-inline">
+                    <a class="btn btn-sm smallNavbarBtn text-danger" href="customize.php" target="_blank"><img src="../image/customize.png" width="25px" alt="Cart" data-toggle="tooltip" data-placement="bottom" title="Customize PC"></a>
+                </div>
+                
+                <div class="d-inline">
                     <a class="btn btn-sm smallNavbarBtn text-danger" href="cart.php"><img src="../image/cart.png" width="25px" alt="Cart" data-toggle="tooltip" data-placement="bottom" title="Shopping Cart"></a>
                 </div>
 
