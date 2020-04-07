@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 03, 2020 at 10:09 AM
+-- Generation Time: Apr 07, 2020 at 07:11 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -238,6 +238,83 @@ INSERT INTO `customer_payment_info` (`customer_id`, `card_no`, `is_deleted`) VAL
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `customize_order`
+--
+
+DROP TABLE IF EXISTS `customize_order`;
+CREATE TABLE IF NOT EXISTS `customize_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` varchar(6) NOT NULL,
+  `unit_price` decimal(10,2) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `is_posted` tinyint(1) NOT NULL DEFAULT 0,
+  `is_received` tinyint(1) NOT NULL DEFAULT 0,
+  `is_canceled` tinyint(1) NOT NULL DEFAULT 0,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customize_order`
+--
+
+INSERT INTO `customize_order` (`id`, `customer_id`, `unit_price`, `quantity`, `date_time`, `is_posted`, `is_received`, `is_canceled`, `is_deleted`) VALUES
+(10, '', '169000.00', 0, '2020-02-25 01:57:43', 1, 1, 0, 0),
+(9, '', '158000.00', 0, '2020-03-27 01:55:56', 1, 1, 0, 0),
+(8, '', '11500.00', 0, '2020-03-24 21:07:46', 1, 1, 0, 0),
+(7, '', '11500.00', 0, '2020-03-24 19:35:55', 0, 1, 0, 0),
+(6, '', '158000.00', 0, '2020-03-24 19:35:55', 1, 1, 0, 0),
+(11, '', '135600.00', 0, '2020-03-25 02:03:43', 0, 0, 0, 0),
+(12, '', '11500.00', 0, '2020-03-25 02:03:43', 0, 0, 1, 0),
+(13, '', '412589.00', 0, '2020-03-24 19:35:50', 1, 1, 0, 0),
+(14, '', '11500.00', 0, '2020-03-24 19:35:55', 0, 0, 0, 0),
+(15, '', '135600.00', 0, '2020-03-25 02:03:43', 0, 0, 0, 0),
+(16, '', '135600.00', 0, '2020-03-25 02:03:43', 0, 0, 0, 0),
+(17, '', '676000.00', 0, '2020-04-05 15:36:51', 0, 0, 0, 0),
+(18, '', '1106000.00', 0, '2020-04-05 15:50:05', 0, 0, 0, 0),
+(19, '', '135600.00', 0, '2020-04-05 15:57:06', 0, 0, 1, 2),
+(20, '', '135600.00', 0, '2020-04-05 15:59:37', 0, 0, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customize_order_product`
+--
+
+DROP TABLE IF EXISTS `customize_order_product`;
+CREATE TABLE IF NOT EXISTS `customize_order_product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customize_order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customize_order_product`
+--
+
+INSERT INTO `customize_order_product` (`id`, `customize_order_id`, `product_id`, `is_deleted`) VALUES
+(10, 1, 2, 0),
+(9, 1, 5, 0),
+(8, 1, 1, 0),
+(7, 1, 1, 0),
+(6, 1, 5, 0),
+(11, 1, 6, 0),
+(12, 1, 1, 0),
+(13, 1, 7, 0),
+(14, 1, 1, 0),
+(15, 1, 6, 0),
+(16, 1, 6, 0),
+(17, 1, 2, 0),
+(18, 1, 5, 0),
+(19, 1, 6, 2),
+(20, 1, 6, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `inventory_officer`
 --
 
@@ -277,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `order_product` (
   `is_canceled` tinyint(1) NOT NULL DEFAULT 0,
   `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `order_product`
@@ -294,7 +371,11 @@ INSERT INTO `order_product` (`id`, `customer_id`, `product_id`, `quantity`, `uni
 (13, 'C00001', 7, 10, '412589.00', '2020-03-24 19:35:50', 1, 1, 0, 0),
 (14, 'C00001', 1, 10, '11500.00', '2020-03-24 19:35:55', 0, 0, 0, 0),
 (15, 'C00001', 6, 7, '135600.00', '2020-03-25 02:03:43', 0, 0, 0, 0),
-(16, 'C00001', 6, 7, '135600.00', '2020-03-25 02:03:43', 0, 0, 0, 0);
+(16, 'C00001', 6, 7, '135600.00', '2020-03-25 02:03:43', 0, 0, 0, 0),
+(17, 'C00001', 2, 4, '676000.00', '2020-04-05 15:36:51', 0, 0, 0, 0),
+(18, 'C00001', 5, 7, '1106000.00', '2020-04-05 15:50:05', 0, 0, 0, 0),
+(19, 'C00001', 6, 9, '135600.00', '2020-04-05 15:57:06', 0, 0, 1, 2),
+(20, 'C00001', 6, 12, '135600.00', '2020-04-05 15:59:37', 0, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -313,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   `category_id` int(11) NOT NULL,
   `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `product`
@@ -321,12 +402,14 @@ CREATE TABLE IF NOT EXISTS `product` (
 
 INSERT INTO `product` (`id`, `name`, `description`, `image`, `price`, `brand_id`, `category_id`, `is_deleted`) VALUES
 (1, 'Asus cerberus mech RGB gaming keyboard', 'Fully mechanical key switches for lightning-fast response and outstanding durability\r\nRGB illumination with seven pre-set lighting effects\r\nOn-the-fly macro recording\r\n100% anti-ghosting with N-key rollover (NKRO) technology\r\nGaming profile keys for storing multiple key, lighting and macro settings\r\nWindows key lock protects against accidental presses while gaming', '1.jpg', '11500.00', 4, 15, 0),
-(2, 'Asus zenbook 14 UX434FLA i5 10th gen with screen pad 2.0', 'Creativity. Style. Innovation. These are the qualities that define the elegant new ZenBook 14. It’s one of the world’s smallest 14-inch laptops, and features the breathtaking frameless NanoEdge display and the revolutionary ScreenPad™ 2.0 to give you the freedom to discover your creative power.', '2.png', '169000.00', 4, 1, 0),
+(2, 'Asus zenbook 14 UX434FLA i5 10th gen with screen pad 2.0', 'Creativity. Style. Innovation. These are the qualities that define the elegant new ZenBook 14.<br>It\'s one of the world\'s smallest 14-inch laptops, and features the breathtaking frameless NanoEdge display and the revolutionary ScreenPad™ 2.0 to give you the freedom to discover your creative power.', '2.png', '169000.00', 4, 1, 0),
 (3, 'MSI GE65 9SE raider 240hz rtx 2060 9th gen', 'REVOLUTIONARY COOLING FOR ENTHUSIASTIC GAMING\r\nMATRIX DISPLAY\r\nMULTI-TASK WITH UP TO 3 MONITORS\r\nPER-KEY RGB GAMING KEYBOARD BY STEELSERIES\r\nTAILOR YOUR KEYBOARD\r\nSmaller Body. BIGGER SCREEN\r\n240HZ ULTRA-HIGH REFRESH RATE WORLD’S FASTEST GAMING DISPLAY\r\nGIANT SPEAKERS. BIGGER. LOUDER. CLEARER', '3.jpg', '360000.00', 11, 1, 0),
 (4, 'Acer predator helios 300 i7 - rtx 2060', 'Ready for battle and eager for a fight, the Helios 300 drops you into the game with everything you need. Only now we’ve armed it with NVIDIA® GeForce RTX™ graphics, 9th Gen Intel® Core™ i7 Processors and our custom-engineered 4th Gen AeroBlade™ 3D Technology.', '4.gif', '299500.00', 1, 1, 0),
 (5, 'Acer nitro 5 2019 gaming i5 GTX 1650', 'ACER NITRO 5 2019 GAMING i5 GTX 1650\r\nIntel Core i5-9300H PROCESSOR\r\n8GB DDR4 2666MHZ\r\n1TB (SATA)\r\n15.6\" FHD (1920x1080), 144hz IPS Panel\r\nNVIDIA® GeForce GTX 1650, 4GB GDDR5\r\nRED Backlit keyboard\r\n2.1 kg, 57WHrs\r\nFREE Predator Gaming Backpack\r\n2 Years warranty\r\nGeniune Windows 10 64Bit Pre-installed', '5.jpg', '158000.00', 1, 1, 0),
 (6, 'NANO X VIDEO LITE', 'Intel® Core™ i5-9400F (9M Cache, up to 4.10 GHz)\r\nMSI B365M PRO VDH\r\n16GB Gaming Memory 2666Mhz\r\n2TB Hard Disk 5400Rpm\r\n240GB SSSD ( Sequential Read of up to 500 MB/s)\r\nNvidia GTX 1650 4GB DDR5\r\nCooler Master Q500L Case\r\nInbuilt Wifi', '6.png', '135600.00', 11, 2, 0),
-(7, 'NANO X VIDEO PRO', 'AMD Ryzen™ 7 2700X (up to 4.3Ghz 8-cores 16-threads) 20M Cache X470 Motherboard RTX 2060 6GB DDR6 Graphics Card 32GB 3200Mhz Gaming Ram 4TB WD Black 7200RPM Samsung 970 EVO PLUS 500GB 650W Gold Certified FULLY MODULAR PSU Cooler Master MB500 Case 240 Liquid Cooler', '7.png', '400000.00', 11, 2, 0);
+(7, 'NANO X VIDEO PRO', 'AMD Ryzen™ 7 2700X (up to 4.3Ghz 8-cores 16-threads) 20M Cache X470 Motherboard RTX 2060 6GB DDR6 Graphics Card 32GB 3200Mhz Gaming Ram 4TB WD Black 7200RPM Samsung 970 EVO PLUS 500GB 650W Gold Certified FULLY MODULAR PSU Cooler Master MB500 Case 240 Liquid Cooler', '7.png', '400000.00', 11, 2, 0),
+(8, 'COOLER MASTER MASTERCASE H500P RGB', 'Materials Outlook: Plastic,<br>\r\nBody: Steel<br>\r\nSide panel: Tempered Glass, Steel<br>\r\nDimensions (LxWxH) 544 x 242 x 542mm / 21.4 x 9.5 x 21.3 inch<br>\r\nMotherboard Support Mini-ITX, Micro-ATX<br>\r\nATX, E-ATX (support upto 12\" x 10.7\")<br>\r\nExpansion Slots 7 + 2 (Support vertical graphics card installation)<br>\r\nDrive Bays 5.25\" 0<br>\r\n2.5\" / 3.5\" 2<br>\r\n2.5\" SSD 2 (Drive Bay support up to 5)<br>\r\nI/O Port USB 3.0 x 2<br>\r\nUSB 2.0 x 2<br>', 'casing1.png', '27000.00', 4, 11, 0),
+(9, 'ASUS PRIME A320M-E', 'AMD AM4 Socket for 2nd/1st AMD Ryzenâ„¢/2nd and 1st Gen AMD Ryzenâ„¢ with Radeonâ„¢ Vega Graphics/Athlonâ„¢ with Radeonâ„¢ Vega Graphics/7th Generation A-series/Athlon X4 Processors', 'motherboard1.png', '13900.00', 4, 6, 0);
 
 -- --------------------------------------------------------
 
@@ -343,6 +426,14 @@ CREATE TABLE IF NOT EXISTS `product_review` (
   PRIMARY KEY (`customer_id`,`product_id`),
   KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product_review`
+--
+
+INSERT INTO `product_review` (`product_id`, `customer_id`, `review_value`, `review_text`) VALUES
+(2, 'C00002', 3, '5555'),
+(2, 'C00001', 3, '5555');
 
 -- --------------------------------------------------------
 
