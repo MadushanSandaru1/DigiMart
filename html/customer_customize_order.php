@@ -221,7 +221,7 @@
 
                                                 if($row['is_received']==0){
                                                     echo "<a class='text-secondary'>Not yet received</a>";
-                                                    echo "<a href='customer_customize_order.php?receivedItem={$row['product_id']}&receivedOrderId={$row['id']}' onclick=\"return confirm('Do you received this item?.');\" class='btn btn-outline-danger btn-sm'>Received</a>";
+                                                    echo "<a href='customer_customize_order.php?receivedItem={$row['id']}&receivedOrderId={$row['id']}' onclick=\"return confirm('Do you received this item?.');\" class='btn btn-outline-danger btn-sm'>Received</a>";
                                                 } else {
                                                     echo "<h6 class=''>Received <i class='far fa-handshake'></i></h6>";
                                                 }
