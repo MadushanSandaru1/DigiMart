@@ -280,6 +280,7 @@
             <a class="p-3" href="digimart_category.php">Category</a>
             <a class="p-3" href="digimart_product.php">Product</a>
             <a class="p-3" href="digimart_order_details.php">Order Details</a>
+            <a class="p-3" href="digimart_customize_order_details.php">Customize Order Details</a>
             
             <?php
                 }

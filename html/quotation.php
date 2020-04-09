@@ -237,10 +237,11 @@
             ?>
 
             <!-- quotation empty -->
-            <div class="justify-content-center mb-2 p-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" style="height: 300px;">
+            <div class="justify-content-center mb-2 px-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">
+                <img src="../image/quote_empty.png" class="img-fluid mx-auto d-block" style="width:25%;">
                 <h2 class="text-center">You don't have any items in your quotation. Let's get shopping!</h2>
 
-                <div class="justify-content-center p-1 d-flex mt-4">
+                <div class="justify-content-center p-1 d-flex my-5">
                     <a href="../index.php" class="btn btn-outline-danger px-5">Start shopping</a>
                 </div>
             </div>
@@ -369,11 +370,12 @@
             ?>
 
             <!-- quest user cannot use quotation -->
-            <div class="justify-content-center mb-2 p-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>" style="height: 300px;">
+            <div class="justify-content-center mb-2 px-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">
+                <img src="../image/cart_empty.png" class="img-fluid mx-auto d-block" style="width:25%;">
                 <h2 class="text-center">You don't have any items in your quotation.</h2>
                 <h3 class="text-center lead mt-4">Have an account? Sign in to see your items.</h3>
 
-                <div class="justify-content-center p-1 d-flex mt-4">
+                <div class="justify-content-center p-1 d-flex my-5">
                     <a href="join.php" class="btn btn-danger px-5 mr-5">Join</a>
                     <a href="sign_in.php" class="btn btn-outline-danger px-5">Sign In</a>
                 </div>

@@ -28,45 +28,29 @@
         }
     }
 
-    if(isset($_POST['btnSubmit'])){
+    if(isset($_GET['postOrder'])){
+        $itemId = $_GET['postOrder'];
         
-        $brandId = $_POST["brandId"];
-        $brandName = $_POST["brandName"];
-
-        if(isset($_FILES['brandLogo'])){
-            $targetDir = "../image/brand/";
-            $fileName = $_FILES['brandLogo']['name'];
-            $tmpFileName = $_FILES['brandLogo']['tmp_name'];
-            $pathForSave = $targetDir.$fileName;
-
-            $status = 0;
-
-            $status = move_uploaded_file($tmpFileName, $pathForSave);
-
-            if($status){
-                $sql="INSERT INTO `brand`(`id`, `name`, `logo`) VALUES ({$brandId},'{$brandName}','{$fileName}')";
-                $sqlResult=mysqli_query($conn,$sql);
-            }
-        } else {
-            $sql="INSERT INTO `brand`(`id`, `name`, `logo`) VALUES ({$brandId},'{$brandName}','{$fileName}')";
-             $sqlResult=mysqli_query($conn,$sql);
-        }
+        $sql = "UPDATE `customize_order` SET `is_posted`= 1 WHERE `id` = {$itemId}";
         
-        $alertStatus = 1;
+        mysqli_query($conn, $sql);
         
-        
+        header('Location: digimart_customize_order_details');
     }
 
-    if(isset($_GET['delete'])){
+    if(isset($_GET['deleteOrder'])){
         
-        $deleteEmail = $_GET['delete'];
+        $itemId = $_GET['deleteOrder'];
         
+        $sql = "UPDATE `customize_order` SET `is_deleted`= 2 WHERE `id` = {$itemId}";
         
-        $sql = "UPDATE `brand` SET `is_deleted`= 1 WHERE `id` = '{$deleteEmail}'";
+        mysqli_query($conn, $sql);
         
-        $result = mysqli_query($conn, $sql);
-
-        header('Location: digimart_brand.php');
+        $sql = "UPDATE `customize_order_product` SET `is_deleted`= 2 WHERE `customize_order_id` = {$itemId}";
+        
+        mysqli_query($conn, $sql);
+        
+        header('Location: digimart_customize_order_details');
     }
 
 ?>
@@ -75,7 +59,7 @@
 <html>
 <head>
     <!-- title -->
-	<title>Brand | DigiMart</title>
+	<title>Customize Order Details | DigiMart</title>
     
     <!-- title icon -->
     <link rel="icon" type="image/ico" href="../image/logo.png"/>
@@ -156,13 +140,13 @@
             }
         }
         
-        .form-control, .custom-file-input {
+        .form-control {
             border-color: #dd123d;
             color: #dd123d;
             background:none!important;
         }
         
-        .form-control:focus, .custom-file-input:focus {
+        .form-control:focus {
             border-color: #dd123d;
             color: #dd123d;
         }
@@ -190,33 +174,12 @@
             50%  {opacity: 0.7;}
             100% {opacity: 0;}
         }
-
-        .dropDownLink a {
-            text-decoration: none;
-            color: #dd123d;
-            border: 1px solid #dd123d;
-            border-radius: 10px;
-        }
-        
-        .dropDownLink a:hover:not(.active) {
-            background-color: #dd123d;
-            color: white;
-        }
         
     </style>
     
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
-        });
-        
-        $(document).ready(function(){
-            $("#tableContentSearch").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#brandList tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
         });
     </script>
     
@@ -295,97 +258,33 @@
         </div>
         
         <div class="content p-1 mb-5 rounded-lg shadow-lg <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
-            <h4 class="text-danger mb-3"><i class="fas fa-tags"></i> Brand</h4>
+            <h4 class="text-danger mb-3"><i class="fas fa-file-invoice-dollar"></i> Customize Order Details</h4>
             
-            <div id="accordion" class="mt-4">
-                <div class="m-3 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "bg-dark"; ?>">
-                    <div class="dropDownLink ml-4 mb-2">
-                        <a class="py-2 px-5" data-toggle="collapse" href="#collapseOne">
-                            Add Brand
-                        </a>
-                    </div>
-                    <div id="collapseOne" class="collapse" data-parent="#accordion">
-                        <div class="row mw-100 p-2" id="product-container">
-
-                            <div class="col-md-6 col-sm-12">
-                                <div class="custom-control custom-checkbox">
-                                    <form action="digimart_brand.php" method="post" enctype="multipart/form-data">
-                                        <div class="">
-
-                                            <?php
-
-                                                $queryIoId = "SELECT * FROM `brand` ORDER BY `id` DESC LIMIT 1";
-
-                                                $result_set = mysqli_query($conn,$queryIoId);
-
-                                                if (mysqli_num_rows($result_set) == 1) {
-
-                                                    $lastId = mysqli_fetch_assoc($result_set);
-                                                    $lastNum = $lastId['id'];
-
-                                                }
-                                                else {
-                                                    $lastNum = 0;
-                                                }
-
-                                                $brdId =  ++$lastNum;
-
-                                            ?>
-
-                                            <div class="form-group">
-                                                <label for="brandId" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Id</label>
-                                                <input type="text" class="form-control"  name="brandId" id="brandId" value="<?php echo $brdId; ?>" readonly>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="brandName" class="<?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">Brand Name</label>
-                                                <input type="text" class="form-control" name="brandName" maxlength="25" placeholder="Brand Name *" id="brandName" required>
-                                            </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" name="brandLogo" id="brandLogo" accept="image/x-png" required>
-                                                <label for="brandLogo" class="custom-file-label">Brand Logo (.png)</label>
-                                            </div>
-                                            <div class="mt-3 form-group">
-                                                <input type="submit" value="Submit" class="btn btn-outline-danger paymentInput px-5" id="btnSubmit" name="btnSubmit">
-                                            </div>
-                                        </div>
-                                    </form>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
+            <div class="row mw-100 p-2" id="product-container">
+                
+                <div class="col">
+                    <a href="../report/tcpdf_lib/examples/customize_order_report_format.php" target="_blank" class="btn btn-sm btn-outline-danger px-5 text-danger">Get Daily Customize Order Report</a>
                 </div>
-            </div>
             
-            <script>
-                // Add the following code if you want the name of the file appear on select
-                $(".custom-file-input").on("change", function() {
-                    var fileName = $(this).val().split("\\").pop();
-                    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                });
-            </script>
+            </div>
             
             
             <table class="table table-striped <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "text-white table-dark"; ?>">
                 <thead>
                     <tr>
-                        <th scope="col" colspan="4" class="text-right">
-                            <input class="form-control form-control-sm w-25 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>" id="tableContentSearch" type="text" placeholder="Search...">
-                        </th>
-                    </tr>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Logo</th>
-                        <th scope="col"></th>
+                        <th scope="col">#</th>
+                    <th scope="col" colspan="2">Order Details</th>
+                    <th scope="col">Order Action</th>
+                    <th scope="col"></th>
                     </tr>
                 </thead>
-                <tbody id="brandList">
-
+                <tbody>
+                
                     <?php
 
-                        $query2 = "SELECT * FROM `brand` WHERE `is_deleted` = 0 ORDER BY `id` ASC";
+                        $i=1;
+
+                        $query2 = "SELECT * FROM `customize_order` WHERE (`is_deleted` = 0 OR `is_deleted` = 1) ORDER BY `date_time` DESC";
 
                         $result = $conn->query($query2);
 
@@ -394,16 +293,87 @@
                     ?>
 
 
-                    <tr>
-                        <th scope="row" class="text-danger"><?php echo $row['id']; ?></th>
-                        <td><?php echo $row['name']; ?></td>
-                        <td><img src="../image/brand/<?php echo $row['logo']; ?>" width="100px"></td>
-                        <td><a href="digimart_brand.php?delete=<?php echo $row['id']; ?>" class="text-danger" onclick="return confirm('This action will remove this brand from brands list..');" ><i class="far fa-trash-alt"></i></a></td>
-                    </tr>
+                    <div id="accordion" class="mt-4">
+                        <tr>
+                            <th scope="row"><?php echo $i; ?></th>
+                            <td>
+                                <address>
+                                    <a class="text-secondary">Order ID: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>"><?php echo $row['id']; ?></b></a><br>
+                                    <a class="text-secondary">Order time: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>"><?php echo $row['date_time']; ?></b></a><br>
+                                    <a data-toggle="collapse" href="#collapse<?php echo $i; ?>"class='btn btn-outline-<?php if($row['is_canceled']!=0) echo "secondary"; else echo "danger"; ?> btn-sm'>More Details</a>
+                                </address>
+                            </td>
+                            <td>
+                                <address>
+                                    <a class="text-secondary">Unit Price: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>">LKR <?php echo number_format($row['unit_price'],2); ?></b></a><br>
+                                    <a class="text-secondary">Quentity: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>"><?php echo $row['quantity']; ?></b></a><br>
+                                    <a class="text-secondary">Order amount: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>">LKR <?php echo number_format($row['quantity']*$row['unit_price'],2); ?></b></a>
+                                </address>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <?php
+                                        $date = date_create($row['date_time']);
+                                        $date = date_format($date,"Y-m-d");
 
+                                        if($row['is_canceled']!=0){
+                                            echo "<a class='text-secondary'>Canceled <i class='far fa-times-circle'></i></a>";
+                                        } else {
+                                            if(date("Y-m-d")==$date){
+                                                echo "<a class='text-secondary'>Not yet confirmed</a>";
+                                            } else {
+                                                echo "<h6 class=''>Confirmed <i class='far fa-check-circle'></i></h6>";
+
+                                                if($row['is_posted']==0){
+                                                    echo "<a class='text-secondary'>Not yet posted</a>";
+                                                    echo "<a href='digimart_customize_order_details?postOrder={$row['id']}' onclick=\"return confirm('This action will mark as this item order posted?..');\" class='btn btn-outline-danger btn-sm'>Post Order</a>";
+                                                } else {
+                                                    echo "<h6 class=''>Posted <i class='fas fa-truck'></i></h6>";
+
+                                                    if($row['is_received']==0){
+                                                        echo "<a class='text-secondary'>Not yet received</a>";
+                                                    } else {
+                                                        echo "<h6 class=''>Received <i class='far fa-handshake'></i></h6>";
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    ?>
+                                </div>
+                            </td>
+                            <td class="d-flex justify-content-center">
+                                <?php if(($row['is_canceled']!=0) || ($row['is_received']!=0)) echo "<a href='digimart_customize_order_details.php?removeItem={$row['id']}' onclick=\"return confirm('This action will remove this item from your customize order list.');\" class='text-danger'><i class='far fa-trash-alt fa-lg'></i></a>"; ?>
+                            </td>
+                        </tr>
+
+                        <?php
+
+                            $query3 = "SELECT p.`name`, p.`price`, ca.`type` FROM `customize_order_product` cu, `product` p, `category` ca WHERE cu.`product_id` = p.`id` AND ca.`id` = p.`category_id` AND cu.`customize_order_id` = {$row['id']}";
+
+                            $result3 = $conn->query($query3);
+
+                            while ($row3 = $result3->fetch_assoc()) {
+
+                        ?>
+
+                        <tr id="collapse<?php echo $i; ?>" class="collapse" data-parent="#accordion">
+                            <td></td>
+                            <td colspan="2"><a class="text-secondary"><?php echo $row3['type']; ?>: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else {if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark')) echo "text-white"; else echo "text-dark";} ?>"><?php echo $row3['name']; ?></b></a></td>
+                            <td><a class="text-secondary">Unit Price: <b class="<?php if($row['is_canceled']!=0) echo "text-secondary"; else echo "text-danger"; ?>">LKR <?php echo number_format($row3['price'],2); ?></b></a></td>
+                            <td></td>
+                        </tr>
+
+                        <?php
+
+                            }
+                        ?>
+
+                    </div>
 
 
                     <?php
+                                $i++;
                             }
                         }
 

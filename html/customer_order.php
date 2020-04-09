@@ -34,7 +34,7 @@
     if(isset($_GET['cancelOrder'])){
         $itemId = $_GET['cancelOrder'];
         
-        $sql = "UPDATE `order_product` SET `is_canceled`= 1, `is_deleted`= 1 WHERE `id` = {$itemId}";
+        $sql = "UPDATE `order_product` SET `is_canceled`= 1 WHERE `id` = {$itemId}";
         
         mysqli_query($conn, $sql);
         
@@ -135,6 +135,9 @@
                     </li>
                     <li class="nav-item active mx-5">
                         <a class="nav-link" href="customer_order.php">My Order</a>
+                    </li>
+                    <li class="nav-item mx-5">
+                        <a class="nav-link" href="customer_customize_order.php">My Customize Order</a>
                     </li>
                     <li class="nav-item mx-5">
                         <a class="nav-link" href="customer_message_center.php">Message Center <span class="badge badge-pill badge-danger"><?php if($unreadMsgCount!=0) echo $unreadMsgCount; ?></span></a>
