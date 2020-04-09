@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 09, 2020 at 02:44 PM
+-- Generation Time: Apr 09, 2020 at 04:23 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -477,7 +477,17 @@ CREATE TABLE IF NOT EXISTS `quotation` (
   `product_id` int(11) NOT NULL,
   `date_time` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `quotation`
+--
+
+INSERT INTO `quotation` (`id`, `customer_id`, `product_id`, `date_time`) VALUES
+(50, 'C00001', 20, '2020-04-09 21:36:38'),
+(49, 'C00001', 13, '2020-04-09 21:26:22'),
+(48, 'C00001', 13, '2020-04-09 21:26:00'),
+(47, 'C00001', 19, '2020-04-09 21:25:51');
 
 -- --------------------------------------------------------
 
@@ -492,7 +502,17 @@ CREATE TABLE IF NOT EXISTS `shopping_cart` (
   `product_id` int(11) NOT NULL,
   `date_time` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `shopping_cart`
+--
+
+INSERT INTO `shopping_cart` (`id`, `customer_id`, `product_id`, `date_time`) VALUES
+(14, 'C00001', 15, '2020-04-09 21:43:18'),
+(13, 'C00001', 13, '2020-04-09 21:31:47'),
+(12, 'C00001', 19, '2020-04-09 21:25:21'),
+(11, 'C00001', 1, '2020-04-09 21:20:18');
 
 -- --------------------------------------------------------
 

@@ -371,7 +371,7 @@
 
             <!-- quest user cannot use quotation -->
             <div class="justify-content-center mb-2 px-5 <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">
-                <img src="../image/cart_empty.png" class="img-fluid mx-auto d-block" style="width:25%;">
+                <img src="../image/quote_empty.png" class="img-fluid mx-auto d-block" style="width:25%;">
                 <h2 class="text-center">You don't have any items in your quotation.</h2>
                 <h3 class="text-center lead mt-4">Have an account? Sign in to see your items.</h3>
 
