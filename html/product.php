@@ -6,6 +6,9 @@
     //session variable start
     session_start();
 
+    $alert = "";
+    $alertStatus = 0;
+
     //set currency type as cookie in local machine
     if(isset($_GET['currency'])){
         setcookie("currency_type", $_GET['currency'], time() + (86400 * 30), "/");
@@ -39,6 +42,26 @@
 
         $productInfo = mysqli_fetch_assoc($result);
         
+    }
+
+    if(isset($_GET['addCart'])){
+        
+        $sql = "SELECT * FROM `shopping_cart` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}' AND `product_id` = {$_GET['addCart']}";
+        
+        $result = mysqli_query($conn, $sql);
+        
+        if (mysqli_num_rows($result) > 0) {
+            $alert = "Product already added";
+            $alertStatus = 1;
+        } else {
+            $sql = "INSERT INTO `shopping_cart`(`customer_id`, `product_id`) VALUES ('{$_SESSION['digimart_current_user_id']}', {$_GET['addCart']})";
+
+            mysqli_query($conn, $sql);       
+
+
+            $alert = "Product added to Shopping Cart";
+            $alertStatus = 1;
+        }
     }
 
 ?>
@@ -90,6 +113,30 @@
             border-top: 1px solid #dd123d;
         }
         
+        .toastNotify {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+            border: 1px solid #dd123d;
+            display: <?php if($alertStatus != 0) echo "block"; else echo "none"; ?>;
+            
+            -webkit-animation: cssAnimation 8s forwards; 
+            animation: cssAnimation 8s forwards;
+        }
+        
+        @keyframes cssAnimation {
+            0%   {opacity: 1;}
+            50%  {opacity: 0.7;}
+            100% {opacity: 0;}
+        }
+        
+        @-webkit-keyframes cssAnimation {
+            0%   {opacity: 1;}
+            50%  {opacity: 0.7;}
+            100% {opacity: 0;}
+        }
+        
     </style>
     
     <!-- Script -->
@@ -121,6 +168,18 @@
     
     <body>
 
+        <div class="toastNotify <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-white"; ?> col-7 col-sm-6 col-md-4 col-lg-3" data-autohide="false">
+            <div class="toast-header <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>">
+                <strong class="mr-auto text-danger">Successful!</strong>
+                <small class="text-muted"></small>
+                <button type="button" class="ml-2 mb-1 close text-danger" data-dismiss="toast">&times;</button>
+            </div>
+
+            <div class="toast-body <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">
+                <?php echo $alert; ?>
+            </div>
+        </div>
+        
         <!-- import navbar -->
         <?php
             require_once('header_half.php');
@@ -204,7 +263,7 @@
                                             if(isset($_SESSION['digimart_current_user_id'])) {
                                         ?>
                                         
-                                        <a href='' id="addCart" name="addCart" class="btn btn-warning px-3 mr-4">Add to cart</a>
+                                        <a href='product.php?productId=<?php echo $productInfo['id']; ?>&addCart=<?php echo $productInfo['id']; ?>' id="addCart" name="addCart" class="btn btn-warning px-3 mr-4">Add to cart</a>
                                         <a href='<?php echo 'product.php?buyProductId='.$productInfo['id'].'&productPrice='.$productInfo['price'].'&productQty=1'; ?>' id="getBuy" name="getBuy" class="btn btn-danger px-5">Buy</a>
                                         <?php
                                             } else {

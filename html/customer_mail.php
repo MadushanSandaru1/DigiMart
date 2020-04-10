@@ -255,6 +255,9 @@
                         <a class="nav-link" href="customer_order.php">My Order</a>
                     </li>
                     <li class="nav-item mx-5">
+                        <a class="nav-link" href="customer_customize_order.php">My Customize Order</a>
+                    </li>
+                    <li class="nav-item mx-5">
                         <a class="nav-link" href="customer_message_center.php">Message Center <span class="badge badge-pill badge-danger"><?php if($unreadMsgCount!=0) echo $unreadMsgCount; ?></span></a>
                     </li>
                 </ul>

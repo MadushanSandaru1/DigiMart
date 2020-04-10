@@ -4,6 +4,7 @@
 
     session_start();
 
+    $alert = "";
     $alertStatus = 0;
 
     if(isset($_GET['currency'])){
@@ -16,8 +17,43 @@
         header('Location: '.$_SERVER['PHP_SELF']);
     }
 
-    if(isset($_POST['btnAddCart'])){
-        $alertStatus = 1;
+    if(isset($_GET['addCart'])){
+        
+        $sql = "SELECT * FROM `shopping_cart` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}' AND `product_id` = {$_GET['addCart']}";
+        
+        $result = mysqli_query($conn, $sql);
+        
+        if (mysqli_num_rows($result) > 0) {
+            $alert = "Product already added";
+            $alertStatus = 1;
+        } else {
+            $sql = "INSERT INTO `shopping_cart`(`customer_id`, `product_id`) VALUES ('{$_SESSION['digimart_current_user_id']}', {$_GET['addCart']})";
+
+            mysqli_query($conn, $sql);       
+
+
+            $alert = "Product added to Shopping Cart";
+            $alertStatus = 1;
+        }
+    }
+
+    if(isset($_GET['addQuote'])){
+        
+        $sql = "SELECT * FROM `quotation` WHERE `customer_id` = '{$_SESSION['digimart_current_user_id']}' AND `product_id` = {$_GET['addQuote']}";
+        
+        $result = mysqli_query($conn, $sql);
+        
+        if (mysqli_num_rows($result) > 0) {
+            $alert = "Product already added";
+            $alertStatus = 1;
+        } else {
+            $sql = "INSERT INTO `quotation`(`customer_id`, `product_id`) VALUES ('{$_SESSION['digimart_current_user_id']}', {$_GET['addQuote']})";
+
+            mysqli_query($conn, $sql);
+
+            $alert = "Product added to Quotation";
+            $alertStatus = 1;
+        }
     }
 ?>
 
@@ -413,13 +449,13 @@
     
     <div class="toastNotify <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; else echo "bg-white"; ?> col-7 col-sm-6 col-md-4 col-lg-3" data-autohide="false">
         <div class="toast-header <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "bg-dark"; ?>">
-            <strong class="mr-auto text-danger">Thank you!</strong>
+            <strong class="mr-auto text-danger">Successful!</strong>
             <small class="text-muted"></small>
             <button type="button" class="ml-2 mb-1 close text-danger" data-dismiss="toast">&times;</button>
         </div>
 
         <div class="toast-body <?php if(isset($_COOKIE['theme']) && ($_COOKIE['theme']=='dark'))echo "text-white"; ?>">
-            Your message has been sent.
+            <?php echo $alert; ?>
         </div>
     </div>
     
@@ -445,7 +481,7 @@
                                     if (mysqli_num_rows($result) > 0) {
                                         while($row = mysqli_fetch_assoc($result)) {
                                             echo "<tr>
-                                                <td class= 'item-type'><a href='#' class='text-secondary item-name'><img src='image/category/". $row['icon']."' width='25px'> ". $row['type']."</a></td>
+                                                <td class= 'item-type'><a href='html/index_products.php?category=".$row['id']."' class='text-secondary item-name'><img src='image/category/". $row['icon']."' width='25px'> ". $row['type']."</a></td>
                                             </tr>";
                                         }
                                     } else {
@@ -580,10 +616,28 @@
                                 <a href="html/product.php?productId=<?php echo $row['id']; ?>" target="_blank">
                                     <img class="p-1" src="image/product/<?php echo $row['image']; ?>">
                                 </a>
+                                
+                                <?php
+                                    if(isset($_SESSION['digimart_current_user_id'])) {
+                                ?>
+                                
                                 <ul class="social">
-                                    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Add to Quot"><i class="fas fa-box"></i></a></li>
-                                    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Add to Cart"><i class="fas fa-cart-plus"></i></a></li>
+                                    <li><a href="index.php?addQuote=<?php echo $row['id']; ?>" data-toggle="tooltip" data-placement="bottom" title="Add to Quot"><i class="fas fa-box"></i></a></li>
+                                    <li><a href="index.php?addCart=<?php echo $row['id']; ?>" data-toggle="tooltip" data-placement="bottom" title="Add to Cart"><i class="fas fa-cart-plus"></i></a></li>
                                 </ul>
+                                
+                                <?php
+                                    } else {
+                                ?>
+                                
+                                <ul class="social">
+                                    <li><a data-toggle="tooltip" data-placement="bottom" title="Login First"><i class="fas fa-box"></i></a></li>
+                                    <li><a data-toggle="tooltip" data-placement="bottom" title="Login First"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                                
+                                <?php
+                                    }
+                                ?>
                                 <!--span class="product-new-label">New</span-->
 
                                 <span class="product-rating-label p-1 text-danger">

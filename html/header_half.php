@@ -69,6 +69,7 @@
                         ?>
                         <a class="dropdown-item text-danger" href="customer_account.php">My Account</a>
                         <a class="dropdown-item text-danger" href="customer_order.php">My Order</a>
+                        <a class="dropdown-item text-danger" href="customer_customize_order.php">My Customize Order</a>
                         <a class="dropdown-item text-danger" href="customer_message_center.php">Message Center</a>
                         <?php
                             }
