@@ -17,3 +17,6 @@ Account Username and password
   * Customer
       username - test@gmail.com
       pwd - 123
+
+
+*** business plan and final report included in Documentation directory...
