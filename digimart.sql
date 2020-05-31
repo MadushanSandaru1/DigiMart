@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 09, 2020 at 04:23 PM
+-- Generation Time: May 31, 2020 at 09:29 AM
 -- Server version: 10.4.10-MariaDB
--- PHP Version: 7.3.12
+-- PHP Version: 7.4.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
 --
 
 INSERT INTO `admin` (`id`, `first_name`, `last_name`, `email`, `is_deleted`) VALUES
-('ADM001', 'DigiMart', 'Admin', 'admin@digimart', 0);
+('ADM001', 'DigiMart', 'Admin', 'head.admin@digimart.com', 0);
 
 -- --------------------------------------------------------
 
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 --
 
 INSERT INTO `customer` (`id`, `first_name`, `last_name`, `email`, `is_deleted`) VALUES
-('C00001', 'madushan', 'Sandaruwan', 'madushansandaru1@gmail.com', 0);
+('C00001', 'Fname', 'Lname', 'test@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -212,7 +212,16 @@ CREATE TABLE IF NOT EXISTS `customer_message` (
   `is_unread` tinyint(1) NOT NULL DEFAULT 1,
   `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customer_message`
+--
+
+INSERT INTO `customer_message` (`id`, `from`, `to`, `message`, `date_time`, `is_unread`, `is_deleted`) VALUES
+(1, 'C00001', 'digimart', 'hii', '2020-04-10 01:43:20', 0, 0),
+(2, 'digimart', 'C00001', 'hello', '2020-04-10 01:45:48', 1, 0),
+(3, 'digimart', 'C00001', 'eBay Inc. is an American multinational e-commerce corporation based in San Jose, California, that facilitates consumer-to-consumer and business-to-consumer sales through its website. eBay was founded by Pierre Omidyar in the autumn of 1995, and became a', '2020-04-10 01:46:27', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -255,15 +264,6 @@ CREATE TABLE IF NOT EXISTS `customize_order` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `customize_order`
---
-
-INSERT INTO `customize_order` (`id`, `customer_id`, `unit_price`, `quantity`, `date_time`, `is_posted`, `is_received`, `is_canceled`, `is_deleted`) VALUES
-(3, 'C00001', '582000.00', 10, '2020-04-09 16:03:47', 0, 0, 1, 1),
-(2, 'C00001', '582000.00', 5, '2020-04-07 15:18:42', 0, 0, 0, 0),
-(1, 'C00001', '532000.00', 5, '2020-04-08 00:00:00', 1, 0, 0, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -278,39 +278,6 @@ CREATE TABLE IF NOT EXISTS `customize_order_product` (
   `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `customize_order_product`
---
-
-INSERT INTO `customize_order_product` (`id`, `customize_order_id`, `product_id`, `is_deleted`) VALUES
-(35, 2, 17, 0),
-(34, 2, 15, 0),
-(33, 2, 15, 0),
-(32, 2, 14, 0),
-(31, 2, 12, 0),
-(30, 2, 8, 0),
-(29, 1, 19, 0),
-(28, 1, 20, 0),
-(27, 1, 18, 0),
-(26, 1, 17, 0),
-(25, 1, 15, 0),
-(24, 1, 16, 0),
-(23, 1, 14, 0),
-(22, 1, 12, 0),
-(21, 1, 10, 0),
-(36, 2, 18, 0),
-(37, 2, 19, 0),
-(38, 2, 19, 0),
-(39, 3, 8, 1),
-(40, 3, 12, 1),
-(41, 3, 14, 1),
-(42, 3, 15, 1),
-(43, 3, 15, 1),
-(44, 3, 17, 1),
-(45, 3, 18, 1),
-(46, 3, 19, 1),
-(47, 3, 19, 1);
 
 -- --------------------------------------------------------
 
@@ -333,7 +300,7 @@ CREATE TABLE IF NOT EXISTS `inventory_officer` (
 --
 
 INSERT INTO `inventory_officer` (`id`, `first_name`, `last_name`, `email`, `is_deleted`) VALUES
-('IO0001', 'Sandun', 'Bandara', 'io@digimart', 0);
+('IO0001', 'Sandun', 'Bandara', 'sandun.io@digimart.com', 0);
 
 -- --------------------------------------------------------
 
@@ -461,8 +428,8 @@ CREATE TABLE IF NOT EXISTS `product_review` (
 --
 
 INSERT INTO `product_review` (`product_id`, `customer_id`, `review_value`, `review_text`) VALUES
-(2, 'C00002', 3, '5555'),
-(2, 'C00001', 3, '5555');
+(2, 'C00002', 3, 'good'),
+(2, 'C00001', 3, 'thank you..');
 
 -- --------------------------------------------------------
 
@@ -477,15 +444,14 @@ CREATE TABLE IF NOT EXISTS `quotation` (
   `product_id` int(11) NOT NULL,
   `date_time` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `quotation`
 --
 
 INSERT INTO `quotation` (`id`, `customer_id`, `product_id`, `date_time`) VALUES
-(50, 'C00001', 20, '2020-04-09 21:36:38'),
-(49, 'C00001', 13, '2020-04-09 21:26:22'),
+(51, 'C00001', 2, '2020-04-09 22:42:08'),
 (48, 'C00001', 13, '2020-04-09 21:26:00'),
 (47, 'C00001', 19, '2020-04-09 21:25:51');
 
@@ -534,9 +500,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`username`, `password`, `role`, `is_deleted`) VALUES
-('admin@digimart', '202cb962ac59075b964b07152d234b70', 'admin', 0),
-('madushansandaru1@gmail.com', '202cb962ac59075b964b07152d234b70', 'customer', 0),
-('io@digimart', '202cb962ac59075b964b07152d234b70', 'inventory_officer', 0);
+('head.admin@digimart.com', '202cb962ac59075b964b07152d234b70', 'admin', 0),
+('test@gmail.com', '202cb962ac59075b964b07152d234b70', 'customer', 0),
+('sandun.io@digimart.com', '202cb962ac59075b964b07152d234b70', 'inventory_officer', 0);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
