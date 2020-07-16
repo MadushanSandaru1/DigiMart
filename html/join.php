@@ -6,6 +6,47 @@
     //session variable start
     session_start();
 
+?>
+
+<?php
+
+    function emailSend($firstName, $lastName, $email){
+        
+        $heading = "Account Created Successfully";
+        $message = "Dear ".$firstName." ".$firstName.",<br><p>You have successfully created your DIGIMART account by emailing <b>".$email."</b></p><br>Thank You!<br><pre>Team Digimart,<br>Karagoda,<br>Uyangoda,<br>Kamburupitiya,<br>Matara,<br>Sri Lanka - 81100</pre>";
+
+        require '../email/PHPMailerAutoload.php';
+        $credential = include('../email/credential.php');      //credentials import
+
+        $mail = new PHPMailer;
+        $mail->isSMTP();                                    // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';                     // Specify main and backup SMTP servers
+        $mail->SMTPAuth = true;                             // Enable SMTP authentication
+        $mail->Username = $credential['user'];              // SMTP username
+        $mail->Password = $credential['pass'];              // SMTP password
+        $mail->SMTPSecure = 'tls';                          // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 587;                                  // TCP port to connect to
+        $mail->setFrom($email);
+        $mail->addAddress($email);                          // Name is optional
+
+        $mail->addReplyTo('hello');
+
+        $mail->isHTML(true);                                    // Set email format to HTML
+
+        $mail->Subject = $heading;
+        $mail->Body    = $message;
+        $mail->AltBody = 'If you see this mail. please reload the page.';
+
+        if(!$mail->send()) {
+            //echo 'Message could not be sent.';
+            //echo 'Mailer Error: ' . $mail->ErrorInfo;
+        }
+    }
+
+?>
+
+<?php
+
     //variable for tooltips visible
     $alertStatus = 0;
 
@@ -78,6 +119,9 @@
                 $qurey = "INSERT INTO `user`(`username`, `password`, `role`) VALUES  ('{$email}','{$h_pwd}','customer')";
 
                 $result = mysqli_query($conn,$qurey);
+
+                //send email
+                emailSend($firstName, $lastName, $email);
 
                 //user info load to session array
                 $_SESSION['digimart_current_user_id'] = $id;
